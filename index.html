@@ -560,3 +560,230 @@
 
 </body>
 </html>
+<!-- =========================================================
+     OBLIVION SECURITY PRODUCT — SENTINEL
+     ========================================================= -->
+
+<style>
+  .oblivion-product-card {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 980px;
+    margin: 40px auto;
+    padding: 34px;
+    box-sizing: border-box;
+    background:
+      radial-gradient(circle at 85% 20%, rgba(255,85,20,.08), transparent 28%),
+      linear-gradient(145deg, #0a0a0a, #050505 70%);
+    border: 1px solid rgba(255,255,255,.12);
+    color: #fff;
+    text-decoration: none;
+    overflow: hidden;
+    transition:
+      transform .45s cubic-bezier(.2,.7,.2,1),
+      border-color .35s ease,
+      box-shadow .35s ease;
+  }
+
+  .oblivion-product-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,105,40,.45);
+    box-shadow:
+      0 20px 60px rgba(0,0,0,.45),
+      0 0 50px rgba(255,90,20,.07);
+  }
+
+  .oblivion-product-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        115deg,
+        transparent 0%,
+        rgba(255,255,255,.025) 45%,
+        transparent 65%
+      );
+    transform: translateX(-100%);
+    transition: transform .8s ease;
+    pointer-events: none;
+  }
+
+  .oblivion-product-card:hover::before {
+    transform: translateX(100%);
+  }
+
+  .sentinel-product-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 110px 1fr auto;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .sentinel-product-icon {
+    width: 92px;
+    height: 92px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.16);
+    background: #000;
+  }
+
+  .sentinel-product-icon svg {
+    width: 58px;
+    height: 58px;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 2;
+  }
+
+  .sentinel-eyebrow {
+    margin-bottom: 8px;
+    color: #8e8e8e;
+    font: 600 11px/1.4 monospace;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+  }
+
+  .sentinel-title {
+    margin: 0;
+    font: 600 clamp(28px, 4vw, 42px)/1.05 system-ui, sans-serif;
+    letter-spacing: -.03em;
+  }
+
+  .sentinel-description {
+    max-width: 700px;
+    margin: 13px 0 0;
+    color: #a6a6a6;
+    font: 400 14px/1.8 system-ui, sans-serif;
+  }
+
+  .sentinel-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .sentinel-tag {
+    padding: 6px 9px;
+    border: 1px solid rgba(255,255,255,.10);
+    color: #bdbdbd;
+    font: 10px monospace;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  .sentinel-product-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 1px solid rgba(255,255,255,.2);
+    white-space: nowrap;
+    color: #fff;
+    font: 600 11px monospace;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    transition: background .3s ease, border-color .3s ease;
+  }
+
+  .oblivion-product-card:hover .sentinel-product-action {
+    background: rgba(255,255,255,.06);
+    border-color: rgba(255,105,40,.45);
+  }
+
+  .sentinel-product-status {
+    margin-top: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #8f8f8f;
+    font: 10px monospace;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .sentinel-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ff6a2a;
+    box-shadow: 0 0 12px rgba(255,106,42,.6);
+  }
+
+  @media (max-width: 760px) {
+    .oblivion-product-card {
+      padding: 24px;
+    }
+
+    .sentinel-product-grid {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .sentinel-product-action {
+      width: fit-content;
+    }
+  }
+</style>
+
+<a
+  class="oblivion-product-card"
+  href="https://shokribardiya.github.io/Sentinel/"
+  aria-label="Explore Oblivion Sentinel"
+>
+
+  <div class="sentinel-product-grid">
+
+    <div class="sentinel-product-icon" aria-hidden="true">
+      <!-- Inline Sentinel-style emblem -->
+      <svg viewBox="0 0 100 100">
+        <path d="M50 8 L82 25 L82 52
+                 C82 72 68 86 50 94
+                 C32 86 18 72 18 52
+                 L18 25 Z"/>
+        <path d="M50 24 L50 76"/>
+        <path d="M30 35 L50 24 L70 35"/>
+      </svg>
+    </div>
+
+    <div>
+      <div class="sentinel-eyebrow">
+        OBLIVION SECURITY / PRODUCT
+      </div>
+
+      <h2 class="sentinel-title">
+        SENTINEL
+      </h2>
+
+      <p class="sentinel-description">
+        A security intelligence platform designed to correlate complex
+        signals, identify meaningful relationships, investigate potential
+        threats, and turn fragmented security information into a structured
+        operational picture.
+      </p>
+
+      <div class="sentinel-tags">
+        <span class="sentinel-tag">Security Intelligence</span>
+        <span class="sentinel-tag">Threat Analysis</span>
+        <span class="sentinel-tag">Signal Correlation</span>
+        <span class="sentinel-tag">Defensive Security</span>
+      </div>
+
+      <div class="sentinel-product-status">
+        <span class="sentinel-status-dot"></span>
+        Active Development
+      </div>
+    </div>
+
+    <div class="sentinel-product-action">
+      Explore Sentinel
+      <span aria-hidden="true">→</span>
+    </div>
+
+  </div>
+</a>
