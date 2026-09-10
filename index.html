@@ -823,3 +823,150 @@
 
   </div>
 </a>
+<!--
+  OBLIVION — CROSS-SITE PAGE TRANSITION
+  =======================================
+  این بلوک رو دقیقاً قبل از </body> در انتهای هر صفحه از هر وبسایتی
+  که می‌خوای این افکت روشون باشه، پیست کن (همون کد، عیناً، توی همه‌شون).
+
+  چون همه‌ی سایت‌ها همین کد رو دارن:
+  - وقتی روی لینکی که به صفحه‌ی دیگه (همون سایت یا سایت دیگه‌ی اکوسیستم) می‌ره کلیک می‌کنی،
+    یک شکل مشکی از گوشه‌ی صفحه باز می‌شه، لوگو وسطش ظاهر می‌شه، و بعد ناوبری واقعی انجام می‌شه.
+  - وقتی صفحه‌ی مقصد لود می‌شه، همون شکل مشکی با لوگو از قبل روی صفحه‌ست و به آرامی جمع می‌شه
+    و صفحه‌ی جدید رو نشون می‌ده — پس افکت پیوسته به نظر می‌رسه، انگار یک ویدیوعه.
+
+  تصویر لوگو به‌صورت base64 داخل همین کده؛ به هیچ فایل خارجی نیاز نداره.
+  می‌تونی گوشه (corner)، رنگ (color) و سرعت (duration) رو در بخش CONFIG پایین عوض کنی.
+-->
+<style id="oblivion-transition-style">
+  #oblivion-transition-overlay{
+    position: fixed;
+    inset: 0;
+    z-index: 2147483647;
+    background: var(--ot-color, #08090a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    clip-path: circle(0% at var(--ot-x, 100%) var(--ot-y, 100%));
+    -webkit-clip-path: circle(0% at var(--ot-x, 100%) var(--ot-y, 100%));
+    transition: clip-path var(--ot-duration, 0.85s) cubic-bezier(.65,0,.35,1),
+                -webkit-clip-path var(--ot-duration, 0.85s) cubic-bezier(.65,0,.35,1);
+  }
+  #oblivion-transition-overlay.ot-cover{
+    clip-path: circle(150% at var(--ot-x, 100%) var(--ot-y, 100%));
+    -webkit-clip-path: circle(150% at var(--ot-x, 100%) var(--ot-y, 100%));
+  }
+  #oblivion-transition-overlay img{
+    width: 84px;
+    height: auto;
+    opacity: 0;
+    transform: scale(.85);
+    transition: opacity .45s ease, transform .45s ease;
+  }
+  #oblivion-transition-overlay.ot-logo-in img{
+    opacity: 1;
+    transform: scale(1);
+  }
+  @media (prefers-reduced-motion: reduce){
+    #oblivion-transition-overlay{ transition-duration: .001ms !important; }
+    #oblivion-transition-overlay img{ transition-duration: .001ms !important; }
+  }
+</style>
+
+<div id="oblivion-transition-overlay" aria-hidden="true">
+  <img alt="" src="data:image/png;base64,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">
+</div>
+
+<script id="oblivion-transition-script">
+(function(){
+  "use strict";
+
+  /* ============ CONFIG — می‌تونی این چهار مقدار رو عوض کنی ============ */
+  var CONFIG = {
+    corner: "bottom-right",   // "bottom-right" | "bottom-left" | "top-right" | "top-left" | "center"
+    color: "#08090a",         // رنگ شکل مشکی
+    duration: 850,            // مدت زمان انیمیشن به میلی‌ثانیه (باید با CSS transition هماهنگ باشه)
+    storageKey: "oblivionTransitionActive"
+  };
+  /* ===================================================================== */
+
+  var overlay = document.getElementById("oblivion-transition-overlay");
+  if(!overlay) return;
+
+  var corners = {
+    "bottom-right": ["100%", "100%"],
+    "bottom-left":  ["0%",   "100%"],
+    "top-right":    ["100%", "0%"],
+    "top-left":     ["0%",   "0%"],
+    "center":       ["50%",  "50%"]
+  };
+  var xy = corners[CONFIG.corner] || corners["bottom-right"];
+  overlay.style.setProperty("--ot-x", xy[0]);
+  overlay.style.setProperty("--ot-y", xy[1]);
+  overlay.style.setProperty("--ot-color", CONFIG.color);
+  overlay.style.setProperty("--ot-duration", CONFIG.duration + "ms");
+
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- ورود به صفحه: اگر از یک انتقال اومده، اورلی رو جمع کن ---------- */
+  function playEntrance(){
+    var cameFromTransition = sessionStorage.getItem(CONFIG.storageKey) === "1";
+    sessionStorage.removeItem(CONFIG.storageKey);
+
+    if(!cameFromTransition){ return; }
+
+    overlay.classList.add("ot-cover", "ot-logo-in");
+    overlay.style.transition = "none";
+    // فورس ری‌فلو تا استایل اولیه (پوشیده) اعمال بشه قبل از انیمیت کردن
+    void overlay.offsetWidth;
+    overlay.style.transition = "";
+
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        overlay.classList.remove("ot-logo-in");
+        overlay.classList.remove("ot-cover");
+      });
+    });
+  }
+  playEntrance();
+
+  /* ---------- خروج از صفحه: با کلیک روی لینک، انیمیشن رو نشون بده و بعد ناوبری کن ---------- */
+  function isTransitionable(a){
+    if(!a || !a.href) return false;
+    if(a.target === "_blank") return false;
+    if(a.hasAttribute("download")) return false;
+    if(a.getAttribute("href") && a.getAttribute("href").indexOf("#") === 0) return false;
+    if(a.protocol === "javascript:" || a.protocol === "mailto:" || a.protocol === "tel:") return false;
+    // لینک به همون صفحه (فقط تغییر hash) رو رد کن
+    if(a.pathname === location.pathname && a.hostname === location.hostname && a.hash){
+      return false;
+    }
+    return true;
+  }
+
+  document.addEventListener("click", function(e){
+    if(e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest("a");
+    if(!isTransitionable(a)) return;
+
+    e.preventDefault();
+    var destination = a.href;
+
+    if(reduceMotion){
+      window.location.href = destination;
+      return;
+    }
+
+    try{ sessionStorage.setItem(CONFIG.storageKey, "1"); }catch(err){}
+
+    overlay.classList.add("ot-cover");
+    setTimeout(function(){ overlay.classList.add("ot-logo-in"); }, CONFIG.duration * 0.35);
+
+    setTimeout(function(){
+      window.location.href = destination;
+    }, CONFIG.duration + 60);
+  }, true);
+
+})();
+</script>
