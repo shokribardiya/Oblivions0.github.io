@@ -262,6 +262,7 @@ table{ border-collapse: collapse; width:100%; }
 .btn-primary:hover{ background: var(--warm); border-color: var(--warm); color: var(--bg); }
 .btn-quiet{ border-color: transparent; padding: 11px 4px; }
 .btn-quiet:hover{ background: none; color: var(--warm); }
+.btn.danger:hover, .btn-quiet.danger:hover{ color: var(--danger); border-color: color-mix(in srgb, var(--danger) 45%, var(--border)); background: none; }
 
 .tag{
   font-family: var(--font-mono);
@@ -906,6 +907,45 @@ table{ border-collapse: collapse; width:100%; }
 .preview-box img, .preview-box video{ max-width:100%; display:block; }
 .preview-box pre{ font-family:var(--font-mono); font-size:11.5px; color:var(--text-secondary); white-space:pre-wrap; word-break:break-word; margin:0; }
 .preview-binary{ text-align:center; padding:24px; color:var(--text-faint); font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; }
+
+/* ---- expanded file-browser row (type/ext/size/version/checksum/updated/owner) ---- */
+.resource-row.is-deleted{ opacity:.5; }
+.resource-row .r-sub{ display:flex; gap:8px; flex-wrap:wrap; margin-top:4px; }
+.resource-row .r-sub span{ font-family:var(--font-mono); font-size:10px; color:var(--text-faint); }
+.resource-row .r-sub b{ color:var(--text-muted); font-weight:500; }
+.resource-row .r-actions{ flex-wrap:wrap; justify-content:flex-end; }
+.resource-row .r-actions button{ font-family:var(--font-mono); font-size:10.5px; color:var(--text-muted); border:1px solid var(--border-hair); padding:4px 9px; white-space:nowrap; }
+.resource-row .r-actions button:hover{ color:var(--text); border-color:var(--border-strong); }
+.resource-row .r-actions button.danger:hover{ color:var(--danger); border-color:color-mix(in srgb, var(--danger) 45%, var(--border)); }
+.resource-row .r-rename{ display:flex; gap:8px; align-items:center; }
+.resource-row .r-rename input{ border:1px solid var(--border-strong); background:var(--surface); padding:6px 8px; font-size:12.5px; flex:1; min-width:0; }
+.files-toolbar{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+.files-toolbar label{ font-family:var(--font-mono); font-size:10.5px; color:var(--text-muted); display:flex; align-items:center; gap:6px; }
+.badge-deleted{ font-family:var(--font-mono); font-size:9.5px; letter-spacing:.06em; color:var(--danger); border:1px solid color-mix(in srgb, var(--danger) 40%, var(--border)); padding:3px 8px; }
+
+/* ---- repository header actions / primary image controls ---- */
+.rh-actions{ display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
+.rh-image{ position:relative; }
+.rh-image .rh-image-actions{ position:absolute; right:10px; bottom:10px; display:flex; gap:6px; }
+.rh-image .rh-image-actions button{ font-family:var(--font-mono); font-size:10px; letter-spacing:.05em; color:var(--text); background:color-mix(in srgb, var(--bg) 75%, transparent); border:1px solid var(--border-strong); padding:5px 10px; }
+.rc-image{ position:relative; }
+.repo-edit-form{ display:flex; flex-direction:column; gap:14px; margin-bottom:24px; border:1px solid var(--border); background:var(--surface-2); padding:20px 22px; }
+.pa-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+
+/* ---- trash / soft-delete ---- */
+.trash-toggle{ margin-bottom:16px; }
+
+/* ---- lightweight confirm / prompt overlay (rename, delete, move) ---- */
+.ob-confirm-overlay{
+  position:fixed; inset:0; background:color-mix(in srgb, var(--bg) 70%, transparent); z-index:1000;
+  display:flex; align-items:center; justify-content:center; padding:20px;
+}
+.ob-confirm-box{
+  background:var(--surface-2); border:1px solid var(--border-strong); padding:22px 24px; max-width:420px; width:100%;
+}
+.ob-confirm-box p{ font-size:13.5px; color:var(--text-secondary); line-height:1.55; margin-bottom:16px; }
+.ob-confirm-box input, .ob-confirm-box select{ width:100%; border:1px solid var(--border-strong); background:var(--surface); padding:9px 10px; font-size:13px; margin-bottom:16px; }
+.ob-confirm-actions{ display:flex; justify-content:flex-end; gap:8px; }
 
 /* ---- create repository form ---- */
 .repo-form{ display:grid; gap:16px; max-width:640px; }
@@ -1599,9 +1639,17 @@ const esc = OblivionSecurity.esc;
    -------------------------------------------------------------------------- */
 const OblivionStorage = (() => {
   const DB_NAME = 'oblivion-repo-store';
-  const DB_VERSION = 1;
+  const DB_VERSION = 2;
   const REPOS = 'repositories';
   const BLOBS = 'blobs';
+  // CHUNKS holds individual uploaded chunks as they arrive, keyed by a
+  // composite "uploadId:chunkIndex" string — this is what lets the upload
+  // engine persist bytes incrementally instead of buffering an entire
+  // multi-GB file's chunks in JS memory. UPLOADS holds a small checkpoint
+  // record per in-progress upload (no file bytes, just progress metadata)
+  // so a paused or interrupted upload can be detected and resumed later.
+  const CHUNKS = 'chunks';
+  const UPLOADS = 'uploads';
   let dbPromise = null;
 
   function open(){
@@ -1613,6 +1661,8 @@ const OblivionStorage = (() => {
         const db = req.result;
         if (!db.objectStoreNames.contains(REPOS)) db.createObjectStore(REPOS, { keyPath: 'id' });
         if (!db.objectStoreNames.contains(BLOBS)) db.createObjectStore(BLOBS, { keyPath: 'blobId' });
+        if (!db.objectStoreNames.contains(CHUNKS)) db.createObjectStore(CHUNKS, { keyPath: 'chunkKey' });
+        if (!db.objectStoreNames.contains(UPLOADS)) db.createObjectStore(UPLOADS, { keyPath: 'uploadId' });
       };
       req.onsuccess = () => resolve(req.result);
       req.onerror = () => resolve(null);
@@ -1683,7 +1733,82 @@ const OblivionStorage = (() => {
     });
   }
 
-  return { putRepo, getAllRepos, removeRepo, putBlob, getBlob, removeBlob };
+  // ---- per-chunk persistence. Each chunk is written to disk (IndexedDB)
+  // the moment it is read from the source File, so the upload engine never
+  // has to hold more than one chunk's worth of a multi-GB file in memory
+  // at a time. ----
+  async function putChunk(uploadId, chunkIndex, chunkBlob){
+    const store = await tx(CHUNKS, 'readwrite');
+    if (!store) return false;
+    return new Promise(resolve => {
+      const req = store.put({ chunkKey: uploadId + ':' + chunkIndex, uploadId, chunkIndex, chunkBlob });
+      req.onsuccess = () => resolve(true);
+      req.onerror = () => resolve(false);
+    });
+  }
+  async function getChunksInOrder(uploadId, totalChunks){
+    const store = await tx(CHUNKS, 'readonly');
+    if (!store) return [];
+    const out = new Array(totalChunks).fill(null);
+    for (let i = 0; i < totalChunks; i++){
+      const chunk = await new Promise(resolve => {
+        const req = store.get(uploadId + ':' + i);
+        req.onsuccess = () => resolve(req.result ? req.result.chunkBlob : null);
+        req.onerror = () => resolve(null);
+      });
+      out[i] = chunk;
+    }
+    return out;
+  }
+  async function removeChunksForUpload(uploadId, totalChunks){
+    const store = await tx(CHUNKS, 'readwrite');
+    if (!store) return false;
+    for (let i = 0; i < totalChunks; i++){
+      await new Promise(resolve => {
+        const req = store.delete(uploadId + ':' + i);
+        req.onsuccess = () => resolve(true);
+        req.onerror = () => resolve(false);
+      });
+    }
+    return true;
+  }
+
+  // ---- upload checkpoints — small progress records (no bytes) that let a
+  // resumable upload be recognized and continued after a pause, a tab
+  // reload, or a dropped connection. ----
+  async function putUploadCheckpoint(record){
+    const store = await tx(UPLOADS, 'readwrite');
+    if (!store) return false;
+    return new Promise(resolve => {
+      const req = store.put(record);
+      req.onsuccess = () => resolve(true);
+      req.onerror = () => resolve(false);
+    });
+  }
+  async function getAllUploadCheckpoints(){
+    const store = await tx(UPLOADS, 'readonly');
+    if (!store) return [];
+    return new Promise(resolve => {
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => resolve([]);
+    });
+  }
+  async function removeUploadCheckpoint(uploadId){
+    const store = await tx(UPLOADS, 'readwrite');
+    if (!store) return false;
+    return new Promise(resolve => {
+      const req = store.delete(uploadId);
+      req.onsuccess = () => resolve(true);
+      req.onerror = () => resolve(false);
+    });
+  }
+
+  return {
+    putRepo, getAllRepos, removeRepo, putBlob, getBlob, removeBlob,
+    putChunk, getChunksInOrder, removeChunksForUpload,
+    putUploadCheckpoint, getAllUploadCheckpoints, removeUploadCheckpoint
+  };
 })();
 
 /* --------------------------------------------------------------------------
@@ -1951,44 +2076,82 @@ const OblivionData = (() => {
     { path:'/api/releases', desc:'Create a release object for a repository', status:'ADAPTER' }
   ];
 
-  // Unified searchable/AI index built from the structured data above.
+  // Unified searchable/AI index built from the structured data above. This
+  // is the SEED index (static demo content only). Live repositories and
+  // uploaded files created in this browser are merged in on top via
+  // reindexLive() every time something is created, edited, deleted,
+  // restored, or finishes uploading — so new content is searchable
+  // immediately, the way requirement #10 asks for, without waiting for a
+  // page reload.
   function buildIndex(){
     const idx = [];
     projects.forEach(p => idx.push({
       id: p.id, type: 'PROJECT', title: p.name,
       desc: p.overview, path: '#project/'+p.id,
-      tags: [p.domain, p.status, ...p.technology].join(' ').toLowerCase()
+      tags: [p.domain, p.status, ...p.technology].join(' ').toLowerCase(),
+      visibility: 'PUBLIC'
     }));
     research.forEach(r => idx.push({
       id: r.id, type: 'RESEARCH', title: r.title,
       desc: r.abstract, path: '#research',
-      tags: (r.authors + ' ' + r.title).toLowerCase()
+      tags: (r.authors + ' ' + r.title).toLowerCase(), visibility: 'PUBLIC'
     }));
     models.forEach(m => idx.push({
       id: m.id, type: 'MODEL', title: m.name,
       desc: m.format + ' \u00b7 ' + m.params + ' parameters \u00b7 ' + m.license,
-      path: '#control', tags: (m.name+' '+m.format+' '+m.license).toLowerCase()
+      path: '#control', tags: (m.name+' '+m.format+' '+m.license).toLowerCase(), visibility: 'PUBLIC'
     }));
     files.forEach(f => idx.push({
       id: f.id, type: 'FILE', title: f.name,
       desc: f.type + ' \u00b7 owned by ' + f.owner,
-      path: '#control', tags: (f.name+' '+f.type+' '+f.owner).toLowerCase()
+      path: '#control', tags: (f.name+' '+f.type+' '+f.owner).toLowerCase(), visibility: 'PUBLIC'
     }));
-    idx.push({ id:'SYS-01', type:'SYSTEM', title:'Oracle Mesh service', desc:'Data-fusion ingestion and query service.', path:'#project/P-001', tags:'oracle mesh ingestion service system' });
-    idx.push({ id:'PER-01', type:'PERSON', title:'Bardiya Shokri', desc:'Management, Oblivion.', path:'#company', tags:'bardiya shokri management' });
-    idx.push({ id:'PLT-01', type:'PLATFORM', title:'Platform infrastructure philosophy', desc:'Zero trust, defense in depth, least privilege.', path:'#platform', tags:'platform security zero trust infrastructure' });
+    idx.push({ id:'SYS-01', type:'SYSTEM', title:'Oracle Mesh service', desc:'Data-fusion ingestion and query service.', path:'#project/P-001', tags:'oracle mesh ingestion service system', visibility:'PUBLIC' });
+    idx.push({ id:'PER-01', type:'PERSON', title:'Bardiya Shokri', desc:'Management, Oblivion.', path:'#company', tags:'bardiya shokri management', visibility:'PUBLIC' });
+    idx.push({ id:'PLT-01', type:'PLATFORM', title:'Platform infrastructure philosophy', desc:'Zero trust, defense in depth, least privilege.', path:'#platform', tags:'platform security zero trust infrastructure', visibility:'PUBLIC' });
     projects.forEach(p => p.releases.forEach(rel => idx.push({
       id: p.id+'-'+rel.v, type:'RELEASE', title: p.name+' '+rel.v,
-      desc: 'Released '+rel.date, path: '#project/'+p.id, tags:(p.name+' release '+rel.v).toLowerCase()
+      desc: 'Released '+rel.date, path: '#project/'+p.id, tags:(p.name+' release '+rel.v).toLowerCase(), visibility:'PUBLIC'
     })));
     repositories.forEach(r => idx.push({
       id: r.id, type:'REPOSITORY', title: r.name,
-      desc: r.description, path: '#control', tags:(r.name+' '+r.tags.join(' ')+' '+r.visibility+' '+r.status).toLowerCase()
+      desc: r.description, path: '#control', tags:(r.name+' '+r.tags.join(' ')+' '+r.visibility+' '+r.status).toLowerCase(),
+      visibility: r.visibility || 'PUBLIC'
     }));
     return idx;
   }
 
-  return { projects, research, models, files, repositories, ecosystem, users, apiSurface, index: buildIndex() };
+  let liveIndex = [];
+  // Rebuilds the "live" half of the index from real repositories created in
+  // this browser (and their attached files), then splices it in alongside
+  // the static seed index. Soft-deleted repositories/files are skipped
+  // entirely — a deleted resource is not searchable even before it is
+  // permanently purged.
+  function reindexLive(liveRepos){
+    const idx = [];
+    (liveRepos || []).forEach(r => {
+      if (r.deletedAt) return;
+      idx.push({
+        id: r.id, type: 'REPOSITORY', title: r.name, desc: r.description,
+        path: '#control', tags: (r.name + ' ' + (r.tags||[]).join(' ') + ' ' + r.visibility + ' ' + r.status).toLowerCase(),
+        visibility: r.visibility || 'PRIVATE'
+      });
+      (r.files||[]).forEach(f => {
+        if (f.deletedAt) return;
+        idx.push({
+          id: r.id + '::' + f.name, type: 'FILE', title: f.name,
+          desc: (f.resourceType||'FILE') + ' \u00b7 in ' + r.name,
+          path: '#control', tags: (f.name + ' ' + (f.resourceType||'') + ' ' + r.name).toLowerCase(),
+          visibility: r.visibility || 'PRIVATE'
+        });
+      });
+    });
+    liveIndex = idx;
+  }
+  function currentIndex(){ return index.concat(liveIndex); }
+
+  const index = buildIndex();
+  return { projects, research, models, files, repositories, ecosystem, users, apiSurface, index, reindexLive, currentIndex };
 })();
 
 /* --------------------------------------------------------------------------
@@ -2149,9 +2312,21 @@ const OblivionML = (() => {
    the same, so OblivionUI's renderer does not need to change.
    -------------------------------------------------------------------------- */
 const OblivionSearch = (() => {
+  // Permission filter stage (query → intent classification → search →
+  // PERMISSION FILTERING → ranking → structured results). An
+  // unauthenticated (public-site) search never sees PRIVATE or RESTRICTED
+  // repositories/files; an authenticated Control Center session sees
+  // everything it owns. This is the seam a real backend would enforce
+  // server-side per request — see /api/search in Developers.
+  function filterByPermission(records){
+    const authed = (typeof OblivionAuth !== 'undefined') && OblivionAuth.isAuthenticated();
+    if (authed) return records;
+    return records.filter(r => !r.visibility || r.visibility === 'PUBLIC' || r.visibility === 'UNLISTED');
+  }
+
   function query(q, typeFilter){
     const term = q.trim().toLowerCase();
-    let results = OblivionData.index;
+    let results = filterByPermission(OblivionData.currentIndex());
     if (typeFilter && typeFilter !== 'ALL'){
       results = results.filter(r => r.type === typeFilter);
     }
@@ -2230,7 +2405,8 @@ const OblivionTelemetry = (() => {
    production build needs — nothing else in this file depends on it.
    -------------------------------------------------------------------------- */
 const OblivionUploadEngine = (() => {
-  const CHUNK_SIZE = 2 * 1024 * 1024; // 2 MB — real slice size for demo chunking
+  const CHUNK_SIZE = 4 * 1024 * 1024; // 4 MB — real slice size, chosen so a
+  // single chunk is always safe to hold in memory even for a multi-GB file.
   const jobs = new Map();
 
   function humanSize(bytes){
@@ -2245,42 +2421,79 @@ const OblivionUploadEngine = (() => {
     const m = Math.floor(seconds/60), s = Math.round(seconds%60);
     return (m>0 ? m+'m ' : '') + s + 's';
   }
+  function hex(buf){ return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join(''); }
+
+  // A file's "signature" for matching a re-selected file against a stored
+  // checkpoint — name + size + lastModified is what every real resumable
+  // uploader (S3 multipart, tus, Drive) uses in place of a stronger
+  // identity, since hashing the whole file up front would defeat the
+  // purpose of resumability for a multi-GB file.
+  function signatureOf(file){ return file.name + ':' + file.size + ':' + (file.lastModified || 0); }
+
+  // Looks for a checkpoint left behind by a paused/interrupted upload of
+  // this exact file (same session or a previous one, since checkpoints and
+  // their chunks live in IndexedDB, not memory). Returns null if none.
+  async function findResumable(file){
+    const sig = signatureOf(file);
+    const checkpoints = await OblivionStorage.getAllUploadCheckpoints();
+    return checkpoints.find(c => c.signature === sig && c.chunkIndex < c.totalChunks) || null;
+  }
 
   // Creates a job descriptor. Nothing is transferred yet — mirrors a real
   // POST /api/uploads that returns an uploadId before any bytes move.
-  function createUpload(file, onUpdate){
-    const id = 'UP-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
+  // If `resumeFrom` is a checkpoint record, the job picks up at its
+  // chunkIndex instead of restarting at zero.
+  function createUpload(file, onUpdate, resumeFrom){
+    const id = resumeFrom ? resumeFrom.uploadId : ('UP-' + Date.now() + '-' + Math.random().toString(36).slice(2,7));
     const totalChunks = Math.max(1, Math.ceil(file.size / CHUNK_SIZE));
     const job = {
-      id, file, totalChunks, chunkIndex: 0, bytesDone: 0, totalBytes: file.size,
-      state: 'QUEUED', hasher: null, chunks: [], startedAt: null, lastTick: null,
-      onUpdate: onUpdate || (() => {}), cancelled: false
+      id, file, totalChunks,
+      chunkIndex: resumeFrom ? resumeFrom.chunkIndex : 0,
+      bytesDone: resumeFrom ? Math.min(resumeFrom.chunkIndex * CHUNK_SIZE, file.size) : 0,
+      totalBytes: file.size,
+      state: 'QUEUED',
+      // Only the SHA-256 of each already-transferred chunk is kept in
+      // memory (a few dozen bytes each) — never the chunk bytes themselves.
+      chunkHashes: resumeFrom ? (resumeFrom.chunkHashes || []) : [],
+      startedAt: null, lastTick: null,
+      onUpdate: onUpdate || (() => {}), cancelled: false, resumed: !!resumeFrom
     };
     jobs.set(id, job);
     return job;
   }
 
-  async function sha256OfChunks(chunks){
-    // Real checksum over the actual assembled bytes, computed with the
-    // browser's native SubtleCrypto — not a placeholder string.
-    const blob = new Blob(chunks);
-    const buf = await blob.arrayBuffer();
-    const digest = await crypto.subtle.digest('SHA-256', buf);
-    return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2,'0')).join('');
+  // Combines the per-chunk digests into one checksum, the same way S3
+  // multipart ETags are derived from concatenated part hashes. This is the
+  // step that lets a checksum exist WITHOUT ever reassembling the whole
+  // file into a single in-memory buffer to hash it directly.
+  async function finalChecksum(chunkHashes){
+    const enc = new TextEncoder().encode(chunkHashes.join(''));
+    const digest = await crypto.subtle.digest('SHA-256', enc);
+    return hex(digest) + '-' + chunkHashes.length; // suffix mirrors S3's "-N part count" convention
   }
 
-  // Reads and "transfers" one chunk. A small pacing delay stands in for
-  // real network latency in this offline demo; the progress it reports is
-  // computed from real bytes read via Blob.slice(), never a fake counter.
+  // Reads exactly one chunk via Blob.slice() (a view, not a copy), hashes
+  // it, and writes it straight to IndexedDB. At no point does this file
+  // hold more than one chunk's bytes in memory, regardless of total file
+  // size — this is the piece that makes multi-GB uploads safe.
   async function uploadChunk(job){
     if (job.cancelled) return { done:false, cancelled:true };
     const start = job.chunkIndex * CHUNK_SIZE;
     const end = Math.min(start + CHUNK_SIZE, job.file.size);
     const slice = job.file.slice(start, end);
-    await new Promise(r => setTimeout(r, 55)); // simulated transfer pacing
-    job.chunks.push(slice);
+    await new Promise(r => setTimeout(r, 40)); // simulated transfer pacing
+    const digest = await crypto.subtle.digest('SHA-256', await slice.arrayBuffer());
+    const stored = await OblivionStorage.putChunk(job.id, job.chunkIndex, slice);
+    if (!stored) throw new Error('STORAGE_WRITE_FAILED');
+    job.chunkHashes[job.chunkIndex] = hex(digest);
     job.bytesDone += slice.size;
     job.chunkIndex += 1;
+    await OblivionStorage.putUploadCheckpoint({
+      uploadId: job.id, signature: signatureOf(job.file), fileName: job.file.name,
+      fileType: job.file.type || 'application/octet-stream', totalBytes: job.totalBytes,
+      totalChunks: job.totalChunks, chunkIndex: job.chunkIndex, chunkHashes: job.chunkHashes,
+      updatedAt: Date.now()
+    });
     return { done: job.chunkIndex >= job.totalChunks, cancelled:false };
   }
 
@@ -2288,7 +2501,7 @@ const OblivionUploadEngine = (() => {
     const now = performance.now();
     if (!job.startedAt) job.startedAt = now;
     const elapsedSec = Math.max(0.001, (now - job.startedAt) / 1000);
-    const rate = job.bytesDone / elapsedSec;
+    const rate = (job.bytesDone - (job.resumeBaseline || 0)) / elapsedSec;
     const remaining = job.totalBytes - job.bytesDone;
     const eta = rate > 0 ? remaining / rate : Infinity;
     job.onUpdate({
@@ -2301,6 +2514,7 @@ const OblivionUploadEngine = (() => {
 
   async function run(job){
     job.state = 'UPLOADING';
+    if (job.resumeBaseline === undefined) job.resumeBaseline = job.bytesDone;
     while (job.chunkIndex < job.totalChunks){
       if (job.cancelled){ job.state = 'FAILED'; job.onUpdate({ state:'FAILED', error:'Cancelled by user.' }); return; }
       if (job.state === 'PAUSED'){ return; } // resume() re-enters run()
@@ -2310,7 +2524,7 @@ const OblivionUploadEngine = (() => {
         if (done) break;
       } catch (err){
         job.state = 'FAILED';
-        job.onUpdate({ state:'FAILED', error: 'Network interrupted while transferring a chunk.' });
+        job.onUpdate({ state:'FAILED', error: 'Transfer interrupted while writing a chunk. Progress up to the last completed chunk is saved — retry will resume, not restart.' });
         return;
       }
     }
@@ -2324,13 +2538,23 @@ const OblivionUploadEngine = (() => {
     job.onUpdate({ state:'VERIFYING' });
     let checksum;
     try {
-      checksum = await sha256OfChunks(job.chunks);
+      checksum = await finalChecksum(job.chunkHashes);
     } catch(err){
       job.state = 'FAILED';
       job.onUpdate({ state:'FAILED', error:'Checksum computation failed.' });
       return;
     }
-    const assembled = new Blob(job.chunks, { type: job.file.type || 'application/octet-stream' });
+    // Read each persisted chunk back as a Blob reference (not raw bytes)
+    // and hand the whole array to the Blob constructor — the browser
+    // stitches these into one logical file without the page ever holding
+    // the full byte range in a JS buffer.
+    const orderedChunks = await OblivionStorage.getChunksInOrder(job.id, job.totalChunks);
+    if (orderedChunks.some(c => !c)){
+      job.state = 'FAILED';
+      job.onUpdate({ state:'FAILED', error:'One or more stored chunks could not be read back from local storage.' });
+      return;
+    }
+    const assembled = new Blob(orderedChunks, { type: job.file.type || 'application/octet-stream' });
     const blobId = 'BLOB-' + job.id;
     const ok = await OblivionStorage.putBlob(blobId, assembled);
     if (!ok){
@@ -2338,6 +2562,10 @@ const OblivionUploadEngine = (() => {
       job.onUpdate({ state:'FAILED', error:'Local storage unavailable — the browser declined to persist this file.' });
       return;
     }
+    // The per-chunk copies and the checkpoint are no longer needed once the
+    // assembled artifact is durably stored.
+    await OblivionStorage.removeChunksForUpload(job.id, job.totalChunks);
+    await OblivionStorage.removeUploadCheckpoint(job.id);
     job.state = 'COMPLETE';
     job.blobId = blobId;
     job.checksum = checksum;
@@ -2346,12 +2574,21 @@ const OblivionUploadEngine = (() => {
 
   function pause(id){ const j = jobs.get(id); if (j && j.state === 'UPLOADING'){ j.state = 'PAUSED'; j.onUpdate({ state:'PAUSED' }); } }
   function resume(id){ const j = jobs.get(id); if (j && j.state === 'PAUSED'){ run(j); } }
-  function cancel(id){ const j = jobs.get(id); if (j){ j.cancelled = true; j.state = 'FAILED'; } }
+  async function cancel(id){
+    const j = jobs.get(id);
+    if (!j) return;
+    j.cancelled = true; j.state = 'FAILED';
+    await OblivionStorage.removeChunksForUpload(j.id, j.totalChunks);
+    await OblivionStorage.removeUploadCheckpoint(j.id);
+  }
   function retry(id){ const j = jobs.get(id); if (j && j.state === 'FAILED' && !j.cancelled){ j.state='QUEUED'; run(j); } }
   function verify(id){ const j = jobs.get(id); return j ? j.checksum : null; }
   function start(id){ const j = jobs.get(id); if (j) run(j); }
 
-  return { createUpload, start, pause, resume, cancel, retry, complete, verify, humanSize, humanRate, humanTime, CHUNK_SIZE };
+  return {
+    createUpload, start, pause, resume, cancel, retry, complete, verify,
+    findResumable, humanSize, humanRate, humanTime, CHUNK_SIZE
+  };
 })();
 
 /* --------------------------------------------------------------------------
@@ -2398,7 +2635,99 @@ const OblivionUI = (() => {
     if (lastFocused && lastFocused.focus) lastFocused.focus({ preventScroll: true });
   }
 
-  return { toast, trapFocus, open, close };
+  // Lightweight themed confirm dialog (Promise<boolean>) used for
+  // destructive actions — repository/file delete, permanent purge, etc.
+  // Kept intentionally small: no native confirm()/prompt(), which would
+  // break the app's own visual chrome.
+  function confirmDialog(message, opts){
+    opts = opts || {};
+    return new Promise(resolve => {
+      const overlay = document.createElement('div');
+      overlay.className = 'ob-confirm-overlay';
+      overlay.innerHTML = `
+        <div class="ob-confirm-box" role="alertdialog" aria-modal="true" aria-label="Confirm">
+          <p>${esc(message)}</p>
+          <div class="ob-confirm-actions">
+            <button type="button" class="btn btn-quiet" data-a="cancel">${esc(opts.cancelLabel || 'CANCEL')}</button>
+            <button type="button" class="btn btn-primary" data-a="ok">${esc(opts.confirmLabel || 'CONFIRM')}</button>
+          </div>
+        </div>`;
+      document.body.appendChild(overlay);
+      const release = trapFocus(overlay);
+      overlay.querySelector('[data-a="ok"]').focus();
+      function done(v){ release(); overlay.remove(); resolve(v); }
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay){ done(false); return; }
+        const btn = e.target.closest('button[data-a]');
+        if (btn) done(btn.dataset.a === 'ok');
+      });
+      overlay.addEventListener('keydown', e => { if (e.key === 'Escape') done(false); });
+    });
+  }
+
+  // Themed single-field prompt (Promise<string|null>) used for rename and
+  // similar quick text edits.
+  function promptDialog(message, defaultValue, opts){
+    opts = opts || {};
+    return new Promise(resolve => {
+      const overlay = document.createElement('div');
+      overlay.className = 'ob-confirm-overlay';
+      overlay.innerHTML = `
+        <div class="ob-confirm-box" role="alertdialog" aria-modal="true" aria-label="Input">
+          <p>${esc(message)}</p>
+          <input type="text" value="${esc(defaultValue || '')}" maxlength="${opts.maxlength || 200}">
+          <div class="ob-confirm-actions">
+            <button type="button" class="btn btn-quiet" data-a="cancel">CANCEL</button>
+            <button type="button" class="btn btn-primary" data-a="ok">${esc(opts.confirmLabel || 'SAVE')}</button>
+          </div>
+        </div>`;
+      document.body.appendChild(overlay);
+      const input = overlay.querySelector('input');
+      const release = trapFocus(overlay);
+      input.focus(); input.select();
+      function done(v){ release(); overlay.remove(); resolve(v); }
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay){ done(null); return; }
+        const btn = e.target.closest('button[data-a]');
+        if (btn) done(btn.dataset.a === 'ok' ? input.value.trim() : null);
+      });
+      overlay.addEventListener('keydown', e => {
+        if (e.key === 'Escape') done(null);
+        if (e.key === 'Enter'){ e.preventDefault(); done(input.value.trim()); }
+      });
+    });
+  }
+
+  // Themed select-from-list prompt — used for "move file to repository".
+  function selectDialog(message, options, opts){
+    opts = opts || {};
+    return new Promise(resolve => {
+      const overlay = document.createElement('div');
+      overlay.className = 'ob-confirm-overlay';
+      overlay.innerHTML = `
+        <div class="ob-confirm-box" role="alertdialog" aria-modal="true" aria-label="Choose">
+          <p>${esc(message)}</p>
+          <select>${options.map(o => `<option value="${esc(o.value)}">${esc(o.label)}</option>`).join('')}</select>
+          <div class="ob-confirm-actions">
+            <button type="button" class="btn btn-quiet" data-a="cancel">CANCEL</button>
+            <button type="button" class="btn btn-primary" data-a="ok">${esc(opts.confirmLabel || 'MOVE')}</button>
+          </div>
+        </div>`;
+      document.body.appendChild(overlay);
+      const select = overlay.querySelector('select');
+      const release = trapFocus(overlay);
+      select.focus();
+      function done(v){ release(); overlay.remove(); resolve(v); }
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay){ done(null); return; }
+        const btn = e.target.closest('button[data-a]');
+        if (btn) done(btn.dataset.a === 'ok' ? select.value : null);
+      });
+      overlay.addEventListener('keydown', e => { if (e.key === 'Escape') done(null); });
+    });
+  }
+
+  return { toast, trapFocus, open, close, confirmDialog, promptDialog, selectDialog };
 })();
 
 /* --------------------------------------------------------------------------
@@ -2521,11 +2850,16 @@ const OblivionRepo = (() => {
   let repos = [];
   let openRepoId = null;
   let activeTab = 'readme';
+  let showTrash = false;
+  let showDeletedFiles = false;
   const RESOURCE_TYPES = ['FILE','DOCUMENT','ARTICLE','RESEARCH','MODEL','DATASET','CODE','ARCHIVE','MEDIA'];
   const PREVIEWABLE_TEXT = /\.(md|markdown|txt|json|csv|html?|js|css)$/i;
   const PREVIEWABLE_IMAGE = /\.(png|jpe?g|gif|webp|svg)$/i;
   const PREVIEWABLE_AV = /\.(mp3|wav|ogg)$/i;
   const PREVIEWABLE_VIDEO = /\.(mp4|webm)$/i;
+
+  function extOf(name){ const parts = (name||'').split('.'); return parts.length > 1 ? parts.pop().toUpperCase() : '\u2014'; }
+  function shortChecksum(c){ return c ? c.slice(0, 12) + '\u2026' : '\u2014'; }
 
   async function load(){
     const stored = await OblivionStorage.getAllRepos();
@@ -2533,6 +2867,13 @@ const OblivionRepo = (() => {
     OblivionData.repositories.forEach(r => byId.set(r.id, r));
     stored.forEach(r => byId.set(r.id, r)); // user-created repos override/extend the seed list
     repos = Array.from(byId.values());
+    // Every repository/file becomes searchable immediately: reindex on
+    // every load, and again after any create/edit/delete/restore/upload.
+    OblivionData.reindexLive(repos.filter(r => !r.demo));
+  }
+  async function persist(r){
+    await OblivionStorage.putRepo(r);
+    OblivionData.reindexLive(repos.filter(x => !x.demo));
   }
 
   function inferResourceType(filename){
@@ -2551,30 +2892,39 @@ const OblivionRepo = (() => {
   function renderDirectory(){
     const el = document.getElementById('panel-repo-directory');
     if (!el) return;
-    if (!repos.length){
-      el.innerHTML = `<div class="control-empty"><b>No repositories</b>Create one below.</div>`;
-      return;
-    }
-    el.innerHTML = `<div class="repo-grid">` + repos.map(r => `
-      <div class="repo-card" tabindex="0" role="button" data-open="${esc(r.id)}" aria-label="Open repository ${esc(r.name)}">
-        <div class="rc-image">${r.primaryImageData ? `<img src="${esc(r.primaryImageData)}" alt="">` : 'NO PRIMARY IMAGE'}</div>
-        <div class="rc-body">
-          <div class="rc-name">${esc(r.name)}</div>
-          <div class="rc-path">OBLIVION / REPOSITORIES / ${esc(r.id)}</div>
-          <div class="rc-desc">${esc(r.description)}</div>
-          <div class="rc-meta">
-            <span class="tag status-${esc(r.status)}">${esc(r.status)}</span>
-            <span>${esc(r.visibility)}</span>
-            <span>${esc(r.version)}</span>
-            <span>${(r.files||[]).length} FILES</span>
+    const visible = repos.filter(r => showTrash ? !!r.deletedAt : !r.deletedAt);
+    const trashCount = repos.filter(r => !!r.deletedAt).length;
+    const toggleHTML = `
+      <div class="repo-toolbar trash-toggle">
+        <span style="color:var(--text-muted);font-size:12.5px;">${showTrash ? 'Soft-deleted repositories \u2014 restore or permanently delete.' : 'Every repository created here persists locally with real stored bytes.'}</span>
+        <button class="btn btn-quiet" id="btn-toggle-trash" type="button">${showTrash ? '\u2190 BACK TO REPOSITORIES' : 'TRASH (' + trashCount + ')'}</button>
+      </div>`;
+    if (!visible.length){
+      el.innerHTML = toggleHTML + `<div class="control-empty"><b>${showTrash ? 'Trash is empty' : 'No repositories'}</b>${showTrash ? 'Deleted repositories will appear here.' : 'Create one below.'}</div>`;
+    } else {
+      el.innerHTML = toggleHTML + `<div class="repo-grid">` + visible.map(r => `
+        <div class="repo-card" tabindex="0" role="button" data-open="${esc(r.id)}" aria-label="Open repository ${esc(r.name)}">
+          <div class="rc-image">${r.primaryImageData ? `<img src="${esc(r.primaryImageData)}" alt="">` : 'NO PRIMARY IMAGE'}</div>
+          <div class="rc-body">
+            <div class="rc-name">${esc(r.name)}</div>
+            <div class="rc-path">OBLIVION / REPOSITORIES / ${esc(r.id)}</div>
+            <div class="rc-desc">${esc(r.description)}</div>
+            <div class="rc-meta">
+              <span class="tag status-${esc(r.status)}">${esc(r.status)}</span>
+              <span>${esc(r.visibility)}</span>
+              <span>${esc(r.version)}</span>
+              <span>${(r.files||[]).length} FILES</span>
+              ${r.deletedAt ? `<span class="badge-deleted">DELETED</span>` : ''}
+            </div>
           </div>
         </div>
-      </div>
-    `).join('') + `</div>`;
+      `).join('') + `</div>`;
+    }
     el.querySelectorAll('[data-open]').forEach(card => {
       card.addEventListener('click', () => openRepo(card.dataset.open));
       card.addEventListener('keydown', e => { if (e.key === 'Enter') openRepo(card.dataset.open); });
     });
+    document.getElementById('btn-toggle-trash')?.addEventListener('click', () => { showTrash = !showTrash; renderDirectory(); });
   }
 
   function renderCreateForm(){
@@ -2663,10 +3013,20 @@ const OblivionRepo = (() => {
   function findRepo(id){ return repos.find(r => r.id === id); }
 
   function repoHeaderHTML(r){
+    const canEdit = !r.demo;
     return `
       <a href="#" class="repo-detail-back" id="repo-back">\u2190 REPOSITORIES</a>
       <div class="repo-header">
-        <div class="rh-image">${r.primaryImageData ? `<img src="${esc(r.primaryImageData)}" alt="">` : ''}</div>
+        <div class="rh-image">
+          ${r.primaryImageData ? `<img src="${esc(r.primaryImageData)}" alt="">` : ''}
+          ${canEdit ? `
+            <div class="rh-image-actions">
+              <button type="button" data-image-action="replace">${r.primaryImageData ? 'REPLACE' : 'SET IMAGE'}</button>
+              ${r.primaryImageData ? `<button type="button" data-image-action="remove">REMOVE</button>` : ''}
+            </div>
+            <input type="file" id="repo-image-input" class="vh" accept="image/jpeg,image/png,image/webp,image/gif">
+          ` : ''}
+        </div>
         <div class="rh-body">
           <div class="rh-path">OBLIVION / REPOSITORIES / ${esc(r.id)}</div>
           <h2>${esc(r.name)}</h2>
@@ -2679,13 +3039,52 @@ const OblivionRepo = (() => {
             <div><span>UPDATED</span><b>${esc(r.updated)}</b></div>
             <div><span>STORAGE</span><b>${r.demo ? 'DEMO RECORD' : 'LOCAL DEMO STORAGE'}</b></div>
           </div>
+          ${canEdit ? `
+            <div class="rh-actions">
+              <button class="btn btn-quiet" id="btn-repo-edit" type="button">EDIT REPOSITORY</button>
+              ${r.deletedAt
+                ? `<button class="btn btn-quiet" id="btn-repo-restore" type="button">RESTORE</button><button class="btn btn-quiet danger" id="btn-repo-purge" type="button">DELETE PERMANENTLY</button>`
+                : `<button class="btn btn-quiet danger" id="btn-repo-delete" type="button">DELETE REPOSITORY</button>`}
+            </div>
+          ` : ''}
         </div>
       </div>
+      ${r.deletedAt ? `<div class="storage-banner"><span class="badge-deleted">DELETED</span>&nbsp; This repository is in the trash. Restore it to make it visible and searchable again, or delete it permanently.</div>` : ''}
+    `;
+  }
+
+  function repoEditFormHTML(r){
+    return `
+      <form class="repo-edit-form" id="repo-edit-form">
+        <label>REPOSITORY NAME<input type="text" id="ef-name" required maxlength="80" value="${esc(r.name)}"></label>
+        <label>DESCRIPTION<textarea id="ef-desc" required maxlength="400">${esc(r.description)}</textarea></label>
+        <div class="rf-row">
+          <label>VISIBILITY
+            <select id="ef-visibility">
+              ${['PUBLIC','UNLISTED','PRIVATE','RESTRICTED'].map(v => `<option value="${v}" ${r.visibility===v?'selected':''}>${v[0]+v.slice(1).toLowerCase()}</option>`).join('')}
+            </select>
+          </label>
+          <label>STATUS
+            <select id="ef-status">
+              ${['active','archived','restricted'].map(v => `<option value="${v}" ${r.status===v?'selected':''}>${v}</option>`).join('')}
+            </select>
+          </label>
+        </div>
+        <label>TAGS <span style="color:var(--text-faint);">(comma separated)</span><input type="text" id="ef-tags" value="${esc((r.tags||[]).join(', '))}"></label>
+        <label>README \u2014 OVERVIEW<textarea id="ef-readme">${esc((r.readme&&r.readme.overview)||'')}</textarea></label>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-primary" type="submit">SAVE CHANGES</button>
+          <button class="btn btn-quiet" type="button" id="btn-repo-edit-cancel">CANCEL</button>
+        </div>
+      </form>
     `;
   }
 
   function primaryArtifactHTML(r){
-    if (!r.primaryArtifact) return `<div class="primary-artifact"><span class="pa-none">No primary artifact set for this repository.</span></div>`;
+    const canEdit = !r.demo && !r.deletedAt;
+    if (!r.primaryArtifact){
+      return `<div class="primary-artifact"><span class="pa-none">No primary artifact set for this repository.</span>${canEdit && (r.files||[]).length ? `<span style="color:var(--text-faint);font-size:11.5px;">Use \u201cSET PRIMARY\u201d on a file below.</span>` : ''}</div>`;
+    }
     const a = r.primaryArtifact;
     return `
       <div class="primary-artifact">
@@ -2698,7 +3097,10 @@ const OblivionRepo = (() => {
             <span class="checksum">SHA-256 ${esc(a.checksum)}</span>
           </div>
         </div>
-        <button class="btn btn-primary" data-download-artifact="${esc(r.id)}">DOWNLOAD</button>
+        <div class="pa-actions">
+          <button class="btn btn-primary" data-download-artifact="${esc(r.id)}">DOWNLOAD</button>
+          ${canEdit ? `<button class="btn btn-quiet" id="btn-primary-remove" type="button">REMOVE</button>` : ''}
+        </div>
       </div>
     `;
   }
@@ -2715,40 +3117,69 @@ const OblivionRepo = (() => {
     `;
   }
 
+  // File browser row — name/type/extension/size/version/checksum/updated/
+  // owner plus Open/Preview/Download/Rename/Move/Delete/Restore/Metadata,
+  // per the "GitHub-like FILES tab" requirement. Uploaded code/HTML/SVG/etc
+  // is only ever previewed as inert text or blocked binary — never executed
+  // (see PREVIEWABLE_* — there is no path that injects file bytes as
+  // script, markup, or an object/embed tag).
   function fileRowHTML(r, f, idx){
     const canDownload = !!f.blobId;
+    const canEdit = !r.demo;
+    const deleted = !!f.deletedAt;
     return `
-      <div class="resource-row">
+      <div class="resource-row${deleted ? ' is-deleted' : ''}">
         <div>
-          <div class="r-name">${esc(f.name)}</div>
+          <div class="r-name">${esc(f.name)} ${deleted ? `<span class="badge-deleted">DELETED</span>` : ''} ${(r.primaryArtifact && r.primaryArtifact.filename === f.name) ? `<span class="badge-prod">PRIMARY</span>` : ''}</div>
           <div class="r-type">${esc(f.resourceType)}</div>
+          <div class="r-sub">
+            <span>EXT <b>${esc(extOf(f.name))}</b></span>
+            <span>CHECKSUM <b class="checksum" title="${esc(f.checksum||'')}">${esc(shortChecksum(f.checksum))}</b></span>
+            <span>UPDATED <b>${esc((f.addedAt||'').slice(0,10) || '\u2014')}</b></span>
+            <span>OWNER <b>${esc(f.owner || r.owner || '\u2014')}</b></span>
+          </div>
         </div>
         <div class="r-size mono">${esc(f.humanSize)}</div>
         <div class="mono" style="color:var(--text-muted);font-size:11px;">${esc(f.version || '\u2014')}</div>
         <div class="r-actions">
-          <button class="btn btn-quiet" data-preview="${idx}">PREVIEW</button>
-          ${canDownload ? `<button class="btn btn-quiet" data-download-file="${idx}">DOWNLOAD</button>` : `<span class="badge-demo" title="Seeded demo record — no stored bytes in this browser">DEMO</span>`}
+          <button class="btn btn-quiet" data-preview="${idx}">${canDownload ? 'OPEN' : 'DEMO'}</button>
+          ${canDownload ? `<button class="btn btn-quiet" data-download-file="${idx}">DOWNLOAD</button>` : `<span class="badge-demo" title="Seeded demo record \u2014 no stored bytes in this browser">DEMO</span>`}
+          ${canEdit ? `<button class="btn btn-quiet" data-metadata-file="${idx}">METADATA</button>` : ''}
+          ${canEdit && !deleted ? `
+            <button class="btn btn-quiet" data-rename-file="${idx}">RENAME</button>
+            <button class="btn btn-quiet" data-move-file="${idx}">MOVE</button>
+            ${canDownload && (!r.primaryArtifact || r.primaryArtifact.filename !== f.name) ? `<button class="btn btn-quiet" data-primary-file="${idx}">SET PRIMARY</button>` : ''}
+            <button class="btn btn-quiet danger" data-delete-file="${idx}">DELETE</button>
+          ` : ''}
+          ${canEdit && deleted ? `<button class="btn btn-quiet" data-restore-file="${idx}">RESTORE</button>` : ''}
         </div>
       </div>
     `;
   }
 
   function filesTabHTML(r){
-    const uploaderHTML = r.demo ? '' : `
+    const uploaderHTML = (r.demo || r.deletedAt) ? '' : `
       <div class="uploader" id="repo-uploader">
         <div class="uploader-drop" id="repo-drop" tabindex="0" role="button" aria-label="Upload files to this repository">
           <span class="ud-state" id="repo-drop-state">IDLE</span>
-          Drop files here, or click to browse.
+          Drop files here, or click to browse. Any file type, including multi-GB files, is accepted.
           <input type="file" id="repo-file-input" class="vh" multiple>
         </div>
       </div>
       <div class="upload-queue" id="repo-upload-queue"></div>
     `;
+    const files = r.files || [];
+    const visibleFiles = files.filter(f => showDeletedFiles ? true : !f.deletedAt);
+    const deletedCount = files.filter(f => f.deletedAt).length;
     return `
-      <div class="storage-banner">LOCAL DEMO STORAGE \u2014 files uploaded here are written to IndexedDB in this browser only. They are not sent to a server. See Developers \u2192 /api/uploads for the production contract.</div>
+      <div class="storage-banner">LOCAL DEMO STORAGE \u2014 files uploaded here are written to IndexedDB in this browser only, as real bytes, in chunks. They are not sent to a server. See Developers \u2192 /api/uploads for the production contract.</div>
       ${uploaderHTML}
+      <div class="files-toolbar">
+        <span style="color:var(--text-muted);font-size:12.5px;">${visibleFiles.length} of ${files.length} files shown</span>
+        ${deletedCount ? `<label><input type="checkbox" id="chk-show-deleted-files" ${showDeletedFiles?'checked':''}> Show deleted (${deletedCount})</label>` : ''}
+      </div>
       <div class="resource-list">
-        ${(r.files||[]).map((f,i) => fileRowHTML(r,f,i)).join('') || `<div class="control-empty" style="border:0;"><b>No files</b>Nothing has been added to this repository yet.</div>`}
+        ${visibleFiles.map((f,i) => fileRowHTML(r,f,files.indexOf(f))).join('') || `<div class="control-empty" style="border:0;"><b>No files</b>Nothing has been added to this repository yet.</div>`}
       </div>
       <div class="preview-box" id="repo-preview" style="display:none;"></div>
     `;
@@ -2756,7 +3187,7 @@ const OblivionRepo = (() => {
 
   function releasesTabHTML(r){
     return `
-      ${r.demo ? '' : `<button class="btn" id="btn-create-release" style="margin-bottom:16px;">CREATE RELEASE</button>`}
+      ${(r.demo || r.deletedAt) ? '' : `<button class="btn" id="btn-create-release" style="margin-bottom:16px;">CREATE RELEASE</button>`}
       ${(r.releases||[]).length ? r.releases.map(rel => `
         <div class="release-row">
           <div><span class="v-tag">v${esc(rel.v)}</span> <span class="v-meta">${esc(rel.date)}</span></div>
@@ -2786,7 +3217,7 @@ const OblivionRepo = (() => {
   }
 
   function mediaTabHTML(r){
-    const media = (r.files||[]).filter(f => f.resourceType === 'MEDIA');
+    const media = (r.files||[]).filter(f => f.resourceType === 'MEDIA' && !f.deletedAt);
     if (!media.length) return `<div class="control-empty" style="border:0;"><b>No media</b>Upload an image, audio, or video file to see it here.</div>`;
     return `<div class="resource-list">${media.map((f,i) => fileRowHTML(r,f,(r.files||[]).indexOf(f))).join('')}</div>`;
   }
@@ -2835,18 +3266,118 @@ const OblivionRepo = (() => {
     main.querySelectorAll('[data-preview]').forEach(btn => {
       btn.addEventListener('click', () => previewFile(r, r.files[+btn.dataset.preview]));
     });
+    main.querySelectorAll('[data-metadata-file]').forEach(btn => {
+      btn.addEventListener('click', () => showFileMetadata(r, r.files[+btn.dataset.metadataFile]));
+    });
+    main.querySelectorAll('[data-rename-file]').forEach(btn => {
+      btn.addEventListener('click', () => renameFile(r, +btn.dataset.renameFile));
+    });
+    main.querySelectorAll('[data-move-file]').forEach(btn => {
+      btn.addEventListener('click', () => moveFile(r, +btn.dataset.moveFile));
+    });
+    main.querySelectorAll('[data-primary-file]').forEach(btn => {
+      btn.addEventListener('click', () => setPrimaryArtifact(r, +btn.dataset.primaryFile));
+    });
+    main.querySelectorAll('[data-delete-file]').forEach(btn => {
+      btn.addEventListener('click', () => deleteFile(r, +btn.dataset.deleteFile));
+    });
+    main.querySelectorAll('[data-restore-file]').forEach(btn => {
+      btn.addEventListener('click', () => restoreFile(r, +btn.dataset.restoreFile));
+    });
+    main.querySelector('#chk-show-deleted-files')?.addEventListener('change', e => {
+      showDeletedFiles = e.target.checked; renderDetail(r.id);
+    });
+    main.querySelector('#btn-primary-remove')?.addEventListener('click', async () => {
+      r.primaryArtifact = null;
+      await persist(r);
+      OblivionAuditLog.record('RESOURCE_UPDATED', 'Primary artifact cleared \u2014 ' + r.name);
+      OblivionUI.toast('Primary artifact removed.', 'success');
+      renderDetail(r.id);
+    });
     main.querySelector('#btn-create-release')?.addEventListener('click', async () => {
       const v = (r.version || 'v0.1.0').replace(/^v/,'');
       const nextV = v.split('.').map((n,i)=> i===2 ? String((+n||0)+1) : n).join('.');
       r.releases = r.releases || [];
       r.releases.unshift({ v: nextV, date: new Date().toISOString().slice(0,7), notes: 'Release created from the Control Center.' });
       r.version = 'v' + nextV;
-      await OblivionStorage.putRepo(r);
+      await persist(r);
       OblivionAuditLog.record('VERSION_CREATED', r.name + ' v' + nextV);
       OblivionUI.toast('Release v' + nextV + ' created.', 'success');
       renderDetail(r.id);
     });
-    if (!r.demo) wireUploader(r);
+
+    // ---- repository-level edit / delete / restore / permanent delete ----
+    main.querySelector('#btn-repo-edit')?.addEventListener('click', () => {
+      const anchor = main.querySelector('.repo-header');
+      const form = document.createElement('div');
+      form.innerHTML = repoEditFormHTML(r);
+      anchor.insertAdjacentElement('afterend', form.firstElementChild);
+      main.querySelector('#repo-edit-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        r.name = document.getElementById('ef-name').value.trim() || r.name;
+        r.description = document.getElementById('ef-desc').value.trim() || r.description;
+        r.visibility = document.getElementById('ef-visibility').value;
+        r.status = document.getElementById('ef-status').value;
+        r.tags = document.getElementById('ef-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+        r.readme = r.readme || {};
+        r.readme.overview = document.getElementById('ef-readme').value.trim();
+        r.updated = new Date().toISOString().slice(0,10);
+        await persist(r);
+        OblivionAuditLog.record('RESOURCE_UPDATED', 'Repository ' + r.name);
+        OblivionUI.toast('Repository updated.', 'success');
+        renderDetail(r.id);
+      });
+      main.querySelector('#btn-repo-edit-cancel').addEventListener('click', () => renderDetail(r.id));
+    });
+    main.querySelector('#btn-repo-delete')?.addEventListener('click', async () => {
+      const ok = await OblivionUI.confirmDialog('Delete "' + r.name + '"? It will move to Trash and can be restored later.', { confirmLabel:'DELETE' });
+      if (!ok) return;
+      r.deletedAt = new Date().toISOString();
+      await persist(r);
+      OblivionAuditLog.record('RESOURCE_DELETED', 'Repository ' + r.name + ' (soft delete)');
+      OblivionUI.toast('Repository moved to trash.', 'success');
+      openRepoId = null; showRepoList(); renderDirectory();
+    });
+    main.querySelector('#btn-repo-restore')?.addEventListener('click', async () => {
+      delete r.deletedAt;
+      await persist(r);
+      OblivionAuditLog.record('RESOURCE_RESTORED', 'Repository ' + r.name);
+      OblivionUI.toast('Repository restored.', 'success');
+      renderDetail(r.id);
+    });
+    main.querySelector('#btn-repo-purge')?.addEventListener('click', async () => {
+      const ok = await OblivionUI.confirmDialog('Permanently delete "' + r.name + '" and all its stored files? This cannot be undone.', { confirmLabel:'DELETE PERMANENTLY' });
+      if (!ok) return;
+      for (const f of (r.files||[])){ if (f.blobId) await OblivionStorage.removeBlob(f.blobId); }
+      await OblivionStorage.removeRepo(r.id);
+      OblivionAuditLog.record('RESOURCE_DELETED', 'Repository ' + r.name + ' (permanent)');
+      OblivionUI.toast('Repository permanently deleted.', 'success');
+      openRepoId = null;
+      await load();
+      showRepoList(); renderDirectory();
+    });
+
+    // ---- primary image replace / remove ----
+    main.querySelector('[data-image-action="replace"]')?.addEventListener('click', () => main.querySelector('#repo-image-input').click());
+    main.querySelector('#repo-image-input')?.addEventListener('change', async e => {
+      const f = e.target.files[0];
+      if (!f) return;
+      r.primaryImageData = await fileToDataURL(f);
+      r.updated = new Date().toISOString().slice(0,10);
+      await persist(r);
+      OblivionAuditLog.record('RESOURCE_UPDATED', 'Primary image \u2192 ' + r.name);
+      OblivionUI.toast('Primary image updated.', 'success');
+      renderDetail(r.id);
+    });
+    main.querySelector('[data-image-action="remove"]')?.addEventListener('click', async () => {
+      r.primaryImageData = null;
+      await persist(r);
+      OblivionAuditLog.record('RESOURCE_UPDATED', 'Primary image removed \u2192 ' + r.name);
+      OblivionUI.toast('Primary image removed.', 'success');
+      renderDetail(r.id);
+    });
+
+    if (!r.demo && !r.deletedAt) wireUploader(r);
   }
 
   function showRepoList(){
@@ -2871,9 +3402,19 @@ const OblivionRepo = (() => {
     OblivionAuditLog.record('FILE_DOWNLOADED', f.name);
   }
 
+  // Uploaded content is only ever rendered as an <img>/<video>/<audio> src
+  // (the browser's own trusted media decoders) or dumped as escaped, inert
+  // text inside a <pre> — HTML, JS, and SVG files are shown as their raw
+  // source text, never parsed or executed. Every other type falls through
+  // to a plain "binary artifact" notice.
   async function previewFile(r, f){
     const box = document.getElementById('repo-preview');
     if (!box) return;
+    if (f.deletedAt){
+      box.style.display = 'block';
+      box.innerHTML = `<div class="preview-binary">THIS FILE IS DELETED<br>RESTORE IT TO PREVIEW OR DOWNLOAD</div>`;
+      return;
+    }
     if (!f.blobId){
       box.style.display = 'block';
       box.innerHTML = `<div class="preview-binary">DEMO RECORD<br>NO STORED BYTES TO PREVIEW</div>`;
@@ -2882,7 +3423,7 @@ const OblivionRepo = (() => {
     const blob = await OblivionStorage.getBlob(f.blobId);
     box.style.display = 'block';
     if (!blob){ box.innerHTML = `<div class="preview-binary">COULD NOT READ FILE</div>`; return; }
-    if (PREVIEWABLE_IMAGE.test(f.name)){
+    if (PREVIEWABLE_IMAGE.test(f.name) && !/\.svg$/i.test(f.name)){
       const url = URL.createObjectURL(blob);
       box.innerHTML = `<img src="${url}" alt="${esc(f.name)}">`;
     } else if (PREVIEWABLE_VIDEO.test(f.name)){
@@ -2891,12 +3432,98 @@ const OblivionRepo = (() => {
     } else if (PREVIEWABLE_AV.test(f.name)){
       const url = URL.createObjectURL(blob);
       box.innerHTML = `<audio src="${url}" controls style="width:100%;"></audio>`;
-    } else if (PREVIEWABLE_TEXT.test(f.name)){
+    } else if (PREVIEWABLE_TEXT.test(f.name) || /\.svg$/i.test(f.name)){
+      // .svg deliberately renders as escaped source text here, not as an
+      // <img>/inline SVG — uploaded SVG can carry embedded script and must
+      // never be parsed as markup.
       const text = await blob.text();
       box.innerHTML = `<pre>${esc(text.slice(0, 20000))}</pre>`;
     } else {
-      box.innerHTML = `<div class="preview-binary">BINARY ARTIFACT<br>NO INLINE PREVIEW</div>`;
+      box.innerHTML = `<div class="preview-binary">BINARY ARTIFACT<br>NO INLINE PREVIEW \u2014 UPLOADED FILES ARE NEVER EXECUTED</div>`;
     }
+  }
+
+  function showFileMetadata(r, f){
+    const box = document.getElementById('repo-preview');
+    if (!box) return;
+    box.style.display = 'block';
+    box.innerHTML = `
+      <div class="readme-block" style="margin:0;">
+        <h4>NAME</h4><p>${esc(f.name)}</p>
+        <h4>TYPE / EXTENSION</h4><p>${esc(f.resourceType)} \u00b7 ${esc(extOf(f.name))}</p>
+        <h4>SIZE</h4><p>${esc(f.humanSize)}</p>
+        <h4>VERSION</h4><p>${esc(f.version || '\u2014')}</p>
+        <h4>CHECKSUM (SHA-256, chunk-manifest)</h4><p class="checksum">${esc(f.checksum || '\u2014')}</p>
+        <h4>UPDATED</h4><p>${esc((f.addedAt||'').replace('T',' ').slice(0,19) || '\u2014')}</p>
+        <h4>OWNER</h4><p>${esc(f.owner || r.owner || '\u2014')}</p>
+        <h4>STATUS</h4><p>${f.deletedAt ? 'Deleted ' + esc(f.deletedAt.slice(0,10)) : 'Active'}</p>
+      </div>`;
+  }
+
+  async function renameFile(r, idx){
+    const f = r.files[idx];
+    const name = await OblivionUI.promptDialog('Rename file', f.name, { confirmLabel:'RENAME' });
+    if (!name || name === f.name) return;
+    f.name = name;
+    f.resourceType = inferResourceType(name);
+    r.updated = new Date().toISOString().slice(0,10);
+    await persist(r);
+    OblivionAuditLog.record('RESOURCE_UPDATED', 'File renamed \u2192 ' + name);
+    OblivionUI.toast('File renamed.', 'success');
+    renderDetail(r.id);
+  }
+
+  async function moveFile(r, idx){
+    const targets = repos.filter(x => x.id !== r.id && !x.demo && !x.deletedAt);
+    if (!targets.length){ OblivionUI.toast('No other repository to move this file to. Create one first.', 'error'); return; }
+    const destId = await OblivionUI.selectDialog(
+      'Move "' + r.files[idx].name + '" to which repository?',
+      targets.map(t => ({ value:t.id, label:t.name })),
+      { confirmLabel:'MOVE' }
+    );
+    if (!destId) return;
+    const dest = repos.find(x => x.id === destId);
+    const [f] = r.files.splice(idx, 1);
+    if (r.primaryArtifact && r.primaryArtifact.filename === f.name) r.primaryArtifact = null;
+    dest.files = dest.files || [];
+    dest.files.push(f);
+    r.updated = new Date().toISOString().slice(0,10);
+    dest.updated = r.updated;
+    await OblivionStorage.putRepo(r);
+    await persist(dest);
+    OblivionAuditLog.record('RESOURCE_UPDATED', f.name + ' moved: ' + r.name + ' \u2192 ' + dest.name);
+    OblivionUI.toast('File moved to ' + dest.name + '.', 'success');
+    renderDetail(r.id);
+  }
+
+  async function setPrimaryArtifact(r, idx){
+    const f = r.files[idx];
+    r.primaryArtifact = { filename: f.name, humanSize: f.humanSize, version: f.version || 'v1', checksum: f.checksum };
+    await persist(r);
+    OblivionAuditLog.record('RESOURCE_UPDATED', f.name + ' set as primary artifact \u2192 ' + r.name);
+    OblivionUI.toast(f.name + ' set as the primary artifact.', 'success');
+    renderDetail(r.id);
+  }
+
+  async function deleteFile(r, idx){
+    const f = r.files[idx];
+    const ok = await OblivionUI.confirmDialog('Delete "' + f.name + '"? It will be hidden but recoverable until permanently purged.', { confirmLabel:'DELETE' });
+    if (!ok) return;
+    f.deletedAt = new Date().toISOString();
+    if (r.primaryArtifact && r.primaryArtifact.filename === f.name) r.primaryArtifact = null;
+    await persist(r);
+    OblivionAuditLog.record('RESOURCE_DELETED', f.name + ' (soft delete)');
+    OblivionUI.toast('File deleted.', 'success');
+    renderDetail(r.id);
+  }
+
+  async function restoreFile(r, idx){
+    const f = r.files[idx];
+    delete f.deletedAt;
+    await persist(r);
+    OblivionAuditLog.record('RESOURCE_RESTORED', f.name);
+    OblivionUI.toast('File restored.', 'success');
+    renderDetail(r.id);
   }
 
   function wireUploader(r){
@@ -2919,7 +3546,7 @@ const OblivionRepo = (() => {
   }
 
   function handleFiles(r, fileList, queueEl){
-    Array.from(fileList).forEach(file => {
+    Array.from(fileList).forEach(async file => {
       const itemEl = document.createElement('div');
       itemEl.className = 'upload-item';
       itemEl.innerHTML = `
@@ -2933,8 +3560,16 @@ const OblivionRepo = (() => {
         <div class="ui-error" data-error></div>
       `;
       queueEl.prepend(itemEl);
-      const job = OblivionUploadEngine.createUpload(file, update => onJobUpdate(r, file, job, itemEl, update));
-      OblivionAuditLog.record('UPLOAD_STARTED', file.name);
+      // A resumable checkpoint (same name + size + lastModified) means a
+      // previous attempt at this exact file was paused or interrupted —
+      // continue from its last persisted chunk instead of restarting.
+      const checkpoint = await OblivionUploadEngine.findResumable(file);
+      if (checkpoint){
+        itemEl.querySelector('[data-status]').textContent = 'RESUMING';
+        itemEl.querySelector('[data-stats]').textContent = 'Resuming from chunk ' + checkpoint.chunkIndex + ' / ' + checkpoint.totalChunks + '\u2026';
+      }
+      const job = OblivionUploadEngine.createUpload(file, update => onJobUpdate(r, file, job, itemEl, update), checkpoint);
+      OblivionAuditLog.record(checkpoint ? 'UPLOAD_RESUMED' : 'UPLOAD_STARTED', file.name);
       wireItemActions(itemEl, job);
       OblivionUploadEngine.start(job.id);
     });
@@ -2966,7 +3601,7 @@ const OblivionRepo = (() => {
       statsEl.textContent = `${update.humanDone} / ${update.humanTotal} \u00b7 ${update.percent.toFixed(1)}% \u00b7 ${update.rateLabel} \u00b7 ETA ${update.etaLabel}`;
     }
     if (update.state === 'VERIFYING'){
-      statsEl.textContent = 'Computing SHA-256 checksum\u2026';
+      statsEl.textContent = 'Computing chunk-manifest SHA-256 checksum\u2026';
     }
     if (update.state === 'COMPLETE'){
       actionsEl.innerHTML = '';
@@ -2974,7 +3609,8 @@ const OblivionRepo = (() => {
       const entry = {
         name: file.name, resourceType: inferResourceType(file.name),
         humanSize: OblivionUploadEngine.humanSize(file.size), version: 'v1',
-        blobId: update.blobId, checksum: update.checksum, addedAt: new Date().toISOString()
+        blobId: update.blobId, checksum: update.checksum, addedAt: new Date().toISOString(),
+        owner: r.owner || 'This session'
       };
       r.files = r.files || [];
       r.files.push(entry);
@@ -2982,7 +3618,7 @@ const OblivionRepo = (() => {
         r.primaryArtifact = { filename: entry.name, humanSize: entry.humanSize, version: entry.version, checksum: entry.checksum };
       }
       r.updated = new Date().toISOString().slice(0,10);
-      await OblivionStorage.putRepo(r);
+      await persist(r);
       OblivionAuditLog.record('UPLOAD_COMPLETED', file.name);
       OblivionAuditLog.record('RESOURCE_PUBLISHED', file.name + ' \u2192 ' + r.name);
       OblivionUI.toast(file.name + ' published to ' + r.name + '.', 'success');
@@ -2996,7 +3632,7 @@ const OblivionRepo = (() => {
     }
   }
 
-  function openRepo(id){ activeTab = 'readme'; renderDetail(id); }
+  function openRepo(id){ activeTab = 'readme'; showDeletedFiles = false; renderDetail(id); }
 
   return { load, renderDirectory, renderCreateForm, openRepo };
 })();
