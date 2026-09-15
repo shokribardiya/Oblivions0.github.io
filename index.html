@@ -803,6 +803,120 @@ table{ border-collapse: collapse; width:100%; }
 .audit-row .t{ font-family: var(--font-mono); color: var(--text-muted); }
 .audit-row .a{ color: var(--text); }
 .audit-row .d{ color: var(--text-secondary); }
+
+/* ==========================================================================
+   REPOSITORIES — directory, detail, primary artifact, README, releases
+   ========================================================================== */
+.repo-toolbar{ display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:18px; }
+.repo-toolbar input{ border:1px solid var(--border-strong); padding:9px 12px; font-size:12.5px; min-width:220px; background:var(--surface); }
+.repo-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap:14px; }
+.repo-card{
+  border:1px solid var(--border); background:var(--surface-2); padding:0; cursor:pointer;
+  display:flex; flex-direction:column; transition: border-color var(--dur-1) var(--ease);
+}
+.repo-card:hover, .repo-card:focus-visible{ border-color: var(--border-strong); }
+.repo-card .rc-image{
+  height:120px; background:var(--surface-3); display:flex; align-items:center; justify-content:center;
+  color:var(--text-faint); font-family:var(--font-mono); font-size:10.5px; letter-spacing:.06em; overflow:hidden;
+  border-bottom:1px solid var(--border-hair);
+}
+.repo-card .rc-image img{ width:100%; height:100%; object-fit:cover; }
+.repo-card .rc-body{ padding:14px 16px 16px; display:flex; flex-direction:column; gap:8px; flex:1; }
+.repo-card .rc-name{ font-size:14.5px; color:var(--text); font-weight:500; }
+.repo-card .rc-path{ font-family:var(--font-mono); font-size:10.5px; color:var(--text-faint); }
+.repo-card .rc-desc{ font-size:12.5px; color:var(--text-muted); line-height:1.55; flex:1; }
+.repo-card .rc-meta{ display:flex; gap:8px; flex-wrap:wrap; font-size:10.5px; }
+.repo-card .rc-meta span{ font-family:var(--font-mono); color:var(--text-muted); border:1px solid var(--border-hair); padding:2px 7px; }
+
+.repo-detail-back{ font-family:var(--font-mono); font-size:11.5px; color:var(--text-muted); margin-bottom:18px; display:inline-flex; align-items:center; gap:6px; }
+.repo-detail-back:hover{ color:var(--text); }
+.repo-header{ border:1px solid var(--border); background:var(--surface-2); margin-bottom:24px; }
+.repo-header .rh-image{ height:200px; background:var(--surface-3); overflow:hidden; border-bottom:1px solid var(--border-hair); }
+.repo-header .rh-image img{ width:100%; height:100%; object-fit:cover; }
+.repo-header .rh-body{ padding:22px 24px 24px; }
+.repo-header .rh-path{ font-family:var(--font-mono); font-size:11px; color:var(--text-faint); margin-bottom:8px; }
+.repo-header h2{ font-size:24px; margin-bottom:8px; }
+.repo-header .rh-desc{ color:var(--text-secondary); font-size:13.5px; max-width:68ch; line-height:1.6; margin-bottom:16px; }
+.repo-header .rh-fields{ display:flex; gap:26px; flex-wrap:wrap; }
+.repo-header .rh-fields div{ display:flex; flex-direction:column; gap:4px; }
+.repo-header .rh-fields span{ font-family:var(--font-mono); font-size:10px; letter-spacing:.06em; color:var(--text-faint); }
+.repo-header .rh-fields b{ font-size:13px; font-weight:500; color:var(--text); }
+
+.repo-tabs{ display:flex; gap:2px; border-bottom:1px solid var(--border-hair); margin-bottom:24px; overflow-x:auto; }
+.repo-tabs button{ padding:11px 16px; font-size:11.5px; font-family:var(--font-mono); letter-spacing:.05em; color:var(--text-muted); border-bottom:2px solid transparent; white-space:nowrap; }
+.repo-tabs button[aria-selected="true"]{ color:var(--text); border-bottom-color:var(--warm); }
+.repo-tabpanel{ display:none; }
+.repo-tabpanel.active{ display:block; }
+
+.primary-artifact{ border:1px solid var(--border-strong); background:var(--surface-3); padding:20px 22px; margin-bottom:28px; display:flex; justify-content:space-between; align-items:center; gap:18px; flex-wrap:wrap; }
+.primary-artifact .pa-label{ font-family:var(--font-mono); font-size:10px; letter-spacing:.08em; color:var(--warm); margin-bottom:8px; }
+.primary-artifact .pa-name{ font-size:15px; color:var(--text); font-weight:500; margin-bottom:6px; word-break:break-all; }
+.primary-artifact .pa-meta{ display:flex; gap:14px; flex-wrap:wrap; font-size:11.5px; color:var(--text-muted); font-family:var(--font-mono); }
+.primary-artifact .pa-meta b{ color:var(--text-secondary); font-weight:500; }
+.primary-artifact .pa-none{ color:var(--text-muted); font-size:13px; }
+
+.readme-block{ border:1px solid var(--border); background:var(--surface-2); padding:24px; margin-bottom:28px; }
+.readme-block h4{ font-size:11px; font-family:var(--font-mono); letter-spacing:.06em; color:var(--text-muted); margin:20px 0 8px; }
+.readme-block h4:first-child{ margin-top:0; }
+.readme-block p{ font-size:13.5px; color:var(--text-secondary); line-height:1.65; white-space:pre-wrap; }
+
+.resource-list{ display:flex; flex-direction:column; gap:1px; background:var(--border-hair); border:1px solid var(--border-hair); margin-bottom:20px; }
+.resource-row{ background:var(--surface-2); padding:13px 16px; display:grid; grid-template-columns: 1fr auto auto auto; gap:14px; align-items:center; font-size:12.5px; }
+.resource-row .r-name{ color:var(--text); font-weight:500; word-break:break-all; }
+.resource-row .r-type{ font-family:var(--font-mono); font-size:10px; color:var(--text-muted); border:1px solid var(--border-hair); padding:2px 7px; width:fit-content; margin-top:4px; }
+.resource-row .r-size{ font-family:var(--font-mono); color:var(--text-muted); }
+.resource-row .r-actions{ display:flex; gap:6px; }
+
+.version-row, .release-row{ display:flex; justify-content:space-between; align-items:center; padding:13px 0; border-bottom:1px solid var(--border-hair); font-size:13px; gap:12px; flex-wrap:wrap; }
+.version-row:last-child, .release-row:last-child{ border-bottom:0; }
+.version-row .v-tag{ font-family:var(--font-mono); font-size:12.5px; color:var(--text); }
+.version-row .v-meta{ font-size:11.5px; color:var(--text-muted); font-family:var(--font-mono); }
+
+.checksum{ font-family:var(--font-mono); font-size:10.5px; color:var(--text-muted); word-break:break-all; }
+.badge-demo{ font-family:var(--font-mono); font-size:9.5px; letter-spacing:.06em; color:var(--warning); border:1px solid color-mix(in srgb, var(--warning) 40%, var(--border)); padding:3px 8px; }
+.badge-prod{ font-family:var(--font-mono); font-size:9.5px; letter-spacing:.06em; color:var(--text-faint); border:1px solid var(--border); padding:3px 8px; }
+.storage-banner{
+  display:flex; align-items:center; gap:10px; font-size:11.5px; color:var(--text-muted); font-family:var(--font-mono);
+  border:1px solid var(--border); background:var(--warm-tint); padding:10px 14px; margin-bottom:20px;
+}
+
+/* ---- uploader ---- */
+.uploader{ border:1px dashed var(--border-strong); padding:0; margin-bottom:20px; }
+.uploader.state-drag{ border-color: var(--warm); background: var(--warm-tint); }
+.uploader-drop{ padding:32px; text-align:center; font-size:13px; color:var(--text-muted); cursor:pointer; }
+.uploader-drop .ud-state{ font-family:var(--font-mono); font-size:10px; letter-spacing:.08em; color:var(--text-faint); display:block; margin-bottom:8px; }
+.upload-queue{ display:flex; flex-direction:column; gap:1px; background:var(--border-hair); }
+.upload-item{ background:var(--surface-2); padding:14px 16px; display:flex; flex-direction:column; gap:8px; }
+.upload-item .ui-top{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; font-size:12.5px; }
+.upload-item .ui-name{ color:var(--text); font-weight:500; word-break:break-all; }
+.upload-item .ui-status{ font-family:var(--font-mono); font-size:10px; letter-spacing:.05em; color:var(--text-muted); white-space:nowrap; }
+.upload-item .ui-status.uploading{ color:var(--info); }
+.upload-item .ui-status.paused{ color:var(--warning); }
+.upload-item .ui-status.complete{ color:var(--success); }
+.upload-item .ui-status.failed{ color:var(--danger); }
+.upload-item .ui-bar{ height:4px; background:var(--surface-3); position:relative; overflow:hidden; }
+.upload-item .ui-bar i{ display:block; height:100%; background:var(--warm); transition:width 90ms linear; }
+.upload-item .ui-stats{ display:flex; gap:14px; flex-wrap:wrap; font-family:var(--font-mono); font-size:10.5px; color:var(--text-muted); }
+.upload-item .ui-actions{ display:flex; gap:8px; }
+.upload-item .ui-actions button{ font-family:var(--font-mono); font-size:10.5px; color:var(--text-muted); border:1px solid var(--border-hair); padding:4px 9px; }
+.upload-item .ui-actions button:hover{ color:var(--text); border-color:var(--border-strong); }
+.upload-item .ui-error{ font-size:11.5px; color:var(--danger); }
+
+.preview-box{ border:1px solid var(--border-hair); background:var(--bg); padding:16px; margin-top:14px; max-height:340px; overflow:auto; }
+.preview-box img, .preview-box video{ max-width:100%; display:block; }
+.preview-box pre{ font-family:var(--font-mono); font-size:11.5px; color:var(--text-secondary); white-space:pre-wrap; word-break:break-word; margin:0; }
+.preview-binary{ text-align:center; padding:24px; color:var(--text-faint); font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; }
+
+/* ---- create repository form ---- */
+.repo-form{ display:grid; gap:16px; max-width:640px; }
+.repo-form label{ display:flex; flex-direction:column; gap:6px; font-size:11.5px; color:var(--text-muted); font-family:var(--font-mono); letter-spacing:.03em; }
+.repo-form input[type="text"], .repo-form select, .repo-form textarea{
+  border:1px solid var(--border-strong); background:var(--surface); padding:10px 12px; font-size:13.5px; color:var(--text); font-family:var(--font-sans);
+}
+.repo-form textarea{ min-height:90px; resize:vertical; }
+.repo-form .rf-row{ display:flex; gap:14px; flex-wrap:wrap; }
+.repo-form .rf-row > label{ flex:1; min-width:160px; }
+
 @media (max-width: 900px){
   .control-app.active{ grid-template-columns: 1fr; }
   .control-side{ display:flex; overflow-x:auto; padding: 12px; border-right:0; border-bottom:1px solid var(--border-hair); }
@@ -833,6 +947,33 @@ table{ border-collapse: collapse; width:100%; }
   .footer-top{ grid-template-columns: 1fr 1fr; }
   .footer-brand{ grid-column: 1 / -1; margin-bottom:12px; }
 }
+
+/* ==========================================================================
+   EXTERNAL ECOSYSTEM / NETWORK
+   ========================================================================== */
+.ecosystem-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap:1px; background:var(--border-hair); border:1px solid var(--border-hair); }
+.eco-card{
+  position:relative; overflow:hidden; background:var(--surface-2); padding:26px 24px; display:flex; flex-direction:column; gap:10px;
+  min-height:150px; justify-content:flex-end;
+}
+.eco-card .eco-reveal{
+  position:absolute; inset:0; background-size:cover; background-position:center;
+  opacity:0; clip-path: inset(0 100% 0 0); transform: scale(1.04);
+  transition: opacity var(--dur-2) var(--ease), clip-path 420ms var(--ease), transform 420ms var(--ease);
+  pointer-events:none;
+}
+.eco-card:hover .eco-reveal, .eco-card:focus-visible .eco-reveal{
+  opacity:.22; clip-path: inset(0 0 0 0); transform: scale(1);
+}
+@media (prefers-reduced-motion: reduce){
+  .eco-card .eco-reveal{ transition:none; }
+}
+.eco-card .eco-index{ position:relative; font-family:var(--font-mono); font-size:10px; color:var(--text-faint); letter-spacing:.08em; }
+.eco-card .eco-name{ position:relative; font-size:17px; color:var(--text); font-weight:500; }
+.eco-card .eco-desc{ position:relative; font-size:12.5px; color:var(--text-muted); }
+.eco-card .eco-go{ position:relative; margin-top:8px; font-family:var(--font-mono); font-size:10.5px; color:var(--text-secondary); display:flex; align-items:center; gap:6px; }
+.eco-card:hover .eco-go, .eco-card:focus-visible .eco-go{ color:var(--warm); }
+.eco-card:hover, .eco-card:focus-visible{ background:var(--surface-3); }
 
 /* ==========================================================================
    TOASTS
@@ -1226,6 +1367,22 @@ table{ border-collapse: collapse; width:100%; }
   </div>
 </section>
 
+<!-- ==========================================================================
+     EXTERNAL ECOSYSTEM / NETWORK
+     ========================================================================== -->
+<section class="section" id="ecosystem">
+  <div class="shell">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">External Network</span>
+        <h2 style="margin-top:14px;">Oblivion Network</h2>
+      </div>
+      <p class="desc">Oblivion's engineering, research, and community surfaces live across a small set of official destinations. Each one is linked directly below rather than buried in a footer line.</p>
+    </div>
+    <div class="ecosystem-grid" id="ecosystem-grid"></div>
+  </div>
+</section>
+
 </main>
 
 <footer class="site-footer">
@@ -1380,14 +1537,15 @@ table{ border-collapse: collapse; width:100%; }
 
      OblivionConfig     - environment/domain configuration, one place to edit
      OblivionSecurity  - safe rendering / escaping helpers (used everywhere)
-     OblivionStorage    - IndexedDB adapter, stands in for object storage
-     OblivionData        - local structured index (projects/research/models/files)
+     OblivionStorage    - IndexedDB adapter for repositories + real local file bytes
+     OblivionData        - local structured index (projects/research/models/repositories)
      OblivionML            - small in-browser neural net for query-intent classification
      OblivionSearch      - query + rank the local index -> will call /api/search
      OblivionAI          - OblivionAI.query() local demo -> will call /api/ai
      OblivionAuth         - demo 3-field gate -> production uses WebAuthn/passkeys + MFO
      OblivionProjects      - project detail rendering
-     OblivionFiles          - file manager demo (File API + IndexedDB)
+     OblivionUploadEngine    - chunked read/checksum/pause/resume adapter -> /api/uploads
+     OblivionRepo               - repository object model, directory + detail rendering
      OblivionTelemetry        - local event buffer, stands in for observability/audit shipping
      OblivionRouter           - hash-based routing for overlay surfaces
      OblivionUI                - toast, focus trap, command palette, misc chrome
@@ -1404,7 +1562,7 @@ table{ border-collapse: collapse; width:100%; }
    `production` gates anything that should only run against a live backend.
    Every *Endpoint value below is an ADAPTER TARGET, not a live endpoint —
    none of these paths exist yet; they document where a backend build would
-   wire OblivionSearch/OblivionAI/OblivionAuth/OblivionFiles once one exists.
+   wire OblivionSearch/OblivionAI/OblivionAuth/OblivionRepo once one exists.
    -------------------------------------------------------------------------- */
 const OblivionConfig = Object.freeze({
   production: false,
@@ -1440,57 +1598,92 @@ const esc = OblivionSecurity.esc;
    never claims unlimited or persistent-across-devices storage.
    -------------------------------------------------------------------------- */
 const OblivionStorage = (() => {
-  const DB_NAME = 'oblivion-demo';
-  const STORE = 'files';
+  const DB_NAME = 'oblivion-repo-store';
+  const DB_VERSION = 1;
+  const REPOS = 'repositories';
+  const BLOBS = 'blobs';
   let dbPromise = null;
 
   function open(){
     if (dbPromise) return dbPromise;
-    dbPromise = new Promise((resolve, reject) => {
+    dbPromise = new Promise((resolve) => {
       if (!('indexedDB' in window)) { resolve(null); return; }
-      const req = indexedDB.open(DB_NAME, 1);
+      const req = indexedDB.open(DB_NAME, DB_VERSION);
       req.onupgradeneeded = () => {
         const db = req.result;
-        if (!db.objectStoreNames.contains(STORE)){
-          db.createObjectStore(STORE, { keyPath: 'id' });
-        }
+        if (!db.objectStoreNames.contains(REPOS)) db.createObjectStore(REPOS, { keyPath: 'id' });
+        if (!db.objectStoreNames.contains(BLOBS)) db.createObjectStore(BLOBS, { keyPath: 'blobId' });
       };
       req.onsuccess = () => resolve(req.result);
       req.onerror = () => resolve(null);
     });
     return dbPromise;
   }
-  async function put(record){
-    const db = await open();
-    if (!db) return false;
+  function tx(store, mode){
+    return open().then(db => db ? db.transaction(store, mode).objectStore(store) : null);
+  }
+
+  // ---- repository records (metadata only — id, slug, files[], readme, etc.) ----
+  async function putRepo(record){
+    const store = await tx(REPOS, 'readwrite');
+    if (!store) return false;
     return new Promise(resolve => {
-      const tx = db.transaction(STORE, 'readwrite');
-      tx.objectStore(STORE).put(record);
-      tx.oncomplete = () => resolve(true);
-      tx.onerror = () => resolve(false);
+      const req = store.put(record);
+      req.onsuccess = () => resolve(true);
+      req.onerror = () => resolve(false);
     });
   }
-  async function getAll(){
-    const db = await open();
-    if (!db) return [];
+  async function getAllRepos(){
+    const store = await tx(REPOS, 'readonly');
+    if (!store) return [];
     return new Promise(resolve => {
-      const tx = db.transaction(STORE, 'readonly');
-      const req = tx.objectStore(STORE).getAll();
+      const req = store.getAll();
       req.onsuccess = () => resolve(req.result || []);
       req.onerror = () => resolve([]);
     });
   }
-  async function remove(id){
-    const db = await open();
-    if (!db) return false;
+  async function removeRepo(id){
+    const store = await tx(REPOS, 'readwrite');
+    if (!store) return false;
     return new Promise(resolve => {
-      const tx = db.transaction(STORE, 'readwrite');
-      tx.objectStore(STORE).delete(id);
-      tx.oncomplete = () => resolve(true);
-      tx.onerror = () => resolve(false);
+      const req = store.delete(id);
+      req.onsuccess = () => resolve(true);
+      req.onerror = () => resolve(false);
     });
   }
-  return { put, getAll, remove };
+
+  // ---- real file bytes. This is a genuine local persistence layer: the
+  // Blob written here is the actual uploaded file, not a metadata stand-in.
+  // See OblivionUploadEngine for how a Blob arrives here in chunks. ----
+  async function putBlob(blobId, blob){
+    const store = await tx(BLOBS, 'readwrite');
+    if (!store) return false;
+    return new Promise(resolve => {
+      const req = store.put({ blobId, blob });
+      req.onsuccess = () => resolve(true);
+      req.onerror = () => resolve(false);
+    });
+  }
+  async function getBlob(blobId){
+    const store = await tx(BLOBS, 'readonly');
+    if (!store) return null;
+    return new Promise(resolve => {
+      const req = store.get(blobId);
+      req.onsuccess = () => resolve(req.result ? req.result.blob : null);
+      req.onerror = () => resolve(null);
+    });
+  }
+  async function removeBlob(blobId){
+    const store = await tx(BLOBS, 'readwrite');
+    if (!store) return false;
+    return new Promise(resolve => {
+      const req = store.delete(blobId);
+      req.onsuccess = () => resolve(true);
+      req.onerror = () => resolve(false);
+    });
+  }
+
+  return { putRepo, getAllRepos, removeRepo, putBlob, getBlob, removeBlob };
 })();
 
 /* --------------------------------------------------------------------------
@@ -1619,6 +1812,114 @@ const OblivionData = (() => {
     { id:'F-104', name:'ledger-event-schema.md', type:'Documentation', size:'54 KB', status:'Current', version:'v2.0', owner:'Platform', updated:'2025-05-22' }
   ];
 
+  // Repositories — first-class objects seeding the Control Center's
+  // Repositories directory. Each conceptually owns a primary artifact,
+  // a README, a file list, versions, and releases. `demo: true` marks
+  // records that ship with this file (read-only, no stored bytes);
+  // repositories created through the Control Center are persisted to
+  // OblivionStorage and merged in at render time — see OblivionRepo.
+  const repositories = [
+    {
+      id:'P-001', slug:'oracle-mesh', name:'Oracle Mesh', resourceType:'REPOSITORY', demo:true,
+      description:'Distributed graph store and streaming ingestion layer for schema-on-read object fusion.',
+      status:'active', version:'v3.2.0', visibility:'PUBLIC', owner:'Systems Engineering', updated:'2026-01-14',
+      tags:['data-fusion','graph','ingestion'], license:'Internal',
+      primaryArtifact:{ filename:'ontology-spec.md', humanSize:'128 KB', version:'v3.2', checksum:'8f2a91e6c3b4d5107f9a2c6e8b1d4f3a5c7e9b0d2f4a6c8e0b2d4f6a8c0e2b4d' },
+      readme:{
+        overview:'Oracle Mesh is Oblivion\u2019s core data-fusion layer. It ingests structured and semi-structured sources into a single addressable object graph.',
+        installation:'Not distributed outside Oblivion infrastructure. Internal deployment is managed through the Platform team\u2019s service pipeline.',
+        usage:'Downstream systems query the object graph through a permission-aware query layer; see the architecture note in the Project record for detail.',
+        architecture:'Ingestion workers normalize source records into typed objects and relationships behind a versioned ontology.'
+      },
+      files:[ { name:'ontology-spec.md', resourceType:'DOCUMENT', humanSize:'128 KB', version:'v3.2' }, { name:'mesh-core', resourceType:'CODE', humanSize:'\u2014', version:'v3.2.0' } ],
+      versions:[ { v:'3.2.0', date:'2026-01', humanSize:'128 KB', checksum:'8f2a91e6\u2026', state:'LATEST' }, { v:'3.1.0', date:'2025-08', humanSize:'119 KB', checksum:'2c7e0b4d\u2026', state:'ARCHIVED' } ],
+      releases:[ { v:'3.2.0', date:'2026-01', notes:'Ontology v3 edge-type revisions and ingestion throughput improvements.' }, { v:'3.1.0', date:'2025-08', notes:'Initial public-metadata release.' } ]
+    },
+    {
+      id:'P-002', slug:'sentinel-grid', name:'Sentinel Grid', resourceType:'REPOSITORY', demo:true,
+      description:'Geospatial and satellite imagery pipeline feeding change-detection and monitoring workflows.',
+      status:'active', version:'v2.4.0', visibility:'PUBLIC', owner:'Applied AI', updated:'2025-12-02',
+      tags:['geospatial','imagery','detection'], license:'Internal',
+      primaryArtifact:{ filename:'tile-index-spec.md', humanSize:'96 KB', version:'v1.4', checksum:'2c7e0b4d9f1a3c5e7b9d1f3a5c7e9b1d3f5a7c9e1b3d5f7a9c1e3b5d7f9a1c3e' },
+      readme:{
+        overview:'Sentinel Grid processes geospatial and satellite data into structured observations.',
+        installation:'Internal service — deployed via the Platform team\u2019s pipeline, not independently distributable.',
+        usage:'Detection results are written into the Oracle Mesh object graph as observation records.',
+        architecture:'A tiled indexing scheme partitions imagery by region and time; detection models run as batch jobs against new tiles.'
+      },
+      files:[ { name:'tile-index-spec.md', resourceType:'DOCUMENT', humanSize:'96 KB', version:'v1.4' }, { name:'sentinel-pipeline', resourceType:'CODE', humanSize:'\u2014', version:'v2.4.0' } ],
+      versions:[ { v:'2.4.0', date:'2025-12', humanSize:'96 KB', checksum:'2c7e0b4d\u2026', state:'LATEST' } ],
+      releases:[ { v:'2.4.0', date:'2025-12', notes:'Tile index v1.4 and anomaly-detection model refresh.' } ]
+    },
+    {
+      id:'P-003', slug:'threshold', name:'Threshold', resourceType:'REPOSITORY', demo:true,
+      description:'Research-stage multimodal retrieval over structured object graphs.',
+      status:'research', version:'v0.4.0-preview', visibility:'UNLISTED', owner:'Research', updated:'2026-02-01',
+      tags:['research','retrieval','multimodal'], license:'Research',
+      primaryArtifact:{ filename:'threshold-lm.gguf', humanSize:'4.1 GB', version:'v0.4.0', checksum:'7a1c3e5b9d0f2a4c6e8b0d2f4a6c8e0b2d4f6a8c0e2b4d6f8a0c2e4b6d8f0a2c' },
+      readme:{
+        overview:'Threshold explores multimodal retrieval over structured object graphs — the research direction behind cross-surface search.',
+        installation:'Preview weights are internal-only; no public distribution channel exists yet.',
+        usage:'Served through an offline evaluation harness; not connected to production traffic.',
+        architecture:'A small serving prototype sits alongside batch evaluation harnesses. Not yet load-bearing for any production surface.'
+      },
+      files:[ { name:'threshold-lm.gguf', resourceType:'MODEL', humanSize:'4.1 GB', version:'v0.4.0' }, { name:'threshold-eval', resourceType:'CODE', humanSize:'\u2014', version:'v0.4.0-preview' } ],
+      versions:[ { v:'0.4.0-preview', date:'2026-02', humanSize:'4.1 GB', checksum:'7a1c3e5b\u2026', state:'LATEST' } ],
+      releases:[ { v:'0.4.0-preview', date:'2026-02', notes:'First internal preview checkpoint. Not production-serving.' } ]
+    },
+    {
+      id:'P-004', slug:'ledger-core', name:'Ledger Core', resourceType:'REPOSITORY', demo:true,
+      description:'Append-only audit and event backbone underpinning the Control Center\u2019s audit surface.',
+      status:'active', version:'v4.0.1', visibility:'PUBLIC', owner:'Platform', updated:'2025-05-22',
+      tags:['audit','infrastructure','events'], license:'Internal',
+      primaryArtifact:{ filename:'event-schema.md', humanSize:'54 KB', version:'v2.0', checksum:'0d2f4a6c8e0b2d4f6a8c0e2b4d6f8a0c2e4b6d8f0a2c4e6b8d0f2a4c6e8b0d2f' },
+      readme:{
+        overview:'Ledger Core is the append-only audit and event backbone every privileged Oblivion system writes to.',
+        installation:'Internal service. Consumers integrate via the event-schema contract, not direct deployment.',
+        usage:'Every privileged write is emitted as an immutable event with actor, action, target, and timestamp.',
+        architecture:'Consumers build read models (like the Control Center audit view) from the event stream without mutating it.'
+      },
+      files:[ { name:'event-schema.md', resourceType:'DOCUMENT', humanSize:'54 KB', version:'v2.0' }, { name:'ledger-core', resourceType:'CODE', humanSize:'\u2014', version:'v4.0.1' } ],
+      versions:[ { v:'4.0.1', date:'2025-05', humanSize:'54 KB', checksum:'0d2f4a6c\u2026', state:'LATEST' } ],
+      releases:[ { v:'4.0.1', date:'2025-05', notes:'Event schema v2.0 and consumer read-model guidance.' } ]
+    },
+    {
+      id:'P-005', slug:'atlas-field', name:'Atlas Field', resourceType:'REPOSITORY', demo:true,
+      description:'Simulation and vision models supporting scenario planning over physical systems.',
+      status:'restricted', version:'\u2014', visibility:'PRIVATE', owner:'Applied AI', updated:'2025-09-01',
+      tags:['simulation','vision','restricted'], license:'Restricted',
+      primaryArtifact:null,
+      readme:{ overview:'Access to this repository\u2019s README requires an authorized Control Center session.', installation:'\u2014', usage:'\u2014', architecture:'\u2014' },
+      files:[ { name:'Access via Control Center', resourceType:'FILE', humanSize:'\u2014', version:'\u2014' } ],
+      versions:[], releases:[]
+    },
+    {
+      id:'P-006', slug:'quietline', name:'Quietline', resourceType:'REPOSITORY', demo:true,
+      description:'Archived secure-communications prototype, retained for research reference only.',
+      status:'archived', version:'v1.2.0', visibility:'UNLISTED', owner:'Platform', updated:'2022-11-10',
+      tags:['messaging','archived'], license:'Internal',
+      primaryArtifact:{ filename:'quietline-archive.zip', humanSize:'6.4 MB', version:'v1.2.0', checksum:'4c6e8b0d2f4a6c8e0b2d4f6a8c0e2b4d6f8a0c2e4b6d8f0a2c4e6b8d0f2a4c6e' },
+      readme:{
+        overview:'Quietline was an internal secure-communications prototype, archived in favor of consolidated identity infrastructure.',
+        installation:'Archived — infrastructure decommissioned. Not deployable.',
+        usage:'Retained for research reference only.',
+        architecture:'Archived. See the final release notes for the last known architecture summary.'
+      },
+      files:[ { name:'quietline-archive.zip', resourceType:'ARCHIVE', humanSize:'6.4 MB', version:'v1.2.0' } ],
+      versions:[ { v:'1.2.0', date:'2022-11', humanSize:'6.4 MB', checksum:'4c6e8b0d\u2026', state:'ARCHIVED' } ],
+      releases:[ { v:'1.2.0', date:'2022-11', notes:'Final release before archival.' } ]
+    }
+  ];
+
+  const ecosystem = [
+    { name:'GitHub', label:'GitHub Organization', org:'VoidkeepDev', desc:'Engineering source and projects.', url:'https://github.com/VoidkeepDev', domain:'github.com' },
+    { name:'Medium', label:'Medium', desc:'Research and writing.', url:'https://medium.com/@shokribardiya0/oblivion-the-recursive-threshold-e62babf89a38', domain:'medium.com' },
+    { name:'X', label:'X / Twitter', desc:'Updates and technical communication.', url:'https://x.com/DELTA29872', domain:'x.com' },
+    { name:'X', label:'X / Twitter (alt)', desc:'Secondary channel.', url:'https://x.com/BardiyaSho73874', domain:'x.com' },
+    { name:'Sentry', label:'Sentry \u2014 Join', desc:'Join the Oblivion community.', url:'https://shokribardiya.github.io/Sentry-oblivion/', domain:'shokribardiya.github.io' },
+    { name:'Sentinel', label:'Sentinel', desc:'Related Oblivion platform.', url:'https://shokribardiya.github.io/Sentinel/', domain:'shokribardiya.github.io' }
+  ];
+
   const users = [
     { name:'B. Shokri', role:'Management', status:'Active', lastActive:'Today' },
     { name:'S. Kade', role:'Research Lead', status:'Active', lastActive:'Today' },
@@ -1638,7 +1939,16 @@ const OblivionData = (() => {
     { path:'/api/ai', desc:'Secure gateway to Oblivion Intelligence', status:'ADAPTER' },
     { path:'/api/audit', desc:'Append-only audit event stream', status:'LOCAL DEMO' },
     { path:'/api/security', desc:'Security posture and status', status:'ADAPTER' },
-    { path:'/api/admin', desc:'Privileged administrative operations', status:'ADAPTER' }
+    { path:'/api/admin', desc:'Privileged administrative operations', status:'ADAPTER' },
+    { path:'/api/repositories', desc:'Create / list repository objects', status:'ADAPTER' },
+    { path:'/api/repositories/:id', desc:'Repository detail, files, README, releases', status:'ADAPTER' },
+    { path:'/api/repositories/:id/files', desc:'Attach a resource to a repository', status:'ADAPTER' },
+    { path:'/api/uploads', desc:'Create a multipart upload session', status:'ADAPTER' },
+    { path:'/api/uploads/:id/chunks', desc:'Upload one chunk of an in-progress upload', status:'ADAPTER' },
+    { path:'/api/uploads/:id/complete', desc:'Assemble and verify a completed upload', status:'ADAPTER' },
+    { path:'/api/files/:id/download', desc:'Signed, authorized artifact download', status:'ADAPTER' },
+    { path:'/api/files/:id/versions', desc:'Create a new resource version', status:'ADAPTER' },
+    { path:'/api/releases', desc:'Create a release object for a repository', status:'ADAPTER' }
   ];
 
   // Unified searchable/AI index built from the structured data above.
@@ -1671,10 +1981,14 @@ const OblivionData = (() => {
       id: p.id+'-'+rel.v, type:'RELEASE', title: p.name+' '+rel.v,
       desc: 'Released '+rel.date, path: '#project/'+p.id, tags:(p.name+' release '+rel.v).toLowerCase()
     })));
+    repositories.forEach(r => idx.push({
+      id: r.id, type:'REPOSITORY', title: r.name,
+      desc: r.description, path: '#control', tags:(r.name+' '+r.tags.join(' ')+' '+r.visibility+' '+r.status).toLowerCase()
+    }));
     return idx;
   }
 
-  return { projects, research, models, files, users, apiSurface, index: buildIndex() };
+  return { projects, research, models, files, repositories, ecosystem, users, apiSurface, index: buildIndex() };
 })();
 
 /* --------------------------------------------------------------------------
@@ -1905,6 +2219,142 @@ const OblivionTelemetry = (() => {
 })();
 
 /* --------------------------------------------------------------------------
+   OblivionUploadEngine — real chunked-read / checksum-verified upload
+   adapter for LOCAL DEMO STORAGE. It does not pretend to talk to a server:
+   every byte it moves is read from the source File via Blob.slice() and
+   written into IndexedDB (OblivionStorage) on this device only. The shape
+   (createUpload/uploadChunk/pause/resume/cancel/retry/complete/verify)
+   is the same shape a real multipart-to-object-storage client would use,
+   so swapping the body of uploadChunk()/complete() for real
+   POST /api/uploads/:id/chunks + /complete calls is the only change a
+   production build needs — nothing else in this file depends on it.
+   -------------------------------------------------------------------------- */
+const OblivionUploadEngine = (() => {
+  const CHUNK_SIZE = 2 * 1024 * 1024; // 2 MB — real slice size for demo chunking
+  const jobs = new Map();
+
+  function humanSize(bytes){
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+    if (bytes < 1024*1024*1024) return (bytes/1024/1024).toFixed(1) + ' MB';
+    return (bytes/1024/1024/1024).toFixed(2) + ' GB';
+  }
+  function humanRate(bytesPerSec){ return humanSize(bytesPerSec) + '/s'; }
+  function humanTime(seconds){
+    if (!isFinite(seconds) || seconds < 0) return '\u2014';
+    const m = Math.floor(seconds/60), s = Math.round(seconds%60);
+    return (m>0 ? m+'m ' : '') + s + 's';
+  }
+
+  // Creates a job descriptor. Nothing is transferred yet — mirrors a real
+  // POST /api/uploads that returns an uploadId before any bytes move.
+  function createUpload(file, onUpdate){
+    const id = 'UP-' + Date.now() + '-' + Math.random().toString(36).slice(2,7);
+    const totalChunks = Math.max(1, Math.ceil(file.size / CHUNK_SIZE));
+    const job = {
+      id, file, totalChunks, chunkIndex: 0, bytesDone: 0, totalBytes: file.size,
+      state: 'QUEUED', hasher: null, chunks: [], startedAt: null, lastTick: null,
+      onUpdate: onUpdate || (() => {}), cancelled: false
+    };
+    jobs.set(id, job);
+    return job;
+  }
+
+  async function sha256OfChunks(chunks){
+    // Real checksum over the actual assembled bytes, computed with the
+    // browser's native SubtleCrypto — not a placeholder string.
+    const blob = new Blob(chunks);
+    const buf = await blob.arrayBuffer();
+    const digest = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  // Reads and "transfers" one chunk. A small pacing delay stands in for
+  // real network latency in this offline demo; the progress it reports is
+  // computed from real bytes read via Blob.slice(), never a fake counter.
+  async function uploadChunk(job){
+    if (job.cancelled) return { done:false, cancelled:true };
+    const start = job.chunkIndex * CHUNK_SIZE;
+    const end = Math.min(start + CHUNK_SIZE, job.file.size);
+    const slice = job.file.slice(start, end);
+    await new Promise(r => setTimeout(r, 55)); // simulated transfer pacing
+    job.chunks.push(slice);
+    job.bytesDone += slice.size;
+    job.chunkIndex += 1;
+    return { done: job.chunkIndex >= job.totalChunks, cancelled:false };
+  }
+
+  function tick(job){
+    const now = performance.now();
+    if (!job.startedAt) job.startedAt = now;
+    const elapsedSec = Math.max(0.001, (now - job.startedAt) / 1000);
+    const rate = job.bytesDone / elapsedSec;
+    const remaining = job.totalBytes - job.bytesDone;
+    const eta = rate > 0 ? remaining / rate : Infinity;
+    job.onUpdate({
+      state: job.state, percent: (job.bytesDone / job.totalBytes) * 100,
+      bytesDone: job.bytesDone, totalBytes: job.totalBytes,
+      rateLabel: humanRate(rate), etaLabel: humanTime(eta),
+      humanDone: humanSize(job.bytesDone), humanTotal: humanSize(job.totalBytes)
+    });
+  }
+
+  async function run(job){
+    job.state = 'UPLOADING';
+    while (job.chunkIndex < job.totalChunks){
+      if (job.cancelled){ job.state = 'FAILED'; job.onUpdate({ state:'FAILED', error:'Cancelled by user.' }); return; }
+      if (job.state === 'PAUSED'){ return; } // resume() re-enters run()
+      try {
+        const { done } = await uploadChunk(job);
+        tick(job);
+        if (done) break;
+      } catch (err){
+        job.state = 'FAILED';
+        job.onUpdate({ state:'FAILED', error: 'Network interrupted while transferring a chunk.' });
+        return;
+      }
+    }
+    if (job.chunkIndex >= job.totalChunks && job.state !== 'PAUSED' && !job.cancelled){
+      await complete(job);
+    }
+  }
+
+  async function complete(job){
+    job.state = 'VERIFYING';
+    job.onUpdate({ state:'VERIFYING' });
+    let checksum;
+    try {
+      checksum = await sha256OfChunks(job.chunks);
+    } catch(err){
+      job.state = 'FAILED';
+      job.onUpdate({ state:'FAILED', error:'Checksum computation failed.' });
+      return;
+    }
+    const assembled = new Blob(job.chunks, { type: job.file.type || 'application/octet-stream' });
+    const blobId = 'BLOB-' + job.id;
+    const ok = await OblivionStorage.putBlob(blobId, assembled);
+    if (!ok){
+      job.state = 'FAILED';
+      job.onUpdate({ state:'FAILED', error:'Local storage unavailable — the browser declined to persist this file.' });
+      return;
+    }
+    job.state = 'COMPLETE';
+    job.blobId = blobId;
+    job.checksum = checksum;
+    job.onUpdate({ state:'COMPLETE', checksum, blobId });
+  }
+
+  function pause(id){ const j = jobs.get(id); if (j && j.state === 'UPLOADING'){ j.state = 'PAUSED'; j.onUpdate({ state:'PAUSED' }); } }
+  function resume(id){ const j = jobs.get(id); if (j && j.state === 'PAUSED'){ run(j); } }
+  function cancel(id){ const j = jobs.get(id); if (j){ j.cancelled = true; j.state = 'FAILED'; } }
+  function retry(id){ const j = jobs.get(id); if (j && j.state === 'FAILED' && !j.cancelled){ j.state='QUEUED'; run(j); } }
+  function verify(id){ const j = jobs.get(id); return j ? j.checksum : null; }
+  function start(id){ const j = jobs.get(id); if (j) run(j); }
+
+  return { createUpload, start, pause, resume, cancel, retry, complete, verify, humanSize, humanRate, humanTime, CHUNK_SIZE };
+})();
+
+/* --------------------------------------------------------------------------
    OblivionUI — toasts, focus trapping, and small shared chrome behaviors.
    -------------------------------------------------------------------------- */
 const OblivionUI = (() => {
@@ -2060,82 +2510,495 @@ const OblivionProjects = (() => {
 })();
 
 /* --------------------------------------------------------------------------
-   OblivionFiles — Control Center file manager demo (File API + IndexedDB).
+   OblivionRepo — the repository object model + Control Center rendering.
+   Replaces the old metadata-only file demo. Repositories seeded from
+   OblivionData.repositories are read-only reference records (demo:true,
+   no stored bytes). Repositories created here are real: their metadata is
+   persisted via OblivionStorage.putRepo, and any file attached to them is
+   persisted as real bytes via OblivionUploadEngine + OblivionStorage.putBlob.
    -------------------------------------------------------------------------- */
-const OblivionFiles = (() => {
-  let rows = [];
+const OblivionRepo = (() => {
+  let repos = [];
+  let openRepoId = null;
+  let activeTab = 'readme';
+  const RESOURCE_TYPES = ['FILE','DOCUMENT','ARTICLE','RESEARCH','MODEL','DATASET','CODE','ARCHIVE','MEDIA'];
+  const PREVIEWABLE_TEXT = /\.(md|markdown|txt|json|csv|html?|js|css)$/i;
+  const PREVIEWABLE_IMAGE = /\.(png|jpe?g|gif|webp|svg)$/i;
+  const PREVIEWABLE_AV = /\.(mp3|wav|ogg)$/i;
+  const PREVIEWABLE_VIDEO = /\.(mp4|webm)$/i;
 
   async function load(){
-    const stored = await OblivionStorage.getAll();
-    rows = [...OblivionData.files, ...stored];
-    render();
+    const stored = await OblivionStorage.getAllRepos();
+    const byId = new Map();
+    OblivionData.repositories.forEach(r => byId.set(r.id, r));
+    stored.forEach(r => byId.set(r.id, r)); // user-created repos override/extend the seed list
+    repos = Array.from(byId.values());
   }
 
-  function render(){
-    const el = document.getElementById('panel-files-table');
+  function inferResourceType(filename){
+    const ext = (filename.split('.').pop() || '').toLowerCase();
+    if (['gguf','safetensors','onnx','ckpt','pt','bin'].includes(ext)) return 'MODEL';
+    if (['zip','7z','tar','gz','rar'].includes(ext)) return 'ARCHIVE';
+    if (['csv','json','parquet','tsv'].includes(ext)) return 'DATASET';
+    if (['js','ts','py','go','rs','c','cpp','java','rb','sh'].includes(ext)) return 'CODE';
+    if (['png','jpg','jpeg','gif','webp','svg','mp4','webm','mp3','wav'].includes(ext)) return 'MEDIA';
+    if (['md','markdown','txt'].includes(ext)) return 'DOCUMENT';
+    if (['pdf'].includes(ext)) return 'RESEARCH';
+    return 'FILE';
+  }
+
+  /* ---------------- directory ---------------- */
+  function renderDirectory(){
+    const el = document.getElementById('panel-repo-directory');
     if (!el) return;
-    if (!rows.length){
-      el.innerHTML = `<div class="control-empty"><b>No files</b>Upload a file below, or files added by other sessions will appear here.</div>`;
+    if (!repos.length){
+      el.innerHTML = `<div class="control-empty"><b>No repositories</b>Create one below.</div>`;
       return;
     }
-    el.innerHTML = `
-      <table class="data-table">
-        <thead><tr><th>Name</th><th>Type</th><th>Size</th><th>Owner</th><th>Updated</th><th></th></tr></thead>
-        <tbody>
-          ${rows.map(f => `
-            <tr>
-              <td class="strong">${esc(f.name)}</td>
-              <td class="mono">${esc(f.type)}</td>
-              <td class="mono">${esc(f.size)}</td>
-              <td>${esc(f.owner)}</td>
-              <td class="mono">${esc(f.updated)}</td>
-              <td>${f.id.startsWith('LOCAL') ? `<button class="btn btn-quiet" data-remove="${esc(f.id)}">Remove</button>` : ''}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>`;
-    el.querySelectorAll('[data-remove]').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        await OblivionStorage.remove(btn.dataset.remove);
-        OblivionAuditLog.record('File removed', btn.dataset.remove);
-        OblivionUI.toast('File removed from local storage.', 'success');
-        load();
-      });
+    el.innerHTML = `<div class="repo-grid">` + repos.map(r => `
+      <div class="repo-card" tabindex="0" role="button" data-open="${esc(r.id)}" aria-label="Open repository ${esc(r.name)}">
+        <div class="rc-image">${r.primaryImageData ? `<img src="${esc(r.primaryImageData)}" alt="">` : 'NO PRIMARY IMAGE'}</div>
+        <div class="rc-body">
+          <div class="rc-name">${esc(r.name)}</div>
+          <div class="rc-path">OBLIVION / REPOSITORIES / ${esc(r.id)}</div>
+          <div class="rc-desc">${esc(r.description)}</div>
+          <div class="rc-meta">
+            <span class="tag status-${esc(r.status)}">${esc(r.status)}</span>
+            <span>${esc(r.visibility)}</span>
+            <span>${esc(r.version)}</span>
+            <span>${(r.files||[]).length} FILES</span>
+          </div>
+        </div>
+      </div>
+    `).join('') + `</div>`;
+    el.querySelectorAll('[data-open]').forEach(card => {
+      card.addEventListener('click', () => openRepo(card.dataset.open));
+      card.addEventListener('keydown', e => { if (e.key === 'Enter') openRepo(card.dataset.open); });
     });
   }
 
-  function humanSize(bytes){
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
-    return (bytes/1024/1024).toFixed(1) + ' MB';
-  }
-
-  async function handleFiles(fileList){
-    for (const file of fileList){
-      const record = {
-        id: 'LOCAL-' + Date.now() + '-' + Math.random().toString(36).slice(2,7),
-        name: file.name, type: file.type || 'Unknown', size: humanSize(file.size),
-        owner: 'This session', updated: new Date().toISOString().slice(0,10), status: 'Current', version: 'v1'
+  function renderCreateForm(){
+    const el = document.getElementById('panel-repo-create');
+    if (!el) return;
+    el.innerHTML = `
+      <form class="repo-form" id="repo-create-form">
+        <label>REPOSITORY NAME
+          <input type="text" id="rf-name" required maxlength="80" placeholder="e.g. inference-gateway">
+        </label>
+        <label>DESCRIPTION
+          <textarea id="rf-desc" required maxlength="400" placeholder="One or two sentences describing what this repository holds."></textarea>
+        </label>
+        <div class="rf-row">
+          <label>VISIBILITY
+            <select id="rf-visibility">
+              <option value="PUBLIC">Public</option>
+              <option value="UNLISTED">Unlisted</option>
+              <option value="PRIVATE">Private</option>
+              <option value="RESTRICTED">Restricted</option>
+            </select>
+          </label>
+          <label>PROJECT RELATIONSHIP
+            <select id="rf-project">
+              <option value="">None</option>
+              ${OblivionData.projects.map(p => `<option value="${esc(p.id)}">${esc(p.id)} \u2014 ${esc(p.name)}</option>`).join('')}
+            </select>
+          </label>
+        </div>
+        <label>TAGS <span style="color:var(--text-faint);">(comma separated)</span>
+          <input type="text" id="rf-tags" placeholder="inference, gpu, serving">
+        </label>
+        <label>README \u2014 OVERVIEW
+          <textarea id="rf-readme" maxlength="1200" placeholder="Overview / usage notes for this repository."></textarea>
+        </label>
+        <label>PRIMARY IMAGE <span style="color:var(--text-faint);">(optional)</span>
+          <input type="file" id="rf-image" accept="image/*">
+        </label>
+        <div>
+          <button class="btn btn-primary" type="submit">CREATE REPOSITORY</button>
+        </div>
+      </form>
+    `;
+    const form = document.getElementById('repo-create-form');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const name = document.getElementById('rf-name').value.trim();
+      const desc = document.getElementById('rf-desc').value.trim();
+      if (!name || !desc) return;
+      let primaryImageData = null;
+      const imgFile = document.getElementById('rf-image').files[0];
+      if (imgFile) primaryImageData = await fileToDataURL(imgFile);
+      const id = 'R-' + Date.now().toString(36).toUpperCase();
+      const repo = {
+        id, slug: name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''),
+        name, resourceType:'REPOSITORY', demo:false,
+        description: desc, status:'active', version:'v0.1.0',
+        visibility: document.getElementById('rf-visibility').value,
+        owner:'This session', updated: new Date().toISOString().slice(0,10),
+        tags: document.getElementById('rf-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+        license:'Unspecified', primaryImageData, primaryArtifact:null,
+        readme:{ overview: document.getElementById('rf-readme').value.trim() || 'No overview provided yet.', installation:'\u2014', usage:'\u2014', architecture:'\u2014' },
+        files:[], versions:[], releases:[],
+        projectId: document.getElementById('rf-project').value || null
       };
-      await OblivionStorage.put(record);
-      OblivionAuditLog.record('File uploaded', record.name);
+      await OblivionStorage.putRepo(repo);
+      OblivionAuditLog.record('RESOURCE_CREATED', 'Repository ' + name);
+      OblivionUI.toast('Repository created.', 'success');
+      await load();
+      renderDirectory();
+      form.reset();
+      openRepo(id);
+    });
+  }
+
+  function fileToDataURL(file){
+    return new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /* ---------------- detail ---------------- */
+  function findRepo(id){ return repos.find(r => r.id === id); }
+
+  function repoHeaderHTML(r){
+    return `
+      <a href="#" class="repo-detail-back" id="repo-back">\u2190 REPOSITORIES</a>
+      <div class="repo-header">
+        <div class="rh-image">${r.primaryImageData ? `<img src="${esc(r.primaryImageData)}" alt="">` : ''}</div>
+        <div class="rh-body">
+          <div class="rh-path">OBLIVION / REPOSITORIES / ${esc(r.id)}</div>
+          <h2>${esc(r.name)}</h2>
+          <p class="rh-desc">${esc(r.description)}</p>
+          <div class="rh-fields">
+            <div><span>STATUS</span><b>${esc(r.status)}</b></div>
+            <div><span>VERSION</span><b>${esc(r.version)}</b></div>
+            <div><span>VISIBILITY</span><b>${esc(r.visibility)}</b></div>
+            <div><span>OWNER</span><b>${esc(r.owner)}</b></div>
+            <div><span>UPDATED</span><b>${esc(r.updated)}</b></div>
+            <div><span>STORAGE</span><b>${r.demo ? 'DEMO RECORD' : 'LOCAL DEMO STORAGE'}</b></div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function primaryArtifactHTML(r){
+    if (!r.primaryArtifact) return `<div class="primary-artifact"><span class="pa-none">No primary artifact set for this repository.</span></div>`;
+    const a = r.primaryArtifact;
+    return `
+      <div class="primary-artifact">
+        <div>
+          <div class="pa-label">PRIMARY ARTIFACT</div>
+          <div class="pa-name">${esc(a.filename)}</div>
+          <div class="pa-meta">
+            <span>SIZE <b>${esc(a.humanSize)}</b></span>
+            <span>VERSION <b>${esc(a.version)}</b></span>
+            <span class="checksum">SHA-256 ${esc(a.checksum)}</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" data-download-artifact="${esc(r.id)}">DOWNLOAD</button>
+      </div>
+    `;
+  }
+
+  function readmeHTML(r){
+    const rd = r.readme || {};
+    return `
+      <div class="readme-block">
+        <h4>OVERVIEW</h4><p>${esc(rd.overview || '\u2014')}</p>
+        <h4>INSTALLATION</h4><p>${esc(rd.installation || '\u2014')}</p>
+        <h4>USAGE</h4><p>${esc(rd.usage || '\u2014')}</p>
+        <h4>ARCHITECTURE</h4><p>${esc(rd.architecture || '\u2014')}</p>
+      </div>
+    `;
+  }
+
+  function fileRowHTML(r, f, idx){
+    const canDownload = !!f.blobId;
+    return `
+      <div class="resource-row">
+        <div>
+          <div class="r-name">${esc(f.name)}</div>
+          <div class="r-type">${esc(f.resourceType)}</div>
+        </div>
+        <div class="r-size mono">${esc(f.humanSize)}</div>
+        <div class="mono" style="color:var(--text-muted);font-size:11px;">${esc(f.version || '\u2014')}</div>
+        <div class="r-actions">
+          <button class="btn btn-quiet" data-preview="${idx}">PREVIEW</button>
+          ${canDownload ? `<button class="btn btn-quiet" data-download-file="${idx}">DOWNLOAD</button>` : `<span class="badge-demo" title="Seeded demo record — no stored bytes in this browser">DEMO</span>`}
+        </div>
+      </div>
+    `;
+  }
+
+  function filesTabHTML(r){
+    const uploaderHTML = r.demo ? '' : `
+      <div class="uploader" id="repo-uploader">
+        <div class="uploader-drop" id="repo-drop" tabindex="0" role="button" aria-label="Upload files to this repository">
+          <span class="ud-state" id="repo-drop-state">IDLE</span>
+          Drop files here, or click to browse.
+          <input type="file" id="repo-file-input" class="vh" multiple>
+        </div>
+      </div>
+      <div class="upload-queue" id="repo-upload-queue"></div>
+    `;
+    return `
+      <div class="storage-banner">LOCAL DEMO STORAGE \u2014 files uploaded here are written to IndexedDB in this browser only. They are not sent to a server. See Developers \u2192 /api/uploads for the production contract.</div>
+      ${uploaderHTML}
+      <div class="resource-list">
+        ${(r.files||[]).map((f,i) => fileRowHTML(r,f,i)).join('') || `<div class="control-empty" style="border:0;"><b>No files</b>Nothing has been added to this repository yet.</div>`}
+      </div>
+      <div class="preview-box" id="repo-preview" style="display:none;"></div>
+    `;
+  }
+
+  function releasesTabHTML(r){
+    return `
+      ${r.demo ? '' : `<button class="btn" id="btn-create-release" style="margin-bottom:16px;">CREATE RELEASE</button>`}
+      ${(r.releases||[]).length ? r.releases.map(rel => `
+        <div class="release-row">
+          <div><span class="v-tag">v${esc(rel.v)}</span> <span class="v-meta">${esc(rel.date)}</span></div>
+          <div style="color:var(--text-muted);font-size:12.5px;max-width:50ch;">${esc(rel.notes || '')}</div>
+        </div>
+      `).join('') : `<div class="control-empty" style="border:0;"><b>No releases</b>This repository has no published releases yet.</div>`}
+    `;
+  }
+
+  function versionsTabHTML(r){
+    return (r.versions||[]).length ? r.versions.map(v => `
+      <div class="version-row">
+        <div><span class="v-tag">v${esc(v.v)}</span> <span class="v-meta">${esc(v.date)} \u00b7 ${esc(v.humanSize)}</span></div>
+        <span class="badge-${v.state==='LATEST'?'prod':'demo'}">${esc(v.state)}</span>
+      </div>
+    `).join('') : `<div class="control-empty" style="border:0;"><b>No versions</b>No version history recorded yet.</div>`;
+  }
+
+  function documentationTabHTML(r){
+    return `
+      <div class="readme-block">
+        <h4>LICENSE</h4><p>${esc(r.license || 'Unspecified')}</p>
+        <h4>TAGS</h4><p>${(r.tags||[]).join(', ') || '\u2014'}</p>
+        <h4>RELATED PROJECT</h4><p>${esc(r.projectId || r.id)}</p>
+      </div>
+    `;
+  }
+
+  function mediaTabHTML(r){
+    const media = (r.files||[]).filter(f => f.resourceType === 'MEDIA');
+    if (!media.length) return `<div class="control-empty" style="border:0;"><b>No media</b>Upload an image, audio, or video file to see it here.</div>`;
+    return `<div class="resource-list">${media.map((f,i) => fileRowHTML(r,f,(r.files||[]).indexOf(f))).join('')}</div>`;
+  }
+
+  function renderDetail(id){
+    const r = findRepo(id);
+    const main = document.getElementById('panel-repo-detail');
+    const listWrap = document.getElementById('panel-repo-list-wrap');
+    if (!r || !main) return;
+    if (listWrap) listWrap.style.display = 'none';
+    openRepoId = id;
+    main.innerHTML = `
+      ${repoHeaderHTML(r)}
+      ${primaryArtifactHTML(r)}
+      <div class="repo-tabs" role="tablist">
+        <button role="tab" data-tab="readme" aria-selected="${activeTab==='readme'}">README</button>
+        <button role="tab" data-tab="files" aria-selected="${activeTab==='files'}">FILES</button>
+        <button role="tab" data-tab="releases" aria-selected="${activeTab==='releases'}">RELEASES</button>
+        <button role="tab" data-tab="versions" aria-selected="${activeTab==='versions'}">VERSIONS</button>
+        <button role="tab" data-tab="documentation" aria-selected="${activeTab==='documentation'}">DOCUMENTATION</button>
+        <button role="tab" data-tab="media" aria-selected="${activeTab==='media'}">MEDIA</button>
+      </div>
+      <div class="repo-tabpanel ${activeTab==='readme'?'active':''}" data-panel="readme">${readmeHTML(r)}</div>
+      <div class="repo-tabpanel ${activeTab==='files'?'active':''}" data-panel="files">${filesTabHTML(r)}</div>
+      <div class="repo-tabpanel ${activeTab==='releases'?'active':''}" data-panel="releases">${releasesTabHTML(r)}</div>
+      <div class="repo-tabpanel ${activeTab==='versions'?'active':''}" data-panel="versions">${versionsTabHTML(r)}</div>
+      <div class="repo-tabpanel ${activeTab==='documentation'?'active':''}" data-panel="documentation">${documentationTabHTML(r)}</div>
+      <div class="repo-tabpanel ${activeTab==='media'?'active':''}" data-panel="media">${mediaTabHTML(r)}</div>
+    `;
+    wireDetail(r);
+  }
+
+  function wireDetail(r){
+    const main = document.getElementById('panel-repo-detail');
+    main.querySelector('#repo-back')?.addEventListener('click', e => { e.preventDefault(); openRepoId = null; showRepoList(); });
+    main.querySelectorAll('.repo-tabs button').forEach(btn => {
+      btn.addEventListener('click', () => { activeTab = btn.dataset.tab; renderDetail(r.id); });
+    });
+    main.querySelector('[data-download-artifact]')?.addEventListener('click', () => {
+      OblivionUI.toast('This is a seeded demonstration record with no stored bytes in this browser \u2014 upload a real file below to get a working download.', 'error');
+      OblivionAuditLog.record('FILE_DOWNLOADED', r.primaryArtifact.filename + ' (attempted, demo record)');
+    });
+    main.querySelectorAll('[data-download-file]').forEach(btn => {
+      btn.addEventListener('click', () => downloadFile(r, r.files[+btn.dataset.downloadFile]));
+    });
+    main.querySelectorAll('[data-preview]').forEach(btn => {
+      btn.addEventListener('click', () => previewFile(r, r.files[+btn.dataset.preview]));
+    });
+    main.querySelector('#btn-create-release')?.addEventListener('click', async () => {
+      const v = (r.version || 'v0.1.0').replace(/^v/,'');
+      const nextV = v.split('.').map((n,i)=> i===2 ? String((+n||0)+1) : n).join('.');
+      r.releases = r.releases || [];
+      r.releases.unshift({ v: nextV, date: new Date().toISOString().slice(0,7), notes: 'Release created from the Control Center.' });
+      r.version = 'v' + nextV;
+      await OblivionStorage.putRepo(r);
+      OblivionAuditLog.record('VERSION_CREATED', r.name + ' v' + nextV);
+      OblivionUI.toast('Release v' + nextV + ' created.', 'success');
+      renderDetail(r.id);
+    });
+    if (!r.demo) wireUploader(r);
+  }
+
+  function showRepoList(){
+    const main = document.getElementById('panel-repo-detail');
+    const listWrap = document.getElementById('panel-repo-list-wrap');
+    if (main) main.innerHTML = '';
+    if (listWrap) listWrap.style.display = '';
+  }
+
+  async function downloadFile(r, f){
+    if (!f.blobId){
+      OblivionUI.toast('No stored bytes for this demonstration record.', 'error');
+      return;
     }
-    OblivionUI.toast(fileList.length + ' file(s) added to local storage.', 'success');
-    load();
+    const blob = await OblivionStorage.getBlob(f.blobId);
+    if (!blob){ OblivionUI.toast('Could not read the file from local storage.', 'error'); return; }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = f.name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    OblivionAuditLog.record('FILE_DOWNLOADED', f.name);
   }
 
-  function initDropzone(){
-    const zone = document.getElementById('files-dropzone');
-    const input = document.getElementById('files-input');
+  async function previewFile(r, f){
+    const box = document.getElementById('repo-preview');
+    if (!box) return;
+    if (!f.blobId){
+      box.style.display = 'block';
+      box.innerHTML = `<div class="preview-binary">DEMO RECORD<br>NO STORED BYTES TO PREVIEW</div>`;
+      return;
+    }
+    const blob = await OblivionStorage.getBlob(f.blobId);
+    box.style.display = 'block';
+    if (!blob){ box.innerHTML = `<div class="preview-binary">COULD NOT READ FILE</div>`; return; }
+    if (PREVIEWABLE_IMAGE.test(f.name)){
+      const url = URL.createObjectURL(blob);
+      box.innerHTML = `<img src="${url}" alt="${esc(f.name)}">`;
+    } else if (PREVIEWABLE_VIDEO.test(f.name)){
+      const url = URL.createObjectURL(blob);
+      box.innerHTML = `<video src="${url}" controls></video>`;
+    } else if (PREVIEWABLE_AV.test(f.name)){
+      const url = URL.createObjectURL(blob);
+      box.innerHTML = `<audio src="${url}" controls style="width:100%;"></audio>`;
+    } else if (PREVIEWABLE_TEXT.test(f.name)){
+      const text = await blob.text();
+      box.innerHTML = `<pre>${esc(text.slice(0, 20000))}</pre>`;
+    } else {
+      box.innerHTML = `<div class="preview-binary">BINARY ARTIFACT<br>NO INLINE PREVIEW</div>`;
+    }
+  }
+
+  function wireUploader(r){
+    const zone = document.getElementById('repo-drop');
+    const input = document.getElementById('repo-file-input');
+    const stateEl = document.getElementById('repo-drop-state');
+    const queueEl = document.getElementById('repo-upload-queue');
+    const uploaderEl = document.getElementById('repo-uploader');
     if (!zone) return;
+    const setState = s => { if (stateEl) stateEl.textContent = s; };
     zone.addEventListener('click', () => input.click());
-    input.addEventListener('change', () => { if (input.files.length) handleFiles(input.files); input.value = ''; });
-    ['dragenter','dragover'].forEach(evt => zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.add('drag'); }));
-    ['dragleave','drop'].forEach(evt => zone.addEventListener(evt, e => { e.preventDefault(); zone.classList.remove('drag'); }));
-    zone.addEventListener('drop', e => { if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files); });
+    zone.addEventListener('keydown', e => { if (e.key === 'Enter') input.click(); });
+    input.addEventListener('change', () => { if (input.files.length) handleFiles(r, input.files, queueEl); input.value = ''; });
+    ['dragenter','dragover'].forEach(evt => zone.addEventListener(evt, e => { e.preventDefault(); uploaderEl.classList.add('state-drag'); setState('DRAGGING'); }));
+    ['dragleave'].forEach(evt => zone.addEventListener(evt, e => { e.preventDefault(); uploaderEl.classList.remove('state-drag'); setState('IDLE'); }));
+    zone.addEventListener('drop', e => {
+      e.preventDefault(); uploaderEl.classList.remove('state-drag'); setState('IDLE');
+      if (e.dataTransfer.files.length) handleFiles(r, e.dataTransfer.files, queueEl);
+    });
   }
 
-  return { load, initDropzone };
+  function handleFiles(r, fileList, queueEl){
+    Array.from(fileList).forEach(file => {
+      const itemEl = document.createElement('div');
+      itemEl.className = 'upload-item';
+      itemEl.innerHTML = `
+        <div class="ui-top"><span class="ui-name">${esc(file.name)}</span><span class="ui-status uploading" data-status>QUEUED</span></div>
+        <div class="ui-bar"><i data-bar style="width:0%;"></i></div>
+        <div class="ui-stats" data-stats>0 B / ${esc(OblivionUploadEngine.humanSize(file.size))} \u00b7 0%</div>
+        <div class="ui-actions" data-actions>
+          <button type="button" data-act="pause">PAUSE</button>
+          <button type="button" data-act="cancel">CANCEL</button>
+        </div>
+        <div class="ui-error" data-error></div>
+      `;
+      queueEl.prepend(itemEl);
+      const job = OblivionUploadEngine.createUpload(file, update => onJobUpdate(r, file, job, itemEl, update));
+      OblivionAuditLog.record('UPLOAD_STARTED', file.name);
+      wireItemActions(itemEl, job);
+      OblivionUploadEngine.start(job.id);
+    });
+  }
+
+  function wireItemActions(itemEl, job){
+    itemEl.querySelector('[data-actions]').addEventListener('click', e => {
+      const btn = e.target.closest('button[data-act]');
+      if (!btn) return;
+      if (btn.dataset.act === 'pause'){ OblivionUploadEngine.pause(job.id); btn.dataset.act='resume'; btn.textContent='RESUME'; }
+      else if (btn.dataset.act === 'resume'){ OblivionUploadEngine.resume(job.id); btn.dataset.act='pause'; btn.textContent='PAUSE'; }
+      else if (btn.dataset.act === 'cancel'){ OblivionUploadEngine.cancel(job.id); }
+      else if (btn.dataset.act === 'retry'){ OblivionUploadEngine.retry(job.id); }
+    });
+  }
+
+  async function onJobUpdate(r, file, job, itemEl, update){
+    const statusEl = itemEl.querySelector('[data-status]');
+    const barEl = itemEl.querySelector('[data-bar]');
+    const statsEl = itemEl.querySelector('[data-stats]');
+    const errorEl = itemEl.querySelector('[data-error]');
+    const actionsEl = itemEl.querySelector('[data-actions]');
+    if (update.state){
+      statusEl.textContent = update.state;
+      statusEl.className = 'ui-status ' + update.state.toLowerCase();
+    }
+    if (update.percent !== undefined){
+      barEl.style.width = Math.min(100, update.percent).toFixed(1) + '%';
+      statsEl.textContent = `${update.humanDone} / ${update.humanTotal} \u00b7 ${update.percent.toFixed(1)}% \u00b7 ${update.rateLabel} \u00b7 ETA ${update.etaLabel}`;
+    }
+    if (update.state === 'VERIFYING'){
+      statsEl.textContent = 'Computing SHA-256 checksum\u2026';
+    }
+    if (update.state === 'COMPLETE'){
+      actionsEl.innerHTML = '';
+      statsEl.innerHTML = `VERIFIED &middot; CHECKSUM OK<br><span class="checksum">${esc(update.checksum)}</span><br>PUBLISHED TO REPOSITORY`;
+      const entry = {
+        name: file.name, resourceType: inferResourceType(file.name),
+        humanSize: OblivionUploadEngine.humanSize(file.size), version: 'v1',
+        blobId: update.blobId, checksum: update.checksum, addedAt: new Date().toISOString()
+      };
+      r.files = r.files || [];
+      r.files.push(entry);
+      if (!r.primaryArtifact){
+        r.primaryArtifact = { filename: entry.name, humanSize: entry.humanSize, version: entry.version, checksum: entry.checksum };
+      }
+      r.updated = new Date().toISOString().slice(0,10);
+      await OblivionStorage.putRepo(r);
+      OblivionAuditLog.record('UPLOAD_COMPLETED', file.name);
+      OblivionAuditLog.record('RESOURCE_PUBLISHED', file.name + ' \u2192 ' + r.name);
+      OblivionUI.toast(file.name + ' published to ' + r.name + '.', 'success');
+      if (activeTab === 'files' && openRepoId === r.id) renderDetail(r.id);
+    }
+    if (update.state === 'FAILED'){
+      errorEl.textContent = update.error || 'Upload failed.';
+      actionsEl.innerHTML = `<button type="button" data-act="retry">RETRY</button><button type="button" data-act="cancel">REMOVE</button>`;
+      wireItemActions(itemEl, job);
+      OblivionAuditLog.record('UPLOAD_FAILED', file.name + ' \u2014 ' + (update.error || ''));
+    }
+  }
+
+  function openRepo(id){ activeTab = 'readme'; renderDetail(id); }
+
+  return { load, renderDirectory, renderCreateForm, openRepo };
 })();
 
 /* --------------------------------------------------------------------------
@@ -2225,6 +3088,34 @@ function renderApiTable(){
 }
 
 /* --------------------------------------------------------------------------
+   External ecosystem / network. Every destination is drawn from a fixed
+   allowlist of official domains (OblivionData.ecosystem) — never built
+   from arbitrary input — and opened with target="_blank" rel="noopener
+   noreferrer". A restrained hover reveal stands in for the supplied
+   visual-transition reference; it is pure CSS opacity/clip-path and
+   respects prefers-reduced-motion.
+   -------------------------------------------------------------------------- */
+const ECOSYSTEM_ALLOWLIST = ['github.com','medium.com','x.com','shokribardiya.github.io'];
+function renderEcosystem(){
+  const el = document.getElementById('ecosystem-grid');
+  if (!el) return;
+  el.innerHTML = OblivionData.ecosystem.map((e,i) => {
+    let host = '';
+    try { host = new URL(e.url).hostname.replace(/^www\./,''); } catch(_) {}
+    if (!ECOSYSTEM_ALLOWLIST.includes(host)) return ''; // refuse anything off-allowlist
+    return `
+      <a class="eco-card" href="${esc(e.url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(e.label)} \u2014 opens in a new tab">
+        <span class="eco-reveal" aria-hidden="true"></span>
+        <span class="eco-index">${String(i+1).padStart(2,'0')} / OBLIVION NETWORK</span>
+        <span class="eco-name">${esc(e.label)}</span>
+        <span class="eco-desc">${esc(e.desc)}${e.org ? ' \u00b7 ' + esc(e.org) : ''}</span>
+        <span class="eco-go">VISIT \u2192</span>
+      </a>
+    `;
+  }).join('');
+}
+
+/* --------------------------------------------------------------------------
    Oblivion Intelligence (AI) surface wiring.
    -------------------------------------------------------------------------- */
 function initAI(){
@@ -2234,7 +3125,7 @@ function initAI(){
   const suggest = document.getElementById('ai-suggest');
 
   function typeIcon(t){
-    return { PROJECT:'PRJ', RESEARCH:'RES', MODEL:'MDL', FILE:'FIL', SYSTEM:'SYS', PERSON:'PPL', RELEASE:'REL', PLATFORM:'PLT' }[t] || t;
+    return { PROJECT:'PRJ', RESEARCH:'RES', MODEL:'MDL', FILE:'FIL', SYSTEM:'SYS', PERSON:'PPL', RELEASE:'REL', PLATFORM:'PLT', REPOSITORY:'REP' }[t] || t;
   }
 
   function run(q){
@@ -2282,7 +3173,7 @@ function initSearchOverlay(){
   const filtersEl = document.getElementById('search-filters');
   const resultsEl = document.getElementById('search-results');
   const countEl = document.getElementById('search-count');
-  const types = ['ALL','PROJECT','RESEARCH','MODEL','FILE','SYSTEM','PERSON','RELEASE','PLATFORM'];
+  const types = ['ALL','PROJECT','REPOSITORY','RESEARCH','MODEL','FILE','SYSTEM','PERSON','RELEASE','PLATFORM'];
   let activeType = 'ALL';
 
   filtersEl.innerHTML = types.map(t => `<button type="button" aria-pressed="${t===activeType}" data-type="${t}">${t}</button>`).join('');
@@ -2347,7 +3238,7 @@ function initCommandPalette(){
     { label:'Search research', hint:'\u2192 search', action:() => { location.hash = '#search'; } },
     { label:'Open Control Center', hint:'\u2192 control', action:() => { location.hash = '#control'; } },
     { label:'Find models', hint:'\u2192 control', action:() => { location.hash = '#control'; } },
-    { label:'Open files', hint:'\u2192 control', action:() => { location.hash = '#control'; } },
+    { label:'Browse repositories', hint:'\u2192 control', action:() => { location.hash = '#control'; } },
     { label:'View projects', hint:'\u2192 projects', action:() => { location.hash = '#projects'; } },
     { label:'Open Oblivion Intelligence', hint:'\u2192 ai', action:() => { location.hash = '#ai'; } }
   ];
@@ -2386,7 +3277,7 @@ function initControlCenter(){
   const sections = [
     { id:'dashboard', label:'Dashboard' },
     { id:'projects', label:'Projects', count: OblivionData.projects.length },
-    { id:'files', label:'Files', count: OblivionData.files.length },
+    { id:'repositories', label:'Repositories', count: OblivionData.repositories.length },
     { id:'models', label:'Models', count: OblivionData.models.length },
     { id:'research', label:'Research', count: OblivionData.research.length },
     { id:'users', label:'Users', count: OblivionData.users.length },
@@ -2423,13 +3314,15 @@ function initControlCenter(){
           <tbody>${OblivionData.projects.map(p=>`<tr><td class="mono">${esc(p.id)}</td><td class="strong">${esc(p.name)}</td><td><span class="tag status-${esc(p.status)}">${esc(p.status)}</span></td><td>${esc(p.domain)}</td><td>${esc(p.team)}</td><td class="mono">${esc(p.year)}</td></tr>`).join('')}</tbody>
         </table>
       `;
-      case 'files': return `
-        <div class="control-topbar"><h2>Files</h2></div>
-        <div class="dropzone" id="files-dropzone" tabindex="0" role="button" aria-label="Upload files">
-          Drop files here, or click to browse. Stored locally in this browser via IndexedDB — not uploaded anywhere.
-          <input type="file" id="files-input" class="vh" multiple>
+      case 'repositories': return `
+        <div class="control-topbar"><h2>Repositories</h2></div>
+        <div id="panel-repo-detail"></div>
+        <div id="panel-repo-list-wrap">
+          <div class="repo-toolbar"><span style="color:var(--text-muted);font-size:12.5px;">Every uploaded project becomes a first-class repository object — README, primary artifact, files, versions, and releases.</span></div>
+          <div id="panel-repo-directory"></div>
+          <div class="control-topbar" style="margin-top:36px;"><h2 style="font-size:16px;">Create repository</h2></div>
+          <div id="panel-repo-create"></div>
         </div>
-        <div id="panel-files-table"></div>
       `;
       case 'models': return `
         <div class="control-topbar"><h2>Model registry</h2></div>
@@ -2495,7 +3388,7 @@ function initControlCenter(){
   function showSection(id){
     nav.querySelectorAll('button').forEach(b => b.setAttribute('aria-current', String(b.dataset.section === id)));
     main.innerHTML = `<div class="control-panel active">${panelHTML(id)}</div>`;
-    if (id === 'files'){ OblivionFiles.load(); OblivionFiles.initDropzone(); }
+    if (id === 'repositories'){ OblivionRepo.load().then(() => { OblivionRepo.renderDirectory(); OblivionRepo.renderCreateForm(); }); }
     if (id === 'audit'){ OblivionAuditLog.render(); }
   }
 
@@ -2619,6 +3512,7 @@ const OblivionApp = (() => {
     document.getElementById('year').textContent = new Date().getFullYear();
     renderResearch();
     renderApiTable();
+    renderEcosystem();
     initAI();
     initMobileNav();
     const searchApi = initSearchOverlay();
@@ -2636,6 +3530,7 @@ document.addEventListener('DOMContentLoaded', OblivionApp.init);
 </script>
 </body>
 </html>
+
 
 <!--
   OBLIVION — CROSS-SITE PAGE TRANSITION
