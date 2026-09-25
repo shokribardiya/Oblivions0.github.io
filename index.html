@@ -4172,3 +4172,176 @@ document.addEventListener('DOMContentLoaded', OblivionApp.init);
    style="display:inline-block;padding:12px 24px;background:#111;color:#fff;text-decoration:none;border-radius:6px;font-family:sans-serif;font-weight:bold;letter-spacing:1px;">
   OSIRISAI Gotham
 </a>
+>
+<div class="ucicada0-panel">
+
+    <button
+        type="button"
+        class="ucicada0-btn staff"
+        onclick="ucicada0OpenStaffLogin()">
+        UCICADA0 — کارکنان
+    </button>
+
+    <button
+        type="button"
+        class="ucicada0-btn services"
+        onclick="ucicada0OpenServices()">
+        UCICADA0 — خدمات
+    </button>
+
+</div>
+
+
+<!-- Staff Password Modal -->
+<div
+    id="ucicada0StaffModal"
+    class="ucicada0-modal-overlay"
+    onclick="ucicada0OutsideModal(event)">
+
+    <div class="ucicada0-modal" onclick="event.stopPropagation()">
+
+        <h3>ورود به وب‌سایت کارکنان</h3>
+
+        <p>
+            برای ورود به بخش کارکنان، رمز عبور را وارد کنید.
+        </p>
+
+        <input
+            id="ucicada0Password"
+            class="ucicada0-password"
+            type="password"
+            inputmode="numeric"
+            autocomplete="off"
+            placeholder="رمز عبور"
+            maxlength="6"
+            onkeydown="ucicada0HandleEnter(event)"
+        >
+
+        <div id="ucicada0Error" class="ucicada0-error"></div>
+
+        <div class="ucicada0-actions">
+
+            <button
+                type="button"
+                class="ucicada0-action-btn ucicada0-cancel"
+                onclick="ucicada0CloseStaffLogin()">
+                انصراف
+            </button>
+
+            <button
+                type="button"
+                class="ucicada0-action-btn ucicada0-enter"
+                onclick="ucicada0VerifyPassword()">
+                ورود
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    /* =========================
+       UCICADA0 CONFIGURATION
+       ========================= */
+
+    const UCICADA0_STAFF_URL =
+        "https://shokribardiya.github.io/VVDE/#/home";
+
+    const UCICADA0_SERVICES_URL =
+        "https://shokribardiya.github.io/Oblivions3/";
+
+    const UCICADA0_PASSWORD = "330121";
+
+
+    /* =========================
+       STAFF LOGIN
+       ========================= */
+
+    function ucicada0OpenStaffLogin() {
+        const modal = document.getElementById("ucicada0StaffModal");
+        const passwordInput = document.getElementById("ucicada0Password");
+        const errorBox = document.getElementById("ucicada0Error");
+
+        modal.classList.add("active");
+
+        passwordInput.value = "";
+        passwordInput.classList.remove("error");
+        errorBox.textContent = "";
+
+        setTimeout(() => {
+            passwordInput.focus();
+        }, 80);
+    }
+
+
+    function ucicada0CloseStaffLogin() {
+        const modal = document.getElementById("ucicada0StaffModal");
+
+        modal.classList.remove("active");
+    }
+
+
+    function ucicada0OutsideModal(event) {
+        if (event.target.id === "ucicada0StaffModal") {
+            ucicada0CloseStaffLogin();
+        }
+    }
+
+
+    function ucicada0HandleEnter(event) {
+        if (event.key === "Enter") {
+            ucicada0VerifyPassword();
+        }
+
+        if (event.key === "Escape") {
+            ucicada0CloseStaffLogin();
+        }
+    }
+
+
+    function ucicada0VerifyPassword() {
+        const passwordInput =
+            document.getElementById("ucicada0Password");
+
+        const errorBox =
+            document.getElementById("ucicada0Error");
+
+        const enteredPassword =
+            passwordInput.value.trim();
+
+
+        if (enteredPassword === UCICADA0_PASSWORD) {
+
+            errorBox.textContent = "";
+            passwordInput.classList.remove("error");
+
+            /*
+             * انتقال به وب‌سایت کارکنان
+             */
+            window.location.href = UCICADA0_STAFF_URL;
+
+        } else {
+
+            passwordInput.classList.add("error");
+
+            errorBox.textContent =
+                "رمز عبور صحیح نیست.";
+
+            passwordInput.value = "";
+            passwordInput.focus();
+        }
+    }
+
+
+    /* =========================
+       SERVICES WEBSITE
+       ========================= */
+
+    function ucicada0OpenServices() {
+
+        window.location.href = UCICADA0_SERVICES_URL;
+
+    }
+</script>
