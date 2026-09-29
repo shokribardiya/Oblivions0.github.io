@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Oblivion — Intelligence. Engineering. Systems.</title>
 <meta name="description" content="Oblivion is a research and engineering organization building intelligence systems, applied AI, and infrastructure for organizations that operate at scale.">
-<link rel="canonical" href="https://www.oblivion.example/">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src data: blob:; connect-src https://api.github.com https://cdn.jsdelivr.net; object-src 'none'; base-uri 'none'; form-action 'none'">
+<link rel="canonical" href="https://shokribardiya.github.io/Oblivions0.github.io/">
 <meta name="theme-color" content="#0a0908">
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="index, follow">
@@ -15,11 +16,10 @@
 <!-- ==========================================================================
      DEPLOYMENT / SEO NOTES (read before shipping to production)
      ==========================================================================
-     1. DOMAIN: every occurrence of https://www.oblivion.example/ in this file
-        (canonical link, Open Graph og:url, Twitter card, and both JSON-LD
-        blocks below) is a placeholder and MUST be replaced with the real
-        production domain before deploy. Search this file for
-        "oblivion.example" to find every instance.
+     1. DOMAIN: the site URL https://shokribardiya.github.io/Oblivions0.github.io/
+        (taken from the GitHub profile) appears in the canonical link, Open Graph
+        og:url, and both JSON-LD blocks. If a custom domain is adopted, replace
+        that one string throughout the file.
      2. GOOGLE SEARCH CONSOLE: this file cannot verify domain ownership on
         its own. Once the real domain is live, verify it in Search Console
         using either (a) the HTML meta-tag method — uncomment the
@@ -50,7 +50,7 @@
 <meta property="og:site_name" content="Oblivion">
 <meta property="og:title" content="Oblivion — Intelligence. Engineering. Systems.">
 <meta property="og:description" content="Oblivion is a research and engineering organization building intelligence systems, applied AI, and infrastructure for organizations that operate at scale.">
-<meta property="og:url" content="https://www.oblivion.example/">
+<meta property="og:url" content="https://shokribardiya.github.io/Oblivions0.github.io/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Oblivion — Intelligence. Engineering. Systems.">
 <meta name="twitter:description" content="Research and engineering for intelligence systems, applied AI, and infrastructure at scale.">
@@ -63,13 +63,14 @@
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "Oblivion",
-  "url": "https://www.oblivion.example/",
-  "description": "Oblivion is a research and engineering organization building intelligence systems, applied AI, and infrastructure for organizations that operate at scale.",
-  "foundingLocation": "Global",
+  "url": "https://shokribardiya.github.io/Oblivions0.github.io/",
+  "description": "Oblivion is an independent engineering, AI systems, software development, and game development studio: four human programmers working with ANGRA, an AI orchestration system coordinating about 100 specialized AI agents.",
+  "sameAs": ["https://github.com/shokribardiya"],
   "member": {
     "@type": "Person",
     "name": "Bardiya Shokri",
-    "jobTitle": "Management"
+    "jobTitle": "Founder and organizational lead",
+    "sameAs": "https://github.com/shokribardiya"
   }
 }
 </script>
@@ -78,12 +79,8 @@
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "Oblivion",
-  "url": "https://www.oblivion.example/",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://www.oblivion.example/search?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
+  "url": "https://shokribardiya.github.io/Oblivions0.github.io/",
+  "sameAs": ["https://github.com/shokribardiya"]
 }
 </script>
 
@@ -1133,6 +1130,22 @@ table{ border-collapse: collapse; width:100%; }
 .toast.error{ border-color: color-mix(in srgb, var(--danger) 50%, var(--border-strong)); }
 .toast.success{ border-color: color-mix(in srgb, var(--success) 50%, var(--border-strong)); }
 @keyframes toast-in{ from{ opacity:0; transform: translateY(6px);} to{ opacity:1; transform: translateY(0);} }
+
+.angra-stack{display:grid;gap:1px;background:var(--border-hair);border:1px solid var(--border-hair);margin-top:32px}
+.angra-layer{background:var(--bg);padding:18px 22px;display:grid;grid-template-columns:90px 240px 1fr;gap:16px;align-items:baseline;transition:background .2s}
+.angra-layer:hover{background:rgba(255,255,255,.02)}
+.angra-layer span{font-family:var(--font-mono,monospace);font-size:11px;opacity:.6}
+.angra-layer b{font-weight:500}.angra-layer p{margin:0;opacity:.8}
+.angra-human{border-left:2px solid var(--accent,#b08d57)}
+.angra-py{margin-top:28px;padding:20px 22px;border:1px solid var(--border-hair)}
+.angra-py-head{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.py-out{margin-top:16px;display:grid;gap:6px;font-family:var(--font-mono,monospace);font-size:12px}
+.py-bar{display:grid;grid-template-columns:150px 1fr 70px;gap:10px;align-items:center}
+.py-bar i{display:block;height:6px;background:var(--accent,#b08d57);transform-origin:left}
+.repo-live{font-family:var(--font-mono,monospace);font-size:11px;opacity:.75;margin:0 0 14px}
+.repo-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+@media(max-width:720px){.angra-layer{grid-template-columns:1fr;gap:4px}.py-bar{grid-template-columns:110px 1fr 56px}}
+@media(prefers-reduced-motion:reduce){.angra-layer{transition:none}}
 </style>
 </head>
 <body>
@@ -1150,6 +1163,7 @@ table{ border-collapse: collapse; width:100%; }
     </a>
     <nav class="primary-nav" aria-label="Primary">
       <a href="#company">Company</a>
+      <a href="#angra">ANGRA</a>
       <a href="#services">Services</a>
       <a href="#technology">Technology</a>
       <a href="#projects">Projects</a>
@@ -1203,15 +1217,15 @@ table{ border-collapse: collapse; width:100%; }
     <div class="hero-copy">
       <span class="hero-wordmark">OBLIVION / INTELLIGENCE &amp; ENGINEERING</span>
       <h1>Intelligence.<br>Engineering.<br><em>Systems.</em></h1>
-      <p class="hero-lede">Oblivion designs and operates the software, models, and infrastructure that organizations use to understand complex systems and act on them with confidence.</p>
+      <p class="hero-lede">Oblivion is an independent engineering, AI systems, and game development studio. Four human programmers build software, agent systems, data tooling, and games together with ANGRA, an orchestration layer over about 100 specialized AI agents.</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="#projects">View projects</a>
         <a class="btn" href="#ai">Explore Oblivion Intelligence</a>
       </div>
       <div class="hero-stats">
-        <div><b>07</b><span>ACTIVE PROJECTS</span></div>
-        <div><b>04</b><span>RESEARCH TRACKS</span></div>
-        <div><b>12</b><span>SYSTEM MODELS</span></div>
+        <div><b>104</b><span>MEMBERS</span></div>
+        <div><b>04</b><span>HUMAN PROGRAMMERS</span></div>
+        <div><b>100</b><span>AI AGENTS</span></div>
       </div>
     </div>
     <div class="hero-visual">
@@ -1232,7 +1246,7 @@ table{ border-collapse: collapse; width:100%; }
         <span class="eyebrow">Company</span>
         <h2 style="margin-top:14px;">An organization built around systems, not features.</h2>
       </div>
-      <p class="desc">Oblivion is structured as a research and engineering organization. Teams work across applied AI, distributed infrastructure, and interface design, organized around long-running programs rather than isolated products.</p>
+      <p class="desc">Oblivion is a small independent studio with a human-plus-AI development model. It works across software engineering, AI-assisted development, agent systems, data and intelligence tooling, and game technology.</p>
     </div>
 
     <div class="pillars">
@@ -1257,7 +1271,36 @@ table{ border-collapse: collapse; width:100%; }
 
     <div class="principle-row" style="border-top:0; padding-top:0;">
       <h4>Management</h4>
-      <p><strong style="color:var(--text)">Bardiya Shokri</strong> leads Oblivion's organization and engineering direction, working across the research, platform, and product teams described throughout this site.</p>
+      <p><strong style="color:var(--text)">Bardiya Shokri</strong> founded and directs Oblivion. The human engineering team also includes Sahand Farzaneh, Barsam Alizadeh, and Danial Dadashi. Their capacity is extended through ANGRA's AI-agent workforce.</p>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="angra">
+  <div class="shell">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">ANGRA</span>
+        <h2 style="margin-top:14px;">Human direction, AI-agent execution.</h2>
+      </div>
+      <p class="desc">ANGRA is Oblivion's personal AI intelligence and orchestration system. It coordinates about 100 specialized AI agents. The four human programmers own direction, architecture, review, and final approval. Agents are roles, not people; they hold no employment status.</p>
+    </div>
+    <div class="angra-stack" id="angra-stack" role="list" aria-label="ANGRA organizational layers">
+      <div class="angra-layer" role="listitem"><span>LAYER 1</span><b>ANGRA core</b><p>Intelligence and orchestration.</p></div>
+      <div class="angra-layer" role="listitem"><span>LAYER 2</span><b>Agent coordinator</b><p>Assigns work by role and tracks task state.</p></div>
+      <div class="angra-layer" role="listitem"><span>LAYER 3</span><b>100 specialized agents</b><p>Coding, research, testing, documentation, architecture, security analysis, data, game development, build and release, UI, QA, analysis, project management.</p></div>
+      <div class="angra-layer" role="listitem"><span>LAYER 4</span><b>Work output</b><p>Projects, research, engineering, games.</p></div>
+      <div class="angra-layer angra-human" role="listitem"><span>LAYER 5</span><b>Human review and control</b><p>Bardiya Shokri, Sahand Farzaneh, Barsam Alizadeh, Danial Dadashi approve every result.</p></div>
+    </div>
+    <div class="angra-py" id="angra-py">
+      <div class="angra-py-head">
+        <span class="tag" id="py-state">OFFLINE</span>
+        <span class="mono">PYTHON RUNTIME · PYODIDE · LOADS ON DEMAND</span>
+      </div>
+      <p id="py-note">The role allocation below is the organizational model, not a measurement. Run the analysis to compute distribution and workload shares in real Python, in your browser.</p>
+      <button class="btn" id="btn-py-run" type="button">Run ANGRA analysis in Python</button>
+      <div id="py-out" class="py-out" aria-live="polite"></div>
     </div>
   </div>
 </section>
@@ -1346,9 +1389,9 @@ table{ border-collapse: collapse; width:100%; }
     <div class="section-head">
       <div>
         <span class="eyebrow">Projects</span>
-        <h2 style="margin-top:14px;">Selected programs</h2>
+        <h2 style="margin-top:14px;">Repositories</h2>
       </div>
-      <p class="desc">Each project is a real technical object: a defined domain, an owning team, an architecture, and a set of artifacts — not a marketing card. Select one to open its record.</p>
+      <p class="desc">Every entry is a public repository under github.com/shokribardiya, refreshed from the GitHub API when available. Forks of external projects are labeled as forks. Select one to open its record.</p>
     </div>
 
     <div class="project-list" id="project-list" role="list"></div>
@@ -1565,7 +1608,7 @@ table{ border-collapse: collapse; width:100%; }
       </div>
       <div class="footer-col">
         <h5>Contact</h5>
-        <a href="mailto:contact@oblivion.example">contact@oblivion.example</a>
+        <a href="https://github.com/shokribardiya" rel="noopener noreferrer" target="_blank">github.com/shokribardiya</a>
         <a href="#company">Management</a>
       </div>
     </div>
@@ -1715,7 +1758,7 @@ table{ border-collapse: collapse; width:100%; }
    -------------------------------------------------------------------------- */
 const OblivionConfig = Object.freeze({
   production: false,
-  siteUrl: 'https://www.oblivion.example', // REPLACE with production domain
+  siteUrl: 'https://shokribardiya.github.io/Oblivions0.github.io', // REPLACE with production domain
   apiBaseUrl: '/api',
   searchEndpoint: '/api/search',
   aiEndpoint: '/api/ai',
@@ -1736,7 +1779,16 @@ const OblivionSecurity = (() => {
     return String(str ?? '').replace(/[&<>"']/g, c => map[c]);
   }
   function safeAttr(str){ return esc(str); }
-  return { esc, safeAttr };
+  const HOSTS = new Set(['github.com','shokribardiya.github.io','x.com','medium.com']);
+  function isAllowedHost(h){ return HOSTS.has(String(h).toLowerCase()); }
+  function safeUrl(u){
+    try { const x = new URL(String(u), location.href);
+      if (x.protocol === 'https:' && isAllowedHost(x.hostname)) return x.href; } catch(e){}
+    return '#';
+  }
+  function safeText(s, max){ return String(s ?? '').replace(/[\u0000-\u001f\u007f]/g,' ').slice(0, max || 500); }
+  function safeHtml(s){ return esc(s); } // no raw HTML is ever accepted; README content is text-only
+  return { esc, safeAttr, safeUrl, safeText, safeHtml, isAllowedHost };
 })();
 const esc = OblivionSecurity.esc;
 
@@ -1927,124 +1979,139 @@ const OblivionStorage = (() => {
 const OblivionData = (() => {
 
   const projects = [
-    {
-      id: 'P-001', name: 'Oracle Mesh', status: 'active', domain: 'Data Fusion',
-      year: 2025, team: 'Systems Engineering',
-      technology: ['Distributed graph store','Streaming ingestion','Schema-on-read ontology'],
-      overview: 'Oracle Mesh is Oblivion\u2019s core data-fusion layer. It ingests structured and semi-structured sources into a single addressable object graph, so every downstream system reasons about the same picture of reality instead of reconciling siloed data on its own.',
-      architecture: 'Ingestion workers normalize source records into typed objects and relationships. A versioned ontology defines object types and permitted edges. Reads are served through a permission-aware query layer that will sit behind /api/projects and /api/search in production.',
-      artifacts: [
-        { name: 'mesh-core', type: 'Repository', meta: 'internal' },
-        { name: 'ontology-spec.md', type: 'Documentation', meta: 'v3.2' },
-        { name: 'ingestion-worker', type: 'Service', meta: 'running' }
-      ],
-      research: ['R-009'],
-      files: 18, releases: [{ v:'3.2.0', date:'2026-01' }, { v:'3.1.0', date:'2025-08' }]
-    },
-    {
-      id: 'P-002', name: 'Sentinel Grid', status: 'active', domain: 'Geospatial Intelligence',
-      year: 2024, team: 'Applied AI',
-      technology: ['Satellite imagery pipelines','Geospatial indexing','Anomaly detection models'],
-      overview: 'Sentinel Grid processes geospatial and satellite data into structured observations, feeding change-detection and monitoring workflows across other Oblivion programs.',
-      architecture: 'A tiled indexing scheme partitions imagery by region and time. Detection models run as batch jobs against new tiles; results are written back into the Oracle Mesh object graph as observation records.',
-      artifacts: [
-        { name: 'sentinel-pipeline', type: 'Repository', meta: 'internal' },
-        { name: 'tile-index-spec.md', type: 'Documentation', meta: 'v1.4' }
-      ],
-      research: ['R-009'],
-      files: 26, releases: [{ v:'2.4.0', date:'2025-12' }]
-    },
-    {
-      id: 'P-003', name: 'Threshold', status: 'research', domain: 'Applied AI',
-      year: 2026, team: 'Research',
-      technology: ['Multimodal retrieval','Structured generation','Evaluation harnesses'],
-      overview: 'Threshold is an early-stage research program exploring multimodal retrieval over structured object graphs — the research direction behind Oblivion Intelligence\u2019s cross-surface search.',
-      architecture: 'Currently a set of offline evaluation harnesses and a small serving prototype. Not yet connected to production traffic.',
-      artifacts: [
-        { name: 'threshold-eval', type: 'Repository', meta: 'internal' }
-      ],
-      research: ['R-014'],
-      files: 9, releases: [{ v:'0.4.0-preview', date:'2026-02' }]
-    },
-    {
-      id: 'P-004', name: 'Ledger Core', status: 'active', domain: 'Infrastructure',
-      year: 2023, team: 'Platform',
-      technology: ['Audit-log infrastructure','Append-only storage','Event streaming'],
-      overview: 'Ledger Core is the append-only audit and event backbone every privileged Oblivion system writes to, underpinning the Control Center\u2019s audit surface.',
-      architecture: 'Every privileged write is emitted as an immutable event with actor, action, target, and timestamp. Consumers build read models (like the Control Center audit view) from this stream without mutating it.',
-      artifacts: [
-        { name: 'ledger-core', type: 'Repository', meta: 'internal' },
-        { name: 'event-schema.md', type: 'Documentation', meta: 'v2.0' }
-      ],
-      research: ['R-005'],
-      files: 14, releases: [{ v:'4.0.1', date:'2025-05' }]
-    },
-    {
-      id: 'P-005', name: 'Atlas Field', status: 'restricted', domain: 'Systems Intelligence',
-      year: 2025, team: 'Applied AI',
-      technology: ['Simulation','Scenario modeling','Vision models'],
-      overview: 'Atlas Field combines simulation and vision models to support scenario planning over physical systems. Access is restricted; this record shows the metadata visible at the public layer only.',
-      architecture: 'Details of this project\u2019s architecture are only available to authorized sessions through the Control Center.',
-      artifacts: [
-        { name: 'Access via Control Center', type: 'Restricted', meta: 'authorization required' }
-      ],
-      research: [],
-      files: 0, releases: []
-    },
-    {
-      id: 'P-006', name: 'Quietline', status: 'archived', domain: 'Secure Comms',
-      year: 2022, team: 'Platform',
-      technology: ['End-to-end messaging','Key management'],
-      overview: 'Quietline was an internal secure-communications prototype. It has been archived in favor of consolidated identity infrastructure shared across Oblivion systems.',
-      architecture: 'Archived — infrastructure decommissioned. Retained for research reference only.',
-      artifacts: [
-        { name: 'quietline-archive', type: 'Repository', meta: 'read-only' }
-      ],
-      research: [],
-      files: 6, releases: [{ v:'1.2.0 (final)', date:'2022-11' }]
-    }
-  ];
+  {
+    "id": "G-001",
+    "name": "Data-Base-with-graph-Oblivion-XQuantum",
+    "status": "public",
+    "domain": "Oblivion project",
+    "year": "\u2014",
+    "team": "Python",
+    "technology": [
+      "Python"
+    ],
+    "overview": "Single-file Python data management system with graph features and machine-learning components.",
+    "architecture": "Repository metadata unavailable.",
+    "files": 0,
+    "research": [],
+    "releases": [],
+    "artifacts": [],
+    "repo": "Data-Base-with-graph-Oblivion-XQuantum",
+    "url": "https://github.com/shokribardiya/Data-Base-with-graph-Oblivion-XQuantum",
+    "fork": false,
+    "live": null
+  },
+  {
+    "id": "G-002",
+    "name": "Castle-Bravo-Squrpion-V1-OSINT-Web-Intelligence",
+    "status": "public",
+    "domain": "Oblivion project",
+    "year": "\u2014",
+    "team": "Python",
+    "technology": [
+      "Python"
+    ],
+    "overview": "Castle Bravo Squrpion V1: an OSINT and web intelligence project.",
+    "architecture": "Repository metadata unavailable.",
+    "files": 0,
+    "research": [],
+    "releases": [],
+    "artifacts": [],
+    "repo": "Castle-Bravo-Squrpion-V1-OSINT-Web-Intelligence",
+    "url": "https://github.com/shokribardiya/Castle-Bravo-Squrpion-V1-OSINT-Web-Intelligence",
+    "fork": false,
+    "live": null
+  },
+  {
+    "id": "G-003",
+    "name": "Data-Base-with-graph-Orbital-2--Oblivion-XQuantum-version-2-",
+    "status": "public",
+    "domain": "Oblivion project",
+    "year": "\u2014",
+    "team": "Python",
+    "technology": [
+      "Python"
+    ],
+    "overview": "Second version of the graph data system, designed for data control and pattern recognition.",
+    "architecture": "Repository metadata unavailable.",
+    "files": 0,
+    "research": [],
+    "releases": [],
+    "artifacts": [],
+    "repo": "Data-Base-with-graph-Orbital-2--Oblivion-XQuantum-version-2-",
+    "url": "https://github.com/shokribardiya/Data-Base-with-graph-Orbital-2--Oblivion-XQuantum-version-2-",
+    "fork": false,
+    "live": null
+  },
+  {
+    "id": "G-004",
+    "name": "Sentinel-Antivirus-Oblivion",
+    "status": "public",
+    "domain": "Oblivion project",
+    "year": "\u2014",
+    "team": "Python",
+    "technology": [
+      "Python"
+    ],
+    "overview": "Virus detection system for home laptops through cloud servers.",
+    "architecture": "Repository metadata unavailable.",
+    "files": 0,
+    "research": [],
+    "releases": [],
+    "artifacts": [],
+    "repo": "Sentinel-Antivirus-Oblivion",
+    "url": "https://github.com/shokribardiya/Sentinel-Antivirus-Oblivion",
+    "fork": false,
+    "live": null
+  },
+  {
+    "id": "G-005",
+    "name": "hacking-tools",
+    "status": "fork",
+    "domain": "Fork of an external project",
+    "year": "\u2014",
+    "team": "Python",
+    "technology": [
+      "Python"
+    ],
+    "overview": "Fork of Z4nzu/hackingtool, an all-in-one hacking tool collection.",
+    "architecture": "Repository metadata unavailable.",
+    "files": 0,
+    "research": [],
+    "releases": [],
+    "artifacts": [],
+    "repo": "hacking-tools",
+    "url": "https://github.com/shokribardiya/hacking-tools",
+    "fork": true,
+    "live": null
+  },
+  {
+    "id": "G-006",
+    "name": "gotham-platform-python",
+    "status": "fork",
+    "domain": "Fork of an external project",
+    "year": "\u2014",
+    "team": "Python",
+    "technology": [
+      "Python"
+    ],
+    "overview": "Fork of palantir/gotham-platform-python, the official Python library for the Gotham API.",
+    "architecture": "Repository metadata unavailable.",
+    "files": 0,
+    "research": [],
+    "releases": [],
+    "artifacts": [],
+    "repo": "gotham-platform-python",
+    "url": "https://github.com/shokribardiya/gotham-platform-python",
+    "fork": true,
+    "live": null
+  }
+];
 
-  const research = [
-    {
-      id: 'R-014', title: 'Multimodal Fusion for Structured Object Retrieval',
-      authors: 'O. Marchetti, D. Reyes', date: '2026-02',
-      abstract: 'Explores retrieval architectures that jointly index text, imagery, and structured relationships within a single object graph, forming the basis for Threshold.',
-      related: ['P-003']
-    },
-    {
-      id: 'R-011', title: 'Permission-Aware Retrieval Architectures for Applied AI',
-      authors: 'S. Kade', date: '2025-11',
-      abstract: 'Proposes a pattern for filtering AI-generated retrieval results by the requesting session\u2019s authorization scope, applied across Oblivion Intelligence.',
-      related: ['P-001']
-    },
-    {
-      id: 'R-009', title: 'Geospatial Data Fusion at Platform Scale',
-      authors: 'T. Voss, L. Farrow', date: '2025-06',
-      abstract: 'Describes the tiled indexing and ingestion strategy behind Oracle Mesh and Sentinel Grid, and its behavior under high write volume.',
-      related: ['P-001','P-002']
-    },
-    {
-      id: 'R-005', title: 'Zero Trust Patterns for Internal Tooling',
-      authors: 'Oblivion Security Team', date: '2024-09',
-      abstract: 'A survey of zero-trust and defense-in-depth patterns applied to internal, privileged tooling such as the Control Center.',
-      related: ['P-004']
-    }
-  ];
+  const research = []; // No verified research records yet. Add only public papers or clearly labeled internal notes.
 
-  const models = [
-    { id:'M-01', name:'oblivion-embed-base', version:'1.3.0', format:'GGUF', size:'1.2 GB', params:'340M', quant:'Q5_K_M', project:'P-003', license:'Internal', date:'2026-01' },
-    { id:'M-02', name:'sentinel-classifier', version:'2.0.0', format:'SafeTensors', size:'480 MB', params:'92M', quant:'\u2014', project:'P-002', license:'Internal', date:'2025-10' },
-    { id:'M-03', name:'threshold-lm', version:'0.4.0', format:'GGUF', size:'4.1 GB', params:'3B', quant:'Q4_K_M', project:'P-003', license:'Research', date:'2026-02' },
-    { id:'M-04', name:'atlas-vision', version:'1.0.0', format:'ONNX', size:'640 MB', params:'110M', quant:'\u2014', project:'P-005', license:'Restricted', date:'2025-09' }
-  ];
+  const models = [];
 
-  const files = [
-    { id:'F-101', name:'mesh-ontology-spec.md', type:'Documentation', size:'128 KB', status:'Current', version:'v3.2', owner:'Systems Engineering', updated:'2026-01-14' },
-    { id:'F-102', name:'sentinel-tile-index.md', type:'Documentation', size:'96 KB', status:'Current', version:'v1.4', owner:'Applied AI', updated:'2025-12-02' },
-    { id:'F-103', name:'q1-research-notes.pdf', type:'Research', size:'2.4 MB', status:'Current', version:'v1.0', owner:'Research', updated:'2026-02-08' },
-    { id:'F-104', name:'ledger-event-schema.md', type:'Documentation', size:'54 KB', status:'Current', version:'v2.0', owner:'Platform', updated:'2025-05-22' }
-  ];
+  const files = [];
 
   // Repositories — first-class objects seeding the Control Center's
   // Repositories directory. Each conceptually owns a primary artifact,
@@ -2052,114 +2119,19 @@ const OblivionData = (() => {
   // records that ship with this file (read-only, no stored bytes);
   // repositories created through the Control Center are persisted to
   // OblivionStorage and merged in at render time — see OblivionRepo.
-  const repositories = [
-    {
-      id:'P-001', slug:'oracle-mesh', name:'Oracle Mesh', resourceType:'REPOSITORY', demo:true,
-      description:'Distributed graph store and streaming ingestion layer for schema-on-read object fusion.',
-      status:'active', version:'v3.2.0', visibility:'PUBLIC', owner:'Systems Engineering', updated:'2026-01-14',
-      tags:['data-fusion','graph','ingestion'], license:'Internal',
-      primaryArtifact:{ filename:'ontology-spec.md', humanSize:'128 KB', version:'v3.2', checksum:'8f2a91e6c3b4d5107f9a2c6e8b1d4f3a5c7e9b0d2f4a6c8e0b2d4f6a8c0e2b4d' },
-      readme:{
-        overview:'Oracle Mesh is Oblivion\u2019s core data-fusion layer. It ingests structured and semi-structured sources into a single addressable object graph.',
-        installation:'Not distributed outside Oblivion infrastructure. Internal deployment is managed through the Platform team\u2019s service pipeline.',
-        usage:'Downstream systems query the object graph through a permission-aware query layer; see the architecture note in the Project record for detail.',
-        architecture:'Ingestion workers normalize source records into typed objects and relationships behind a versioned ontology.'
-      },
-      files:[ { name:'ontology-spec.md', resourceType:'DOCUMENT', humanSize:'128 KB', version:'v3.2' }, { name:'mesh-core', resourceType:'CODE', humanSize:'\u2014', version:'v3.2.0' } ],
-      versions:[ { v:'3.2.0', date:'2026-01', humanSize:'128 KB', checksum:'8f2a91e6\u2026', state:'LATEST' }, { v:'3.1.0', date:'2025-08', humanSize:'119 KB', checksum:'2c7e0b4d\u2026', state:'ARCHIVED' } ],
-      releases:[ { v:'3.2.0', date:'2026-01', notes:'Ontology v3 edge-type revisions and ingestion throughput improvements.' }, { v:'3.1.0', date:'2025-08', notes:'Initial public-metadata release.' } ]
-    },
-    {
-      id:'P-002', slug:'sentinel-grid', name:'Sentinel Grid', resourceType:'REPOSITORY', demo:true,
-      description:'Geospatial and satellite imagery pipeline feeding change-detection and monitoring workflows.',
-      status:'active', version:'v2.4.0', visibility:'PUBLIC', owner:'Applied AI', updated:'2025-12-02',
-      tags:['geospatial','imagery','detection'], license:'Internal',
-      primaryArtifact:{ filename:'tile-index-spec.md', humanSize:'96 KB', version:'v1.4', checksum:'2c7e0b4d9f1a3c5e7b9d1f3a5c7e9b1d3f5a7c9e1b3d5f7a9c1e3b5d7f9a1c3e' },
-      readme:{
-        overview:'Sentinel Grid processes geospatial and satellite data into structured observations.',
-        installation:'Internal service — deployed via the Platform team\u2019s pipeline, not independently distributable.',
-        usage:'Detection results are written into the Oracle Mesh object graph as observation records.',
-        architecture:'A tiled indexing scheme partitions imagery by region and time; detection models run as batch jobs against new tiles.'
-      },
-      files:[ { name:'tile-index-spec.md', resourceType:'DOCUMENT', humanSize:'96 KB', version:'v1.4' }, { name:'sentinel-pipeline', resourceType:'CODE', humanSize:'\u2014', version:'v2.4.0' } ],
-      versions:[ { v:'2.4.0', date:'2025-12', humanSize:'96 KB', checksum:'2c7e0b4d\u2026', state:'LATEST' } ],
-      releases:[ { v:'2.4.0', date:'2025-12', notes:'Tile index v1.4 and anomaly-detection model refresh.' } ]
-    },
-    {
-      id:'P-003', slug:'threshold', name:'Threshold', resourceType:'REPOSITORY', demo:true,
-      description:'Research-stage multimodal retrieval over structured object graphs.',
-      status:'research', version:'v0.4.0-preview', visibility:'UNLISTED', owner:'Research', updated:'2026-02-01',
-      tags:['research','retrieval','multimodal'], license:'Research',
-      primaryArtifact:{ filename:'threshold-lm.gguf', humanSize:'4.1 GB', version:'v0.4.0', checksum:'7a1c3e5b9d0f2a4c6e8b0d2f4a6c8e0b2d4f6a8c0e2b4d6f8a0c2e4b6d8f0a2c' },
-      readme:{
-        overview:'Threshold explores multimodal retrieval over structured object graphs — the research direction behind cross-surface search.',
-        installation:'Preview weights are internal-only; no public distribution channel exists yet.',
-        usage:'Served through an offline evaluation harness; not connected to production traffic.',
-        architecture:'A small serving prototype sits alongside batch evaluation harnesses. Not yet load-bearing for any production surface.'
-      },
-      files:[ { name:'threshold-lm.gguf', resourceType:'MODEL', humanSize:'4.1 GB', version:'v0.4.0' }, { name:'threshold-eval', resourceType:'CODE', humanSize:'\u2014', version:'v0.4.0-preview' } ],
-      versions:[ { v:'0.4.0-preview', date:'2026-02', humanSize:'4.1 GB', checksum:'7a1c3e5b\u2026', state:'LATEST' } ],
-      releases:[ { v:'0.4.0-preview', date:'2026-02', notes:'First internal preview checkpoint. Not production-serving.' } ]
-    },
-    {
-      id:'P-004', slug:'ledger-core', name:'Ledger Core', resourceType:'REPOSITORY', demo:true,
-      description:'Append-only audit and event backbone underpinning the Control Center\u2019s audit surface.',
-      status:'active', version:'v4.0.1', visibility:'PUBLIC', owner:'Platform', updated:'2025-05-22',
-      tags:['audit','infrastructure','events'], license:'Internal',
-      primaryArtifact:{ filename:'event-schema.md', humanSize:'54 KB', version:'v2.0', checksum:'0d2f4a6c8e0b2d4f6a8c0e2b4d6f8a0c2e4b6d8f0a2c4e6b8d0f2a4c6e8b0d2f' },
-      readme:{
-        overview:'Ledger Core is the append-only audit and event backbone every privileged Oblivion system writes to.',
-        installation:'Internal service. Consumers integrate via the event-schema contract, not direct deployment.',
-        usage:'Every privileged write is emitted as an immutable event with actor, action, target, and timestamp.',
-        architecture:'Consumers build read models (like the Control Center audit view) from the event stream without mutating it.'
-      },
-      files:[ { name:'event-schema.md', resourceType:'DOCUMENT', humanSize:'54 KB', version:'v2.0' }, { name:'ledger-core', resourceType:'CODE', humanSize:'\u2014', version:'v4.0.1' } ],
-      versions:[ { v:'4.0.1', date:'2025-05', humanSize:'54 KB', checksum:'0d2f4a6c\u2026', state:'LATEST' } ],
-      releases:[ { v:'4.0.1', date:'2025-05', notes:'Event schema v2.0 and consumer read-model guidance.' } ]
-    },
-    {
-      id:'P-005', slug:'atlas-field', name:'Atlas Field', resourceType:'REPOSITORY', demo:true,
-      description:'Simulation and vision models supporting scenario planning over physical systems.',
-      status:'restricted', version:'\u2014', visibility:'PRIVATE', owner:'Applied AI', updated:'2025-09-01',
-      tags:['simulation','vision','restricted'], license:'Restricted',
-      primaryArtifact:null,
-      readme:{ overview:'Access to this repository\u2019s README requires an authorized Control Center session.', installation:'\u2014', usage:'\u2014', architecture:'\u2014' },
-      files:[ { name:'Access via Control Center', resourceType:'FILE', humanSize:'\u2014', version:'\u2014' } ],
-      versions:[], releases:[]
-    },
-    {
-      id:'P-006', slug:'quietline', name:'Quietline', resourceType:'REPOSITORY', demo:true,
-      description:'Archived secure-communications prototype, retained for research reference only.',
-      status:'archived', version:'v1.2.0', visibility:'UNLISTED', owner:'Platform', updated:'2022-11-10',
-      tags:['messaging','archived'], license:'Internal',
-      primaryArtifact:{ filename:'quietline-archive.zip', humanSize:'6.4 MB', version:'v1.2.0', checksum:'4c6e8b0d2f4a6c8e0b2d4f6a8c0e2b4d6f8a0c2e4b6d8f0a2c4e6b8d0f2a4c6e' },
-      readme:{
-        overview:'Quietline was an internal secure-communications prototype, archived in favor of consolidated identity infrastructure.',
-        installation:'Archived — infrastructure decommissioned. Not deployable.',
-        usage:'Retained for research reference only.',
-        architecture:'Archived. See the final release notes for the last known architecture summary.'
-      },
-      files:[ { name:'quietline-archive.zip', resourceType:'ARCHIVE', humanSize:'6.4 MB', version:'v1.2.0' } ],
-      versions:[ { v:'1.2.0', date:'2022-11', humanSize:'6.4 MB', checksum:'4c6e8b0d\u2026', state:'ARCHIVED' } ],
-      releases:[ { v:'1.2.0', date:'2022-11', notes:'Final release before archival.' } ]
-    }
-  ];
+  const repositories = [];
 
   const ecosystem = [
-    { name:'GitHub', label:'GitHub Organization', org:'VoidkeepDev', desc:'Engineering source and projects.', url:'https://github.com/VoidkeepDev', domain:'github.com' },
-    { name:'Medium', label:'Medium', desc:'Research and writing.', url:'https://medium.com/@shokribardiya0/oblivion-the-recursive-threshold-e62babf89a38', domain:'medium.com' },
-    { name:'X', label:'X / Twitter', desc:'Updates and technical communication.', url:'https://x.com/DELTA29872', domain:'x.com' },
-    { name:'X', label:'X / Twitter (alt)', desc:'Secondary channel.', url:'https://x.com/BardiyaSho73874', domain:'x.com' },
-    { name:'Sentry', label:'Sentry \u2014 Join', desc:'Join the Oblivion community.', url:'https://shokribardiya.github.io/Sentry-oblivion/', domain:'shokribardiya.github.io' },
-    { name:'Sentinel', label:'Sentinel', desc:'Related Oblivion platform.', url:'https://shokribardiya.github.io/Sentinel/', domain:'shokribardiya.github.io' }
+    { name:'GitHub', label:'GitHub \u2014 shokribardiya', desc:'Primary public source for Oblivion projects.', url:'https://github.com/shokribardiya', domain:'github.com' },
+    { name:'Site', label:'Oblivion site', desc:'Public Oblivion web page on GitHub Pages.', url:'https://shokribardiya.github.io/Oblivions0.github.io/', domain:'shokribardiya.github.io' },
+    { name:'X', label:'X / Twitter', desc:'Linked from the GitHub profile.', url:'https://x.com/DELTA29872', domain:'x.com' }
   ];
 
   const users = [
-    { name:'B. Shokri', role:'Management', status:'Active', lastActive:'Today' },
-    { name:'S. Kade', role:'Research Lead', status:'Active', lastActive:'Today' },
-    { name:'T. Voss', role:'Systems Engineering', status:'Active', lastActive:'Yesterday' },
-    { name:'L. Farrow', role:'Applied AI', status:'Active', lastActive:'2 days ago' },
-    { name:'D. Reyes', role:'Research', status:'Invited', lastActive:'\u2014' }
+    { name:'Bardiya Shokri', role:'Founder / organizational lead', status:'Human', lastActive:'\u2014' },
+    { name:'Sahand Farzaneh', role:'Programmer', status:'Human', lastActive:'\u2014' },
+    { name:'Barsam Alizadeh', role:'Programmer', status:'Human', lastActive:'\u2014' },
+    { name:'Danial Dadashi', role:'Programmer', status:'Human', lastActive:'\u2014' }
   ];
 
   const apiSurface = [
@@ -2215,8 +2187,8 @@ const OblivionData = (() => {
       desc: f.type + ' \u00b7 owned by ' + f.owner,
       path: '#control', tags: (f.name+' '+f.type+' '+f.owner).toLowerCase(), visibility: 'PUBLIC'
     }));
-    idx.push({ id:'SYS-01', type:'SYSTEM', title:'Oracle Mesh service', desc:'Data-fusion ingestion and query service.', path:'#project/P-001', tags:'oracle mesh ingestion service system', visibility:'PUBLIC' });
-    idx.push({ id:'PER-01', type:'PERSON', title:'Bardiya Shokri', desc:'Management, Oblivion.', path:'#company', tags:'bardiya shokri management', visibility:'PUBLIC' });
+    [['Bardiya Shokri','Founder and organizational lead.'],['Sahand Farzaneh','Programmer.'],['Barsam Alizadeh','Programmer.'],['Danial Dadashi','Programmer.']].forEach((h,i) => idx.push({ id:'PER-0'+(i+1), type:'PERSON', title:h[0], desc:h[1]+' Oblivion.', path:'#company', tags:h[0].toLowerCase()+' programmer human oblivion', visibility:'PUBLIC', source:'Oblivion website' }));
+    idx.push({ id:'ANG-01', type:'PLATFORM', title:'ANGRA', desc:'Oblivion\u2019s AI orchestration system coordinating about 100 specialized AI agents under human review.', path:'#angra', tags:'angra ai agents orchestration workforce human review', visibility:'PUBLIC', source:'Oblivion website' });
     idx.push({ id:'PLT-01', type:'PLATFORM', title:'Platform infrastructure philosophy', desc:'Zero trust, defense in depth, least privilege.', path:'#platform', tags:'platform security zero trust infrastructure', visibility:'PUBLIC' });
     projects.forEach(p => p.releases.forEach(rel => idx.push({
       id: p.id+'-'+rel.v, type:'RELEASE', title: p.name+' '+rel.v,
@@ -2856,8 +2828,8 @@ const OblivionProjects = (() => {
         <span class="pid">${esc(p.id)}</span>
         <span class="pname">${esc(p.name)}<small>${esc(p.domain)}</small></span>
         <span class="${statusClass(p.status)}">${esc(p.status)}</span>
-        <span class="pmeta">${esc(p.team)}</span>
-        <span class="pmeta">${esc(p.year)}</span>
+        <span class="pmeta">${esc(p.live ? p.live.language || p.team : p.team)}</span>
+        <span class="pmeta">${esc(p.live ? '\u2605 ' + p.live.stars + ' \u00b7 ' + p.live.updated : 'CACHED')}</span>
         <span class="parrow">OPEN \u2192</span>
       </div>
     `).join('');
@@ -2874,10 +2846,14 @@ const OblivionProjects = (() => {
         <span class="tag">${esc(p.year)}</span>
       </div>
       <div class="detail-fields">
-        <div><span>TEAM</span><b>${esc(p.team)}</b></div>
-        <div><span>FILES</span><b>${esc(p.files)}</b></div>
-        <div><span>RESEARCH LINKS</span><b>${p.research.length}</b></div>
-        <div><span>RELEASES</span><b>${p.releases.length}</b></div>
+        <div><span>LANGUAGE</span><b>${esc(p.live ? p.live.language || p.team : p.team)}</b></div>
+        <div><span>STARS</span><b>${esc(p.live ? p.live.stars : 'unavailable')}</b></div>
+        <div><span>FORKS</span><b>${esc(p.live ? p.live.forks : 'unavailable')}</b></div>
+        <div><span>OPEN ISSUES</span><b>${esc(p.live ? p.live.issues : 'unavailable')}</b></div>
+      </div>
+      <p class="repo-live">${p.live ? 'LIVE \u00b7 GitHub API \u00b7 last push ' + esc(p.live.updated) : 'CACHED \u00b7 GitHub metadata not loaded (offline or rate limited)'}</p>
+      <div class="repo-actions">
+        <a class="btn btn-primary" href="${esc(OblivionSecurity.safeUrl(p.url))}" target="_blank" rel="noopener noreferrer">Open GitHub</a>
       </div>
       <div class="detail-tabs" role="tablist">
         <button role="tab" aria-selected="true" data-tab="overview">OVERVIEW</button>
@@ -2894,7 +2870,7 @@ const OblivionProjects = (() => {
       <div class="detail-tabpanel" data-panel="architecture"><p>${esc(p.architecture)}</p></div>
       <div class="detail-tabpanel" data-panel="artifacts">
         ${restricted ? `<p>Artifact listing requires an authorized Control Center session.</p>` :
-          p.artifacts.map(a => `<div class="artifact-row"><span class="a-name">${esc(a.name)}</span><span class="a-meta">${esc(a.type)} \u00b7 ${esc(a.meta)}</span></div>`).join('')}
+          (p.artifacts.length ? p.artifacts.map(a => `<div class="artifact-row"><span class="a-name">${esc(a.name)}</span><span class="a-meta">${esc(a.type)} \u00b7 ${esc(a.meta)}</span></div>`).join('') : '<p>Repository metadata unavailable.</p>')}
       </div>
       <div class="detail-tabpanel" data-panel="research">
         ${p.research.length ? p.research.map(rid => {
@@ -2903,7 +2879,7 @@ const OblivionProjects = (() => {
         }).join('') : `<p>No linked research objects.</p>`}
       </div>
       <div class="detail-tabpanel" data-panel="releases">
-        ${p.releases.length ? p.releases.map(r => `<div class="artifact-row"><span class="a-name">v${esc(r.v)}</span><span class="a-meta">${esc(r.date)}</span></div>`).join('') : `<p>No public releases.</p>`}
+        ${p.releases.length ? p.releases.map(r => `<div class="artifact-row"><span class="a-name">v${esc(r.v)}</span><span class="a-meta">${esc(r.date)}</span></div>`).join('') : `<p>No releases recorded.</p>`}
       </div>
     `;
     body.querySelectorAll('.detail-tabs button').forEach(btn => {
@@ -2944,7 +2920,7 @@ const OblivionProjects = (() => {
   scrim?.addEventListener('click', e => { if (e.target === scrim) history.back(); });
 
   renderList();
-  return { openById, closeDetail };
+  return { openById, closeDetail, renderList };
 })();
 
 /* --------------------------------------------------------------------------
@@ -3749,14 +3725,10 @@ const OblivionRepo = (() => {
 /* --------------------------------------------------------------------------
    OblivionAuditLog — in-memory session log feeding the Control Center
    audit panel. Production backs this with the append-only /api/audit
-   stream described in the Platform section (see Ledger Core, P-004).
+   stream described in the Platform section (demo only).
    -------------------------------------------------------------------------- */
 const OblivionAuditLog = (() => {
-  const entries = [
-    { time:'09:14', actor:'S. Kade', action:'Session started', detail:'Control Center' },
-    { time:'09:20', actor:'T. Voss', action:'Model registered', detail:'sentinel-classifier v2.0.0' },
-    { time:'11:02', actor:'System', action:'Ingestion run completed', detail:'Oracle Mesh \u00b7 P-001' }
-  ];
+  const entries = [];
   function record(action, detail){
     const now = new Date();
     entries.unshift({ time: now.toTimeString().slice(0,5), actor: 'This session', action, detail });
@@ -3790,21 +3762,25 @@ const OblivionAuditLog = (() => {
    anything — any three non-empty values succeed.
    -------------------------------------------------------------------------- */
 const OblivionAuth = (() => {
-  let authenticated = false;
-  function isAuthenticated(){ return authenticated; }
-  function attempt(a1, a2, a3){
+  // DEMO MODE ONLY. This is a client-side interface gate, not authentication.
+  // Static hosting cannot enforce access control; nothing here is a secret.
+  // Production architecture: server-side sessions with passkeys/WebAuthn + MFA.
+  let session = null;
+  function isAuthenticated(){ return !!session; }
+  function getSession(){ return session ? { mode:'DEMO', since: session.since } : null; }
+  function login(a1, a2, a3){
     if (!a1.trim() || !a2.trim() || !a3.trim()){
-      return { ok:false, message:'All three access fields are required.' };
+      return { ok:false, message:'All three fields are required.' };
     }
-    authenticated = true;
-    OblivionAuditLog.record('Control Center authenticated', 'Demonstration gate');
+    session = { since: new Date().toISOString() };
+    OblivionAuditLog.record('Control Center opened', 'DEMO mode, no real authentication');
     return { ok:true };
   }
-  function signOut(){
-    authenticated = false;
-    OblivionAuditLog.record('Control Center session ended', 'Demonstration gate');
+  function logout(){
+    session = null;
+    OblivionAuditLog.record('Control Center closed', 'DEMO mode');
   }
-  return { isAuthenticated, attempt, signOut };
+  return { isAuthenticated, getSession, login, logout, attempt: login, signOut: logout };
 })();
 
 /* --------------------------------------------------------------------------
@@ -3812,6 +3788,7 @@ const OblivionAuth = (() => {
    -------------------------------------------------------------------------- */
 function renderResearch(){
   const el = document.getElementById('research-grid');
+  if (!OblivionData.research.length){ el.innerHTML = '<p class="desc">No research records are published yet. Records will appear here only when they correspond to a public paper, repository documentation, or a clearly labeled internal note.</p>'; return; }
   el.innerHTML = OblivionData.research.map(r => `
     <article class="research-card">
       <span class="eyebrow">${esc(r.id)} \u00b7 ${esc(r.date)}</span>
@@ -4272,6 +4249,119 @@ const OblivionApp = (() => {
 })();
 
 document.addEventListener('DOMContentLoaded', OblivionApp.init);
+
+/* --------------------------------------------------------------------------
+   OblivionGitHub — live public metadata for the verified repositories.
+   No token. Failure leaves records in CACHED state; nothing is invented.
+   -------------------------------------------------------------------------- */
+const OblivionGitHub = (() => {
+  const OWNER = 'shokribardiya';
+  const state = { status: 'CACHED' };
+  async function refresh(){
+    state.status = 'LOADING';
+    let ok = 0, limited = false;
+    await Promise.all(OblivionData.projects.map(async p => {
+      try {
+        const r = await fetch('https://api.github.com/repos/' + OWNER + '/' + encodeURIComponent(p.repo), { headers:{ Accept:'application/vnd.github+json' } });
+        if (r.status === 403 || r.status === 429){ limited = true; return; }
+        if (!r.ok) return;
+        const d = await r.json();
+        if (!d || !d.owner || d.owner.login !== OWNER) return;
+        p.live = { language: OblivionSecurity.safeText(d.language, 40), stars: Number(d.stargazers_count) || 0,
+          forks: Number(d.forks_count) || 0, issues: Number(d.open_issues_count) || 0,
+          updated: OblivionSecurity.safeText(String(d.pushed_at || '').slice(0,10), 10) };
+        if (d.description) p.overview = OblivionSecurity.safeText(d.description, 400);
+        if (d.language) p.technology = [OblivionSecurity.safeText(d.language, 40)];
+        ok++;
+      } catch(e){}
+    }));
+    state.status = ok === OblivionData.projects.length ? 'ONLINE' : ok ? 'DEGRADED' : (limited ? 'RATE LIMITED' : 'OFFLINE');
+    OblivionProjects.renderList();
+    return state.status;
+  }
+  return { refresh, state };
+})();
+if ('requestIdleCallback' in window) requestIdleCallback(() => OblivionGitHub.refresh()); else setTimeout(() => OblivionGitHub.refresh(), 1500);
+
+/* --------------------------------------------------------------------------
+   OblivionPython — lazy Pyodide runtime. Python source is embedded and only
+   named modules run; no arbitrary code from URLs or user input.
+   -------------------------------------------------------------------------- */
+const PY_SRC = `
+import json
+def angra_analysis(payload):
+    roles = payload["roles"]
+    total = sum(roles.values())
+    dist = sorted(((k, v, round(100.0 * v / total, 1)) for k, v in roles.items()), key=lambda t: (-t[1], t[0]))
+    tasks = payload["tasks"]
+    per = {k: round(tasks * v / total, 1) for k, v in roles.items()}
+    return json.dumps({"total": total, "distribution": dist, "tasks_per_role": per})
+def repo_stats(payload):
+    langs = {}
+    for r in payload["repos"]:
+        langs[r["language"] or "unknown"] = langs.get(r["language"] or "unknown", 0) + 1
+    return json.dumps({"count": len(payload["repos"]), "languages": langs, "forks": sum(1 for r in payload["repos"] if r["fork"])})
+MODULES = {"angra_analysis": angra_analysis, "repo_stats": repo_stats}
+def run(module, payload_json):
+    if module not in MODULES:
+        raise ValueError("unknown module")
+    return MODULES[module](json.loads(payload_json))
+`;
+const OblivionPython = (() => {
+  let py = null, loading = null, status = 'OFFLINE';
+  function init(){
+    if (py) return Promise.resolve(py);
+    if (loading) return loading;
+    status = 'LOADING';
+    loading = new Promise((resolve, reject) => {
+      const t = setTimeout(() => { status = 'UNAVAILABLE'; loading = null; reject(new Error('Python runtime timed out.')); }, 45000);
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js';
+      s.crossOrigin = 'anonymous';
+      s.onload = async () => {
+        try { py = await loadPyodide(); py.runPython(PY_SRC); status = 'ONLINE'; clearTimeout(t); resolve(py); }
+        catch(e){ status = 'UNAVAILABLE'; loading = null; clearTimeout(t); reject(e); }
+      };
+      s.onerror = () => { status = 'UNAVAILABLE'; loading = null; clearTimeout(t); reject(new Error('Could not load the Python runtime.')); };
+      document.head.appendChild(s);
+    });
+    return loading;
+  }
+  async function run(module, payload){
+    const p = await init();
+    const fn = p.globals.get('run');
+    try { return JSON.parse(fn(module, JSON.stringify(payload))); } finally { fn.destroy(); }
+  }
+  function health(){ return status; }
+  function shutdown(){ py = null; loading = null; status = 'OFFLINE'; }
+  return { init, run, health, shutdown };
+})();
+
+/* --------------------------------------------------------------------------
+   OblivionANGRA — organizational model. Role counts are the planned model
+   (sum 100), not measured telemetry, and are labeled that way in the UI.
+   -------------------------------------------------------------------------- */
+const OblivionANGRA = (() => {
+  const roles = { 'Coding':18, 'Research':9, 'Testing':8, 'Documentation':7, 'Architecture':6, 'Security analysis':8,
+    'Data':9, 'Game development':10, 'Build and release':5, 'UI':6, 'QA':6, 'Analysis':4, 'Project management':4 };
+  const btn = document.getElementById('btn-py-run'), out = document.getElementById('py-out');
+  const stateEl = document.getElementById('py-state'), note = document.getElementById('py-note');
+  btn?.addEventListener('click', async () => {
+    btn.disabled = true; stateEl.textContent = 'LOADING';
+    out.textContent = 'Starting the Python runtime. This downloads once and can take a few seconds.';
+    try {
+      const r = await OblivionPython.run('angra_analysis', { roles, tasks: 500 });
+      stateEl.textContent = OblivionPython.health();
+      const max = Math.max(...r.distribution.map(d => d[1]));
+      out.innerHTML = '<div>' + esc(r.total) + ' agents in the model. Bars show the share each role holds; the last column is that role\u2019s share of a 500-task sample workload.</div>' +
+        r.distribution.map(d => '<div class="py-bar"><span>' + esc(d[0]) + '</span><i style="width:' + (d[1] / max * 100) + '%"></i><span>' + esc(r.tasks_per_role[d[0]]) + '</span></div>').join('');
+    } catch(e){
+      stateEl.textContent = 'UNAVAILABLE';
+      out.textContent = 'Python could not start: ' + OblivionSecurity.safeText(e.message, 120) + ' Check your connection and try again.';
+    } finally { btn.disabled = false; }
+  });
+  return { roles };
+})();
 </script>
 </body>
 </html>
