@@ -4544,3 +4544,305 @@ const OblivionANGRA = (() => {
 
     }
 </script>
+<!-- ANGRA AI — Liquid Glass Website Button -->
+<style>
+  .angra-ai-entry {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 99999;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border-radius: 999px;
+    color: #fff;
+    text-decoration: none;
+    font: 600 13px/1 -apple-system, BlinkMacSystemFont, "SF Pro Display",
+      "SF Pro Text", Inter, sans-serif;
+    letter-spacing: .02em;
+
+    background:
+      linear-gradient(
+        135deg,
+        rgba(255,255,255,.20),
+        rgba(255,255,255,.07)
+      );
+
+    border: 1px solid rgba(255,255,255,.24);
+
+    box-shadow:
+      0 8px 32px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.28),
+      inset 0 -1px 0 rgba(255,255,255,.06);
+
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+
+    transition:
+      transform .35s cubic-bezier(.2,.8,.2,1),
+      box-shadow .35s ease,
+      background .35s ease;
+  }
+
+  .angra-ai-entry::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: inherit;
+    pointer-events: none;
+
+    background:
+      linear-gradient(
+        120deg,
+        rgba(255,255,255,.16),
+        transparent 35%,
+        transparent 65%,
+        rgba(255,255,255,.08)
+      );
+
+    opacity: .7;
+  }
+
+  .angra-ai-entry:hover {
+    transform: translateY(-3px) scale(1.025);
+
+    background:
+      linear-gradient(
+        135deg,
+        rgba(255,255,255,.27),
+        rgba(255,255,255,.10)
+      );
+
+    box-shadow:
+      0 14px 42px rgba(0,0,0,.36),
+      0 0 0 1px rgba(255,255,255,.08),
+      inset 0 1px 0 rgba(255,255,255,.35);
+  }
+
+  .angra-ai-entry:active {
+    transform: translateY(0) scale(.97);
+  }
+
+  .angra-ai-entry .angra-entry-icon {
+    width: 17px;
+    height: 17px;
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  .angra-ai-entry .angra-entry-label {
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 600px) {
+    .angra-ai-entry {
+      right: 16px;
+      bottom: 16px;
+      padding: 11px 15px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .angra-ai-entry {
+      transition: none;
+    }
+  }
+</style>
+
+<a
+  class="angra-ai-entry"
+  href="https://shokribardiya.github.io/Angra_AI/"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Enter ANGRA AI"
+>
+  <svg
+    class="angra-entry-icon"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M5 12h13"/>
+    <path d="m13 6 6 6-6 6"/>
+  </svg>
+
+  <span class="angra-entry-label">ANGRA AI</span>
+</a>
+<!-- ANGRA AI — Black Corner Page Transition (paste before </body>) -->
+<style>
+  #angra-curtain {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483647;
+    pointer-events: none;
+    visibility: hidden;
+    overflow: hidden;
+  }
+  #angra-curtain .angra-layer {
+    position: absolute;
+    inset: 0;
+    clip-path: circle(0% at 100% 100%);
+    will-change: clip-path;
+  }
+  #angra-curtain .angra-edge {
+    background: linear-gradient(135deg, rgba(255,255,255,.35), rgba(255,255,255,.08));
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+  }
+  #angra-curtain .angra-base {
+    background: #000;
+  }
+  #angra-curtain .angra-logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 72px;
+    height: auto;
+    transform: translate(-50%, -50%) scale(.6);
+    opacity: 0;
+    image-rendering: pixelated;
+  }
+  #angra-curtain.angra-covered .angra-layer { clip-path: circle(150% at 100% 100%); }
+  #angra-curtain.angra-covered .angra-logo  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+</style>
+
+<script>
+(function () {
+  // ===== Settings =====
+  var ORIGIN   = "100% 100%"; // animation corner: "0% 0%" / "100% 0%" / "0% 100%" / "100% 100%"
+  var COVER_MS = 750;         // time for black to cover the screen
+  var LOGO_MS  = 550;         // logo fade/scale time
+  var HOLD_MS  = 450;         // how long the logo stays before navigating
+  var EASE     = "cubic-bezier(.77,0,.18,1)";
+
+  // Logo embedded inside the code (SVG as data URI, no external file needed)
+  var LOGO_SVG =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1750 1200" shape-rendering="crispEdges">' +
+    '<g fill="#D97757">' +
+    '<rect x="300" y="10" width="1180" height="860"/>' +
+    '<rect x="10" y="300" width="1735" height="285"/>' +
+    '<rect x="300" y="860" width="140" height="330"/>' +
+    '<rect x="595" y="860" width="140" height="330"/>' +
+    '<rect x="1025" y="860" width="140" height="330"/>' +
+    '<rect x="1320" y="860" width="160" height="330"/>' +
+    '</g><g fill="#000">' +
+    '<rect x="450" y="143" width="147" height="149"/>' +
+    '<rect x="1170" y="143" width="150" height="149"/>' +
+    '</g></svg>';
+  var LOGO_SRC = "data:image/svg+xml;utf8," + encodeURIComponent(LOGO_SVG);
+
+  // ===== Build overlay =====
+  var curtain = document.createElement("div");
+  curtain.id = "angra-curtain";
+  curtain.setAttribute("aria-hidden", "true");
+  curtain.innerHTML =
+    '<div class="angra-layer angra-edge"></div>' +
+    '<div class="angra-layer angra-base"></div>' +
+    '<img class="angra-logo" alt="" src="' + LOGO_SRC + '">';
+  document.body.appendChild(curtain);
+
+  var edge = curtain.querySelector(".angra-edge");
+  var base = curtain.querySelector(".angra-base");
+  var logo = curtain.querySelector(".angra-logo");
+
+  function circle(r) { return "circle(" + r + " at " + ORIGIN + ")"; }
+  function play(el, from, to, ms, delay) {
+    return el.animate([{ clipPath: circle(from) }, { clipPath: circle(to) }],
+      { duration: ms, delay: delay || 0, easing: EASE, fill: "both" }).finished;
+  }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  var busy = false;
+
+  function cover() {
+    curtain.style.visibility = "visible";
+    return Promise.all([
+      play(edge, "0%", "150%", COVER_MS, 0),
+      play(base, "0%", "150%", COVER_MS, 110)
+    ]).then(function () {
+      return logo.animate(
+        [{ opacity: 0, transform: "translate(-50%,-50%) scale(.6)" },
+         { opacity: 1, transform: "translate(-50%,-50%) scale(1)" }],
+        { duration: LOGO_MS, easing: "cubic-bezier(.2,.8,.2,1)", fill: "both" }
+      ).finished;
+    });
+  }
+
+  function reveal() {
+    curtain.style.visibility = "visible";
+    base.style.clipPath = circle("150%");
+    edge.style.clipPath = circle("150%");
+    logo.style.opacity = 1;
+    logo.style.transform = "translate(-50%,-50%) scale(1)";
+    return wait(250).then(function () {
+      return logo.animate([{ opacity: 1 }, { opacity: 0 }],
+        { duration: 250, fill: "both" }).finished;
+    }).then(function () {
+      return Promise.all([
+        play(base, "150%", "0%", COVER_MS, 0),
+        play(edge, "150%", "0%", COVER_MS, 110)
+      ]);
+    }).then(function () {
+      curtain.style.visibility = "hidden";
+      base.style.clipPath = edge.style.clipPath = "";
+      logo.style.opacity = logo.style.transform = "";
+    });
+  }
+
+  function go(url) {
+    if (busy) return;
+    busy = true;
+    try { sessionStorage.setItem("angraTransition", "1"); } catch (e) {}
+    cover().then(function () { return wait(HOLD_MS); })
+           .then(function () { window.location.href = url; });
+  }
+
+  // ===== Intercept every link click =====
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented || e.button !== 0) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+    var a = e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    if (a.hasAttribute("download")) return;
+    if (a.target && a.target !== "_self") return; // new-tab links open normally
+
+    var href = a.getAttribute("href");
+    if (!href || href.charAt(0) === "#") return;
+    if (/^(javascript:|mailto:|tel:|sms:)/i.test(href)) return;
+
+    var url;
+    try { url = new URL(a.href, location.href); } catch (err) { return; }
+    // same page with only a hash change -> no transition
+    if (url.origin === location.origin && url.pathname === location.pathname &&
+        url.search === location.search && url.hash) return;
+
+    e.preventDefault();
+    go(url.href);
+  }, true);
+
+  // ===== When the new page loads on this site: open the curtain =====
+  try {
+    if (sessionStorage.getItem("angraTransition")) {
+      sessionStorage.removeItem("angraTransition");
+      reveal();
+    }
+  } catch (e) {}
+
+  // Back/forward cache: make sure the page is not stuck black
+  window.addEventListener("pageshow", function (e) {
+    if (e.persisted) {
+      busy = false;
+      curtain.style.visibility = "hidden";
+      base.style.clipPath = edge.style.clipPath = "";
+    }
+  });
+})();
+</script>
