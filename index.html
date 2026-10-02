@@ -5701,3 +5701,328 @@ const OblivionANGRA = (() => {
 <!-- نسخه‌ی پشتیبان برای گوگل و iOS (فایل واقعی، پایین‌تر توضیح دادم) -->
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+
+<script>
+(function () {
+  var CFG = {
+    delay: 1600,            // delay before the window opens (ms)
+    cooldownHours: 12,      // 0 = show on every visit
+    key: "obv_promo_closed",
+    link: "https://shokribardiya.github.io/OblivionStudioDev/",
+    img: "https://shokribardiya.github.io/OblivionStudioDev/angra-cover.jpg"
+  };
+
+  function boot() {
+    if (document.getElementById("obvPromo")) return;
+
+    var f = document.createElement("link");
+    f.rel = "stylesheet";
+    f.href = "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Instrument+Serif&display=swap";
+    document.head.appendChild(f);
+
+    var s = document.createElement("style");
+    s.textContent = `
+.obv{--paper:#E9DDCD;--ink:#141210;--terra:#E0592A;--ease:cubic-bezier(.2,.8,.2,1);position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:16px;visibility:hidden;pointer-events:none;font-family:"Hanken Grotesk",system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);line-height:normal;text-align:left}
+.obv[hidden]{display:none}
+.obv.is-open{visibility:visible;pointer-events:auto}
+.obv,.obv *{box-sizing:border-box}
+.obv-backdrop{position:absolute;inset:0;background:rgba(14,13,11,.66);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);opacity:0;transition:opacity .5s ease}
+.is-open .obv-backdrop{opacity:1}
+.obv-window{position:relative;container-type:inline-size;background:var(--paper);overflow:hidden;border-radius:4px;width:min(1100px,100%,calc((100dvh - 32px) * 1.597));aspect-ratio:1585/992;box-shadow:0 40px 90px -20px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06);outline:none;opacity:0;transform:translateY(28px) scale(.96);transition:opacity .45s ease,transform .6s var(--ease)}
+.is-open .obv-window{opacity:1;transform:none;transition-delay:.08s}
+.obv-media{position:absolute;inset:0;overflow:hidden;transform:scale(1.04);transition:transform .7s var(--ease)}
+.obv-art{display:block;width:100%;height:100%;max-width:none;object-fit:cover}
+.is-open .obv-art{animation:obvSettle 2.6s var(--ease) both}
+.obv-curtain{position:absolute;inset:0;z-index:5;display:grid;grid-template-columns:repeat(4,1fr);pointer-events:none}
+.obv-curtain i{background:var(--terra);transform:scaleY(0);transform-origin:50% 100%}
+.is-open .obv-curtain i{animation:obvStep .95s var(--ease) both;animation-delay:calc(.5s + var(--n)*.09s)}
+.obv-curtain i:nth-child(1){--n:0}.obv-curtain i:nth-child(2){--n:1}.obv-curtain i:nth-child(3){--n:2}.obv-curtain i:nth-child(4){--n:3}
+.obv-close{position:absolute;top:14px;right:14px;z-index:7;width:42px;height:42px;display:grid;place-items:center;padding:0;border:0;border-radius:50%;background:var(--paper);color:var(--ink);cursor:pointer;transition:transform .45s var(--ease),background .25s,color .25s}
+.obv-close:hover{background:var(--ink);color:var(--paper);transform:rotate(90deg)}
+.obv-close svg{width:16px;height:16px}
+.obv-copy{--fs:clamp(12.5px,1.3cqw,16px);position:absolute;z-index:2;left:24%;top:0;bottom:0;width:31%;display:flex;flex-direction:column;justify-content:center;padding:3% 0 1%;font-size:var(--fs)}
+.obv-brand{display:flex;align-items:center;gap:.7em;margin:0 0 1.1em;font-family:"Instrument Serif",Georgia,serif;font-size:1.25em;letter-spacing:.08em;color:var(--ink)}
+.obv-dot{position:relative;width:.55em;height:.55em;border-radius:50%;background:var(--terra)}
+.obv-dot::after{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid var(--terra);animation:obvPing 2.6s ease-out infinite}
+.obv-title{margin:0 0 .35em;overflow:hidden;padding:0 0 .08em;font:400 clamp(40px,5.4cqw,70px)/1 "Instrument Serif",Georgia,serif;letter-spacing:-.01em;color:var(--ink)}
+.obv-title span{display:block}
+.is-open .obv-title span{animation:obvMask 1.1s var(--ease) .95s backwards}
+.obv-lead{margin:0 0 1.4em;line-height:1.6;max-width:34ch;color:var(--ink)}
+.obv-facts{list-style:none;margin:0 0 1.7em;padding:0}
+.obv-facts li{margin:0;padding:.75em 0;border-top:1px solid rgba(20,18,16,.2);line-height:1.5;color:var(--ink)}
+.obv-facts li:last-child{border-bottom:1px solid rgba(20,18,16
+<script>
+(function () {
+  if (window.OblivionPromo) return;
+
+  var IMG_SRC = "PASTE_YOUR_data:image/webp;base64,..._HERE";
+  var CTA_URL = "https://example.com";
+  var AUTO_OPEN_MS = 1500;   // 0 = بدون باز شدن خودکار
+  var SHOW_ONCE = false;     // true = فقط یک بار در هر نشست
+
+  var CSS = '.obv{--paper:#E9DDCD;--ink:#141210;--terra:#E0592A;--ease:cubic-bezier(.2,.8,.2,1);position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:16px;visibility:hidden;pointer-events:none;font-family:"Hanken Grotesk",system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink)}'
+  + '.obv.is-open{visibility:visible;pointer-events:auto}.obv *{box-sizing:border-box}'
+  + '.obv-backdrop{position:absolute;inset:0;background:rgba(14,13,11,.66);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);opacity:0;transition:opacity .5s ease}.is-open .obv-backdrop{opacity:1}'
+  + '.obv-window{position:relative;container-type:inline-size;background:var(--paper);overflow:hidden;border-radius:4px;width:min(1100px,100%,calc((100dvh - 32px) * 1.597));aspect-ratio:1585/992;box-shadow:0 40px 90px -20px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06);outline:none;opacity:0;transform:translateY(28px) scale(.96);transition:opacity .45s ease,transform .6s var(--ease)}'
+  + '.is-open .obv-window{opacity:1;transform:none;transition-delay:.08s}'
+  + '.obv-media{position:absolute;inset:0;overflow:hidden}.obv-art{display:block;width:100%;height:100%;object-fit:cover}.is-open .obv-art{animation:obvSettle 2.6s var(--ease) both}'
+  + '.obv-curtain{position:absolute;inset:0;z-index:5;display:grid;grid-template-columns:repeat(4,1fr);pointer-events:none}.obv-curtain i{background:var(--terra);transform:scaleY(0);transform-origin:50% 100%}'
+  + '.is-open .obv-curtain i{animation:obvStep .95s var(--ease) both;animation-delay:calc(.5s + var(--n)*.09s)}'
+  + '.obv-curtain i:nth-child(1){--n:0}.obv-curtain i:nth-child(2){--n:1}.obv-curtain i:nth-child(3){--n:2}.obv-curtain i:nth-child(4){--n:3}'
+  + '.obv-close{position:absolute;top:14px;right:14px;z-index:7;width:42px;height:42px;display:grid;place-items:center;border:0;border-radius:50%;background:var(--paper);color:var(--ink);cursor:pointer;transition:transform .45s var(--ease),background .25s,color .25s}'
+  + '.obv-close:hover{background:var(--ink);color:var(--paper);transform:rotate(90deg)}.obv-close svg{width:16px;height:16px}'
+  + '.obv-copy{--fs:clamp(12.5px,1.3cqw,16px);position:absolute;z-index:2;left:24%;top:0;bottom:0;width:31%;display:flex;flex-direction:column;justify-content:center;padding:3% 0 1%;font-size:var(--fs)}'
+  + '.obv-brand{display:flex;align-items:center;gap:.7em;margin:0 0 1.1em;font-family:"Instrument Serif",Georgia,serif;font-size:1.25em;letter-spacing:.08em}'
+  + '.obv-dot{position:relative;width:.55em;height:.55em;border-radius:50%;background:var(--terra)}.obv-dot::after{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid var(--terra);animation:obvPing 2.6s ease-out infinite}'
+  + '.obv-title{margin:0 0 .35em;overflow:hidden;padding-bottom:.08em;font:400 clamp(40px,5.4cqw,70px)/1 "Instrument Serif",Georgia,serif;letter-spacing:-.01em}.obv-title span{display:block}'
+  + '.is-open .obv-title span{animation:obvMask 1.1s var(--ease) .95s backwards}'
+  + '.obv-lead{margin:0 0 1.4em;line-height:1.6;max-width:34ch}'
+  + '.obv-facts{list-style:none;margin:0 0 1.7em;padding:0}.obv-facts li{padding:.75em 0;border-top:1px solid rgba(20,18,16,.2);line-height:1.5}.obv-facts li:last-child{border-bottom:1px solid rgba(20,18,16,.2)}.obv-facts b{font-weight:600}'
+  + '.obv-actions{display:flex;align-items:center;gap:1.4em;flex-wrap:wrap}'
+  + '.obv-cta{position:relative;overflow:hidden;isolation:isolate;display:inline-block;padding:1em 1.7em;background:var(--ink);color:var(--paper);font-weight:600;text-decoration:none;transition:color .35s ease}'
+  + '.obv-cta::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--terra);transform:scaleX(0);transform-origin:0 50%;transition:transform .5s var(--ease)}.obv-cta:hover{color:var(--ink)}.obv-cta:hover::before{transform:scaleX(1)}'
+  + '.obv-skip{background:none;border:0;padding:.3em 0;font:inherit;color:inherit;opacity:.72;cursor:pointer;text-decoration:underline;text-underline-offset:.3em}.obv-skip:hover{opacity:1}'
+  + '.obv a:focus-visible,.obv button:focus-visible{outline:2px solid var(--terra);outline-offset:3px}'
+  + '.is-open .obv-copy>:not(.obv-title){animation:obvRise .9s var(--ease) backwards;animation-delay:calc(.95s + var(--i,0)*.09s)}'
+  + '@keyframes obvStep{from{transform:scaleY(1)}to{transform:scaleY(0)}}@keyframes obvSettle{from{transform:scale(1.16)}to{transform:scale(1)}}@keyframes obvMask{from{transform:translateY(105%)}to{transform:none}}@keyframes obvRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}@keyframes obvPing{0%{transform:scale(1);opacity:.9}100%{transform:scale(3.2);opacity:0}}'
+  + 'html.obv-lock{overflow:hidden}'
+  + '@media (max-width:900px){.obv{padding:12px}.obv-window{width:min(560px,100%);aspect-ratio:auto;max-height:calc(100dvh - 24px);overflow-y:auto;display:flex;flex-direction:column}.obv-media{position:relative;inset:auto;flex:none;aspect-ratio:16/9}.obv-art{object-position:68% 50%}.obv-copy{--fs:15px;position:relative;left:auto;top:auto;bottom:auto;width:auto;padding:24px 22px 26px;background:var(--paper)}.obv-title{font-size:48px}.obv-lead{max-width:none}.obv-cta{flex:1 1 auto;text-align:center}}'
+  + '@media (prefers-reduced-motion:reduce){.obv *,.obv *::before,.obv *::after{animation:none!important;transition-duration:.01ms!important}}';
+
+  var HTML = ''
+  + '<div class="obv-backdrop" data-obv-close></div>'
+  + '<section class="obv-window" role="dialog" aria-modal="true" aria-label="Angra" tabindex="-1">'
+  +   '<div class="obv-media"><img class="obv-art" alt="" src="' + IMG_SRC + '">'
+  +     '<div class="obv-curtain"><i></i><i></i><i></i><i></i></div></div>'
+  +   '<button class="obv-close" type="button" data-obv-close aria-label="Close">'
+  +     '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 2l12 12M14 2L2 14"/></svg></button>'
+  +   '<div class="obv-copy">'
+  +     '<div class="obv-brand" style="--i:0"><span class="obv-dot"></span>OBLIVION</div>'
+  +     '<h2 class="obv-title"><span>Angra</span></h2>'
+  +     '<p class="obv-lead" style="--i:1">Local-first AI observability, evaluation and relay.</p>'
+  +     '<ul class="obv-facts" style="--i:2"><li><b>Local-first</b> — your data stays with you</li><li><b>Single file</b> — easy to run</li></ul>'
+  +     '<div class="obv-actions" style="--i:3"><a class="obv-cta" href="' + CTA_URL + '">Learn more</a>'
+  +     '<button class="obv-skip" type="button" data-obv-close>Not now</button></div>'
+  +   '</div>'
+  + '</section>';
+
+  var root, lastFocus;
+
+  function build() {
+    if (root) return;
+    var fonts = document.createElement('link');
+    fonts.rel = 'stylesheet';
+    fonts.href = 'https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=Instrument+Serif&display=swap';
+    document.head.appendChild(fonts);
+
+    var st = document.createElement('style');
+    st.textContent = CSS;
+    document.head.appendChild(st);
+
+    root = document.createElement('div');
+    root.className = 'obv';
+    root.setAttribute('aria-hidden', 'true');
+    root.innerHTML = HTML;
+    document.body.appendChild(root); // مستقیماً زیر body، fixed و روی همه چیز
+
+    root.addEventListener('click', function (e) {
+      if (e.target.closest('[data-obv-close]')) close();
+    });
+  }
+
+  function open() {
+    build();
+    lastFocus = document.activeElement;
+    root.setAttribute('aria-hidden', 'false');
+    document.documentElement.classList.add('obv-lock');
+    // یک فریم صبر می‌کنیم تا انیمیشن‌ها درست شروع شوند
+    requestAnimationFrame(function () {
+      root.classList.add('is-open');
+      var w = root.querySelector('.obv-window');
+      if (w) w.focus();
+    });
+    try { sessionStorage.setItem('obvSeen', '1'); } catch (e) {}
+  }
+
+  function close() {
+    if (!root) return;
+    root.classList.remove('is-open');
+    root.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('obv-lock');
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && root && root.classList.contains('is-open')) close();
+  });
+
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest && e.target.closest('[data-obv-open]');
+    if (t) { e.preventDefault(); open(); }
+  });
+
+  window.OblivionPromo = { open: open, close: close };
+
+  function init() {
+    var seen = false;
+    try { seen = SHOW_ONCE && sessionStorage.getItem('obvSeen') === '1'; } catch (e) {}
+    if (AUTO_OPEN_MS > 0 && !seen) setTimeout(open, AUTO_OPEN_MS);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
+
+<!-- ===== ANGRA × OBLIVION — این بلوک رو انتهای <body> (قبل از </body>) پیست کن ===== -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap">
+<style>
+.ang-dock,.ang-btn,.ang-veil{--ang-cream:#E9E1CE;--ang-ink:#14130F;--ang-red:#D8482A;--ang-leaf:#4E7A22;--ang-teal:#0F7F7A}
+
+/* ---------- Taskbar dock (فقط وقتی ساخته میشه که taskbar خودت پیدا نشه) ---------- */
+.ang-dock{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:2147482000;
+  padding:6px;background:rgba(233,225,206,.9);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(20,19,15,.2)}
+
+/* ---------- Button ---------- */
+.ang-btn{position:relative;display:flex;align-items:center;gap:12px;padding:7px 20px 7px 12px;overflow:hidden;
+  background:var(--ang-cream);color:var(--ang-ink);text-decoration:none;cursor:pointer;
+  font-family:'Cormorant Garamond',Georgia,serif;-webkit-tap-highlight-color:transparent}
+.ang-btn::before{content:"";position:absolute;left:30px;top:50%;width:260px;height:260px;margin:-130px 0 0 -130px;border-radius:50%;
+  background:var(--ang-red);transform:scale(0);transition:transform .6s cubic-bezier(.7,0,.2,1)}
+.ang-btn>*{position:relative}
+.ang-ico{width:36px;color:var(--ang-red);transition:color .3s .15s;display:block}
+.ang-ico svg{width:100%;display:block}
+.ang-rule{width:1px;align-self:stretch;margin:2px 0;background:var(--ang-red);transition:background .3s .15s}
+.ang-txt{display:flex;flex-direction:column;line-height:1.05}
+.ang-txt b{font-weight:600;font-size:19px;letter-spacing:.3em;margin-right:-.3em}
+.ang-txt i{font-style:normal;font-size:11px;letter-spacing:.34em;margin-top:3px;opacity:.7}
+.ang-btn:hover::before,.ang-btn:focus-visible::before{transform:scale(1)}
+.ang-btn:hover .ang-ico,.ang-btn:focus-visible .ang-ico{color:var(--ang-cream);animation:angHop .5s steps(2,end) 2 .2s}
+.ang-btn:hover .ang-rule,.ang-btn:focus-visible .ang-rule{background:var(--ang-cream)}
+.ang-btn:hover .ang-txt,.ang-btn:focus-visible .ang-txt{color:var(--ang-cream);transition:color .3s .15s}
+.ang-btn:focus-visible{outline:2px solid var(--ang-ink);outline-offset:2px}
+.ang-btn:active{transform:translateY(1px)}
+@keyframes angHop{50%{transform:translateY(-5px)}}
+
+/* ---------- Transition veil ---------- */
+.ang-veil{position:fixed;inset:0;z-index:2147483000;visibility:hidden;pointer-events:none;overflow:hidden;--cx:50%;--cy:90%}
+.ang-veil.on{visibility:visible;pointer-events:all}
+.ang-veil>*{position:absolute}
+.ang-paper{inset:0;background:var(--ang-cream);clip-path:circle(0 at var(--cx) var(--cy))}
+.on .ang-paper{animation:angReveal .8s cubic-bezier(.7,0,.2,1) forwards}
+@keyframes angReveal{to{clip-path:circle(150vmax at var(--cx) var(--cy))}}
+
+/* black quarter-disc + orange ring & dot (از تصویر ۲) */
+.ang-ink{left:0;top:0;width:62vmin;height:62vmin;background:var(--ang-ink);border-radius:0 0 100% 0;transform:translate(-101%,-101%)}
+.ang-ink::before{content:"";position:absolute;left:-30%;top:-30%;width:100%;height:100%;border:1px solid var(--ang-red);border-radius:50%;
+  clip-path:inset(0 0 0 0);opacity:0}
+.ang-ink::after{content:"";position:absolute;left:30%;top:20%;width:11%;height:11%;border-radius:50%;background:var(--ang-red);transform:scale(0)}
+.on .ang-ink{animation:angIn .8s .35s cubic-bezier(.2,.8,.2,1) forwards}
+.on .ang-ink::before{animation:angFade .6s 1s forwards}
+.on .ang-ink::after{animation:angPop .4s 1.1s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes angIn{to{transform:none}}
+@keyframes angFade{to{opacity:1}}
+@keyframes angPop{to{transform:scale(1)}}
+
+/* thin red rule */
+.ang-line{left:70%;top:0;width:1px;height:0;background:var(--ang-red)}
+.on .ang-line{animation:angLine .9s .5s cubic-bezier(.7,0,.2,1) forwards}
+@keyframes angLine{to{height:24vh}}
+
+/* stepped orange building (از تصویر ۲) */
+.ang-stairs{right:24vmin;bottom:0;width:40vmin;height:54vmin;background:var(--ang-red);
+  clip-path:polygon(0 100%,0 62%,30% 62%,30% 36%,60% 36%,60% 0,100% 0,100% 100%);transform:translateY(105%)}
+.ang-stairs i{position:absolute;background:var(--ang-ink)}
+.ang-stairs i:nth-child(1){left:66%;top:8%;width:18%;height:19%}
+.ang-stairs i:nth-child(2){left:34%;top:42%;width:18%;height:17%}
+.ang-stairs i:nth-child(3){left:6%;top:68%;width:20%;height:26%}
+.on .ang-stairs{animation:angIn .9s .55s cubic-bezier(.2,.8,.2,1) forwards}
+
+/* leaf (از تصویر ۱ و ۲) */
+.ang-leaf{left:-14vmin;bottom:-12vmin;width:46vmin;height:74vmin;border-radius:62% 38% 56% 44%/72% 60% 40% 28%;
+  background:
+   repeating-linear-gradient(115deg,transparent 0 22px,rgba(233,225,150,.22) 22px 23px),
+   linear-gradient(100deg,transparent 48%,rgba(233,225,150,.5) 49% 50%,transparent 51%),
+   radial-gradient(circle at 30% 55%,#E5D44A 0 7%,transparent 8%),
+   radial-gradient(ellipse at 40% 40%,#6A9A2C,var(--ang-leaf) 60%,#2F5A1A);
+  transform:translateX(-120%) rotate(-24deg)}
+.on .ang-leaf{animation:angLeaf 1s .45s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes angLeaf{to{transform:translateX(0) rotate(-24deg)}}
+
+/* teal cell-section (از تصویر ۱ و ۲) */
+.ang-cell{right:-20vmin;bottom:-28vmin;width:72vmin;height:72vmin;border-radius:50%;border:3px solid #1B3E8F;
+  background:
+   radial-gradient(circle,#F4F1E6 0 3.5px,transparent 4.5px) 0 0/15px 15px,
+   radial-gradient(circle,#F4F1E6 0 2px,transparent 3px) 7px 7px/15px 15px,
+   radial-gradient(circle at 50% 40%,#0F7F7A,#0A3F55);
+  transform:translateY(60%) rotate(-30deg) scale(.8);opacity:0}
+.on .ang-cell{animation:angCell 1.1s .7s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes angCell{to{transform:none;opacity:1}}
+
+/* orange cell-dots */
+.ang-dot{width:var(--s);height:var(--s);left:var(--x);top:var(--y);border-radius:50%;transform:scale(0);
+  background:radial-gradient(circle,#F08A3C 0 15%,var(--ang-red) 16% 70%,#7B1F10)}
+.on .ang-dot{animation:angPop .45s calc(1.1s + var(--d)) cubic-bezier(.3,1.6,.5,1) forwards}
+
+/* center mark */
+.ang-center{left:50%;top:46%;transform:translate(-50%,-50%);text-align:center;color:var(--ang-ink);
+  font-family:'Cormorant Garamond',Georgia,serif;opacity:0;width:max-content;max-width:90vw}
+.ang-center .ang-ico{width:64px;margin:0 auto 20px;color:var(--ang-red)}
+.ang-center b{display:block;font-weight:600;font-size:clamp(20px,4.5vmin,30px);letter-spacing:.42em;margin-right:-.42em}
+.ang-center i{display:block;font-style:normal;font-size:12px;letter-spacing:.4em;margin:8px -.4em 0 0}
+.ang-center em{display:block;font-style:normal;font-size:11px;letter-spacing:.35em;margin-top:34px;opacity:.7}
+.on .ang-center{animation:angFade .5s .9s forwards}
+.on .ang-center .ang-ico{animation:angHop .5s steps(2,end) 3 1.1s}
+
+/* progress */
+.ang-bar{left:0;bottom:0;height:3px;width:0;background:var(--ang-red);z-index:2}
+.on .ang-bar{animation:angBar 1.95s .15s linear forwards}
+@keyframes angBar{to{width:100%}}
+
+@media (prefers-reduced-motion:reduce){.ang-btn::before,.ang-ico{transition:none;animation:none!important}}
+</style>
+
+<script>
+(function(){
+  if(window.__angraBtn)return;window.__angraBtn=true;
+  var URL='https://shokribardiya.github.io/OblivionStudioDev/';
+  var G=['01100000110','01111111110','01101110110','11111111111','01111111110','01010101010','01010101010'];
+  function icon(){var r='';G.forEach(function(row,y){for(var x=0;x<11;x++)if(row.charAt(x)==='1')r+='<rect x="'+x+'" y="'+y+'" width="1.03" height="1.03"/>';});
+    return '<svg viewBox="0 0 11 7" fill="currentColor" shape-rendering="crispEdges" aria-hidden="true">'+r+'</svg>';}
+
+  /* button */
+  var btn=document.createElement('a');
+  btn.className='ang-btn';btn.href=URL;btn.setAttribute('aria-label','Open Angra — Oblivion Studio');
+  btn.innerHTML='<span class="ang-ico">'+icon()+'</span><span class="ang-rule"></span><span class="ang-txt"><b>Angra</b><i>Oblivion</i></span>';
+
+  /* mount: داخل taskbar خودت اگه باشه، وگرنه یه dock پایین صفحه */
+  var host=document.querySelector('#taskbar,.taskbar,[data-taskbar]');
+  if(host){host.appendChild(btn);}
+  else{var dock=document.createElement('div');dock.className='ang-dock';dock.appendChild(btn);document.body.appendChild(dock);}
+
+  /* veil */
+  var veil=document.createElement('div');veil.className='ang-veil';veil.setAttribute('aria-hidden','true');
+  var dots=[['4vmin','52vmin','38%','0s'],['3vmin','60vmin','47%','.08s'],['5vmin','70vmin','40%','.16s'],['2.5vmin','56vmin','58%','.24s'],['3.5vmin','76vmin','52%','.3s']]
+    .map(function(d){return '<span class="ang-dot" style="--s:'+d[0]+';--y:'+d[1]+';--x:'+d[2]+';--d:'+d[3]+'"></span>';}).join('');
+  veil.innerHTML='<div class="ang-paper"></div><div class="ang-ink"></div><div class="ang-line"></div>'+
+    '<div class="ang-stairs"><i></i><i></i><i></i></div><div class="ang-leaf"></div><div class="ang-cell"></div>'+dots+
+    '<div class="ang-center"><span class="ang-ico">'+icon()+'</span><b>Angra</b><i>Oblivion</i><em>Bardiya Shokri</em></div><div class="ang-bar"></div>';
+  document.body.appendChild(veil);
+
+  /* click → انیمیشن → رفتن به سایت */
+  var going=false;
+  btn.addEventListener('click',function(e){
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button>0)return;
+    e.preventDefault();if(going)return;going=true;
+    if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches){location.href=URL;return;}
+    var b=btn.getBoundingClientRect();
+    veil.style.setProperty('--cx',(b.left+b.width/2)+'px');
+    veil.style.setProperty('--cy',(b.top+b.height/2)+'px');
+    veil.classList.add('on');
+    setTimeout(function(){location.href=URL;},2150);
+  });
+  window.addEventListener('pageshow',function(e){if(e.persisted){veil.classList.remove('on');going=false;}});
+})();
+</script>
+<!-- ===== پایان ===== -->
