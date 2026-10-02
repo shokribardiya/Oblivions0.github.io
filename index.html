@@ -4365,185 +4365,240 @@ const OblivionANGRA = (() => {
 </script>
 </body>
 </html>
-<a href="https://osirisai.live/?layers=flights,private,jets,military,maritime,satellites,sat_comms,sat_military,sat_navigation,sat_earth,sat_science,cctv,cctv_previews,live_news,earthquakes,global_incidents,day_night,cables,sdk_sea,sdk_air,sdk_naval" 
-   target="_blank" 
-   rel="noopener noreferrer"
-   style="display:inline-block;padding:12px 24px;background:#111;color:#fff;text-decoration:none;border-radius:6px;font-family:sans-serif;font-weight:bold;letter-spacing:1px;">
-  OSIRISAI Gotham
-</a>
->
-<div class="ucicada0-panel">
 
-    <button
-        type="button"
-        class="ucicada0-btn staff"
-        onclick="ucicada0OpenStaffLogin()">
-        UCICADA0 — کارکنان
-    </button>
+<style>
+  #gh-projects {
+    --accent: #d9775a;
+    --bg: #0e0e10;
+    --card: rgba(255,255,255,.04);
+    --line: rgba(255,255,255,.09);
+    --text: #f3ece8;
+    --muted: #a39690;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 56px 20px;
+    color: var(--text);
+    font: 400 15px/1.5 -apple-system, "SF Pro Display", "Segoe UI", Inter, system-ui, sans-serif;
+  }
+  #gh-projects * { box-sizing: border-box; }
 
-    <button
-        type="button"
-        class="ucicada0-btn services"
-        onclick="ucicada0OpenServices()">
-        UCICADA0 — خدمات
-    </button>
+  #gh-projects .gh-head { display: flex; flex-wrap: wrap; gap: 14px; align-items: end; justify-content: space-between; margin-bottom: 22px; }
+  #gh-projects h2 { margin: 0; font-size: clamp(26px, 5vw, 38px); font-weight: 700; letter-spacing: -.02em; }
+  #gh-projects h2 span { color: var(--accent); }
+  #gh-projects .gh-live { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  #gh-projects .gh-live i { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 0 0 rgba(74,222,128,.6); animation: gh-pulse 2s infinite; }
+  #gh-projects .gh-live.err i { background: #f87171; animation: none; }
+  @keyframes gh-pulse { 70% { box-shadow: 0 0 0 8px rgba(74,222,128,0); } 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); } }
 
-</div>
+  /* نوار ابزار */
+  #gh-projects .gh-tools { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+  #gh-projects .gh-tools input,
+  #gh-projects .gh-tools select {
+    background: rgba(255,255,255,.06);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    color: var(--text);
+    padding: 12px 16px;
+    font: inherit;
+    outline: none;
+    transition: border-color .25s, box-shadow .25s, background .25s;
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  }
+  #gh-projects .gh-tools input { flex: 1 1 240px; }
+  #gh-projects .gh-tools select option { background: #1a1a1d; }
+  #gh-projects .gh-tools input:focus,
+  #gh-projects .gh-tools select:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(217,119,90,.15); background: rgba(255,255,255,.09); }
 
+  /* کارت‌ها */
+  #gh-projects .gh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+  #gh-projects .gh-card {
+    position: relative;
+    display: flex; flex-direction: column; gap: 12px;
+    padding: 20px;
+    border-radius: 20px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    color: inherit; text-decoration: none;
+    overflow: hidden;
+    transition: transform .35s cubic-bezier(.2,.9,.2,1.1), border-color .3s, background .3s;
+    animation: gh-in .5s both;
+  }
+  #gh-projects .gh-card::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(420px circle at var(--mx,50%) var(--my,0%), rgba(217,119,90,.18), transparent 60%);
+    opacity: 0; transition: opacity .3s; pointer-events: none;
+  }
+  #gh-projects .gh-card:hover { transform: translateY(-4px); border-color: rgba(217,119,90,.55); background: rgba(255,255,255,.065); }
+  #gh-projects .gh-card:hover::before { opacity: 1; }
+  @keyframes gh-in { from { opacity: 0; transform: translateY(14px); } }
 
-<!-- Staff Password Modal -->
-<div
-    id="ucicada0StaffModal"
-    class="ucicada0-modal-overlay"
-    onclick="ucicada0OutsideModal(event)">
+  #gh-projects .gh-name { display: flex; align-items: center; gap: 8px; font-weight: 650; font-size: 17px; word-break: break-word; }
+  #gh-projects .gh-badge { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 99px; background: var(--accent); color: #fff; white-space: nowrap; }
+  #gh-projects .gh-badge.upd { background: rgba(217,119,90,.18); color: #f0a58c; }
+  #gh-projects .gh-desc { color: var(--muted); font-size: 14px; flex: 1; }
+  #gh-projects .gh-topics { display: flex; flex-wrap: wrap; gap: 6px; }
+  #gh-projects .gh-topics span { font-size: 12px; padding: 3px 10px; border-radius: 99px; background: rgba(255,255,255,.07); color: #d8c9c2; }
+  #gh-projects .gh-meta { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; font-size: 13px; color: var(--muted); }
+  #gh-projects .gh-lang i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
 
-    <div class="ucicada0-modal" onclick="event.stopPropagation()">
+  /* حالت‌های خاص */
+  #gh-projects .gh-skel { height: 168px; border-radius: 20px; background: linear-gradient(100deg, rgba(255,255,255,.04) 30%, rgba(255,255,255,.1) 50%, rgba(255,255,255,.04) 70%); background-size: 200% 100%; animation: gh-sk 1.3s infinite linear; }
+  @keyframes gh-sk { to { background-position: -200% 0; } }
+  #gh-projects .gh-empty { grid-column: 1/-1; text-align: center; color: var(--muted); padding: 40px 0; }
+  #gh-projects .gh-foot { margin-top: 26px; text-align: center; }
+  #gh-projects .gh-foot a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  #gh-projects .gh-foot a:hover { text-decoration: underline; }
+</style>
 
-        <h3>ورود به وب‌سایت کارکنان</h3>
+<section id="gh-projects">
+  <div class="gh-head">
+    <h2>My <span>Projects</span></h2>
+    <div class="gh-live" id="gh-live"><i></i><span id="gh-status">Connecting…</span></div>
+  </div>
 
-        <p>
-            برای ورود به بخش کارکنان، رمز عبور را وارد کنید.
-        </p>
+  <div class="gh-tools">
+    <input id="gh-search" type="search" placeholder="Search projects, languages, topics…" autocomplete="off">
+    <select id="gh-lang"><option value="">All languages</option></select>
+    <select id="gh-sort">
+      <option value="pushed">Recently updated</option>
+      <option value="created">Newest</option>
+      <option value="stars">Most stars</option>
+      <option value="name">Name A–Z</option>
+    </select>
+  </div>
 
-        <input
-            id="ucicada0Password"
-            class="ucicada0-password"
-            type="password"
-            inputmode="numeric"
-            autocomplete="off"
-            placeholder="رمز عبور"
-            maxlength="6"
-            onkeydown="ucicada0HandleEnter(event)"
-        >
+  <div class="gh-grid" id="gh-grid"></div>
 
-        <div id="ucicada0Error" class="ucicada0-error"></div>
-
-        <div class="ucicada0-actions">
-
-            <button
-                type="button"
-                class="ucicada0-action-btn ucicada0-cancel"
-                onclick="ucicada0CloseStaffLogin()">
-                انصراف
-            </button>
-
-            <button
-                type="button"
-                class="ucicada0-action-btn ucicada0-enter"
-                onclick="ucicada0VerifyPassword()">
-                ورود
-            </button>
-
-        </div>
-
-    </div>
-</div>
-
+  <div class="gh-foot"><a id="gh-profile" target="_blank" rel="noopener">View all on GitHub →</a></div>
+</section>
 
 <script>
-    /* =========================
-       UCICADA0 CONFIGURATION
-       ========================= */
+(function () {
+  /* ---------- تنظیمات ---------- */
+  var USER = "shokribardiya";   // نام کاربری گیت‌هاب
+  var REFRESH_MS = 120000;      // هر ۲ دقیقه خودکار به‌روزرسانی
+  var SHOW_FORKS = false;       // true = ریپوهای فورک‌شده هم نمایش داده شوند
+  var NEW_DAYS = 7, UPDATED_DAYS = 3;
 
-    const UCICADA0_STAFF_URL =
-        "https://shokribardiya.github.io/Angra_AI/";
+  var COLORS = {
+    JavaScript:"#f1e05a", TypeScript:"#3178c6", Python:"#3572A5", HTML:"#e34c26", CSS:"#563d7c",
+    Java:"#b07219", "C++":"#f34b7d", C:"#555555", "C#":"#178600", PHP:"#4F5D95", Go:"#00ADD8",
+    Rust:"#dea584", Kotlin:"#A97BFF", Swift:"#F05138", Dart:"#00B4AB", Shell:"#89e051",
+    Vue:"#41b883", Ruby:"#701516", Lua:"#000080", Jupyter:"#DA5B0B", "Jupyter Notebook":"#DA5B0B"
+  };
 
-    const UCICADA0_SERVICES_URL =
-        "https://shokribardiya.github.io/Oblivions3/";
+  var $ = function (id) { return document.getElementById(id); };
+  var grid = $("gh-grid"), search = $("gh-search"), langSel = $("gh-lang"), sortSel = $("gh-sort");
+  var repos = [], CACHE_KEY = "gh_repos_" + USER;
 
-    const UCICADA0_PASSWORD = "330121";
+  $("gh-profile").href = "https://github.com/" + USER;
 
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]; }); }
 
-    /* =========================
-       STAFF LOGIN
-       ========================= */
+  function ago(d) {
+    var s = (Date.now() - new Date(d)) / 1000;
+    if (s < 60) return "just now";
+    var u = [[60,"minute"],[3600,"hour"],[86400,"day"],[2592000,"month"],[31536000,"year"]], i = 0, v, n;
+    if (s < 3600) { i = 0; v = 60; } else if (s < 86400) { i = 1; v = 3600; } else if (s < 2592000) { i = 2; v = 86400; }
+    else if (s < 31536000) { i = 3; v = 2592000; } else { i = 4; v = 31536000; }
+    n = Math.floor(s / v);
+    return n + " " + u[i][1] + (n > 1 ? "s" : "") + " ago";
+  }
+  var days = function (d) { return (Date.now() - new Date(d)) / 864e5; };
 
-    function ucicada0OpenStaffLogin() {
-        const modal = document.getElementById("ucicada0StaffModal");
-        const passwordInput = document.getElementById("ucicada0Password");
-        const errorBox = document.getElementById("ucicada0Error");
-
-        modal.classList.add("active");
-
-        passwordInput.value = "";
-        passwordInput.classList.remove("error");
-        errorBox.textContent = "";
-
-        setTimeout(() => {
-            passwordInput.focus();
-        }, 80);
+  /* ---------- دریافت اطلاعات ---------- */
+  function load(first) {
+    if (first) {
+      grid.innerHTML = '<div class="gh-skel"></div>'.repeat(6);
+      try { var c = JSON.parse(localStorage.getItem(CACHE_KEY)); if (c && c.length) { repos = c; fillLangs(); render(); } } catch (e) {}
     }
+    fetch("https://api.github.com/users/" + USER + "/repos?per_page=100&sort=pushed", {
+      headers: { "Accept": "application/vnd.github+json" }
+    })
+    .then(function (r) {
+      if (!r.ok) throw new Error(r.status === 403 ? "Rate limit reached" : "GitHub error " + r.status);
+      return r.json();
+    })
+    .then(function (data) {
+      repos = data.filter(function (r) { return SHOW_FORKS || !r.fork; });
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify(repos)); } catch (e) {}
+      fillLangs(); render();
+      status("Live · synced " + new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }), false);
+    })
+    .catch(function (e) {
+      status(repos.length ? "Offline · showing saved data" : e.message, true);
+      if (!repos.length) grid.innerHTML = '<div class="gh-empty">Could not load projects right now.</div>';
+    });
+  }
 
+  function status(t, err) {
+    $("gh-status").textContent = t;
+    $("gh-live").className = "gh-live" + (err ? " err" : "");
+  }
 
-    function ucicada0CloseStaffLogin() {
-        const modal = document.getElementById("ucicada0StaffModal");
+  function fillLangs() {
+    var cur = langSel.value, set = {};
+    repos.forEach(function (r) { if (r.language) set[r.language] = 1; });
+    langSel.innerHTML = '<option value="">All languages</option>' +
+      Object.keys(set).sort().map(function (l) { return '<option>' + esc(l) + '</option>'; }).join("");
+    langSel.value = cur;
+  }
 
-        modal.classList.remove("active");
-    }
+  /* ---------- نمایش ---------- */
+  function render() {
+    var q = search.value.trim().toLowerCase(), lang = langSel.value, sort = sortSel.value;
+    var list = repos.filter(function (r) {
+      if (lang && r.language !== lang) return false;
+      if (!q) return true;
+      return (r.name + " " + (r.description || "") + " " + (r.language || "") + " " + (r.topics || []).join(" ")).toLowerCase().indexOf(q) > -1;
+    });
+    list.sort(function (a, b) {
+      if (sort === "stars") return b.stargazers_count - a.stargazers_count;
+      if (sort === "name") return a.name.localeCompare(b.name);
+      if (sort === "created") return new Date(b.created_at) - new Date(a.created_at);
+      return new Date(b.pushed_at) - new Date(a.pushed_at);
+    });
 
+    if (!list.length) { grid.innerHTML = '<div class="gh-empty">No projects found.</div>'; return; }
 
-    function ucicada0OutsideModal(event) {
-        if (event.target.id === "ucicada0StaffModal") {
-            ucicada0CloseStaffLogin();
-        }
-    }
+    grid.innerHTML = list.map(function (r, i) {
+      var badge = days(r.created_at) <= NEW_DAYS ? '<span class="gh-badge">NEW</span>'
+                : days(r.pushed_at) <= UPDATED_DAYS ? '<span class="gh-badge upd">Updated</span>' : "";
+      var topics = (r.topics || []).slice(0, 4).map(function (t) { return "<span>" + esc(t) + "</span>"; }).join("");
+      return '<a class="gh-card" href="' + esc(r.html_url) + '" target="_blank" rel="noopener" style="animation-delay:' + Math.min(i * 40, 400) + 'ms">' +
+        '<div class="gh-name">' + esc(r.name) + badge + '</div>' +
+        '<div class="gh-desc">' + esc(r.description || "No description yet.") + '</div>' +
+        (topics ? '<div class="gh-topics">' + topics + '</div>' : "") +
+        '<div class="gh-meta">' +
+          (r.language ? '<span class="gh-lang"><i style="background:' + (COLORS[r.language] || "#d9775a") + '"></i>' + esc(r.language) + '</span>' : "") +
+          '<span>★ ' + r.stargazers_count + '</span>' +
+          '<span>⑂ ' + r.forks_count + '</span>' +
+          '<span>' + ago(r.pushed_at) + '</span>' +
+        '</div></a>';
+    }).join("");
+  }
 
+  /* افکت نور دنبال ماوس روی کارت */
+  grid.addEventListener("mousemove", function (e) {
+    var c = e.target.closest(".gh-card"); if (!c) return;
+    var b = c.getBoundingClientRect();
+    c.style.setProperty("--mx", (e.clientX - b.left) + "px");
+    c.style.setProperty("--my", (e.clientY - b.top) + "px");
+  });
 
-    function ucicada0HandleEnter(event) {
-        if (event.key === "Enter") {
-            ucicada0VerifyPassword();
-        }
+  search.addEventListener("input", render);
+  langSel.addEventListener("change", render);
+  sortSel.addEventListener("change", render);
 
-        if (event.key === "Escape") {
-            ucicada0CloseStaffLogin();
-        }
-    }
+  /* به‌روزرسانی خودکار + وقتی کاربر به تب برمی‌گردد */
+  setInterval(function () { if (!document.hidden) load(false); }, REFRESH_MS);
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) load(false); });
 
-
-    function ucicada0VerifyPassword() {
-        const passwordInput =
-            document.getElementById("ucicada0Password");
-
-        const errorBox =
-            document.getElementById("ucicada0Error");
-
-        const enteredPassword =
-            passwordInput.value.trim();
-
-
-        if (enteredPassword === UCICADA0_PASSWORD) {
-
-            errorBox.textContent = "";
-            passwordInput.classList.remove("error");
-
-            /*
-             * انتقال به وب‌سایت کارکنان
-             */
-            window.location.href = UCICADA0_STAFF_URL;
-
-        } else {
-
-            passwordInput.classList.add("error");
-
-            errorBox.textContent =
-                "رمز عبور صحیح نیست.";
-
-            passwordInput.value = "";
-            passwordInput.focus();
-        }
-    }
-
-
-    /* =========================
-       SERVICES WEBSITE
-       ========================= */
-
-    function ucicada0OpenServices() {
-
-        window.location.href = UCICADA0_SERVICES_URL;
-
-    }
+  load(true);
+})();
 </script>
+
 <script>
 /* Living Robot Engine: a tiny creature that lives inside the page.
    Self-contained · Shadow DOM · vanilla JS · no network · no data collection */
@@ -5336,3 +5391,313 @@ const OblivionANGRA = (() => {
   } catch (e) { /* fail silently */ }
 })();
 </script>
+<!-- ===== Angra AI · Liquid Glass Floating Button ===== -->
+<!-- این کد را قبل از </body> در همه صفحات وبسایتتان قرار دهید -->
+
+<style>
+  :root {
+    --angra: #d9775a;
+    --angra-deep: #c97b5c;
+    --angra-url: "https://shokribardiya.github.io/Angra_AI/";
+  }
+
+  /* ---------- دکمه شیشه‌ای ---------- */
+  #angra-btn {
+    position: fixed;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2147483000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px 10px 12px;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    font: 600 14px/1 -apple-system, "SF Pro Display", "Segoe UI", Inter, system-ui, sans-serif;
+    letter-spacing: .3px;
+    color: #fff;
+    text-shadow: 0 1px 8px rgba(120, 50, 25, .45);
+    overflow: hidden;
+    isolation: isolate;
+
+    background:
+      linear-gradient(135deg, rgba(255,255,255,.38) 0%, rgba(255,255,255,.06) 42%, rgba(217,119,90,.30) 100%),
+      rgba(217, 119, 90, .22);
+    -webkit-backdrop-filter: blur(18px) saturate(190%) brightness(1.08);
+            backdrop-filter: blur(18px) saturate(190%) brightness(1.08);
+    box-shadow:
+      inset 0 1.5px 1px rgba(255,255,255,.75),
+      inset 0 -2px 6px rgba(255,255,255,.18),
+      inset 0 0 0 1px rgba(255,255,255,.22),
+      0 10px 30px -6px rgba(201,123,92,.55),
+      0 2px 6px rgba(0,0,0,.12);
+    transition: transform .5s cubic-bezier(.2,.9,.2,1.2), box-shadow .4s ease, padding .4s ease;
+    animation: angra-float 5s ease-in-out infinite;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* انعکاس نور متحرک روی شیشه */
+  #angra-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.55) 48%, transparent 66%);
+    transform: translateX(-130%);
+    animation: angra-sheen 4.5s ease-in-out infinite;
+  }
+  /* هایلایت بالای شیشه */
+  #angra-btn::after {
+    content: "";
+    position: absolute;
+    left: 10%; right: 10%; top: 2px;
+    height: 46%;
+    border-radius: 999px;
+    background: linear-gradient(to bottom, rgba(255,255,255,.55), rgba(255,255,255,0));
+    opacity: .6;
+    pointer-events: none;
+  }
+
+  #angra-btn:hover {
+    transform: translateY(-50%) scale(1.07);
+    box-shadow:
+      inset 0 1.5px 1px rgba(255,255,255,.9),
+      inset 0 -2px 8px rgba(255,255,255,.25),
+      inset 0 0 0 1px rgba(255,255,255,.3),
+      0 16px 40px -6px rgba(201,123,92,.75),
+      0 0 0 6px rgba(217,119,90,.12);
+  }
+  #angra-btn:active { transform: translateY(-50%) scale(.95); }
+
+  #angra-btn .a-ico {
+    width: 30px; height: 22px;
+    filter: drop-shadow(0 2px 4px rgba(120,50,25,.4));
+    transition: transform .5s cubic-bezier(.2,.9,.2,1.4);
+  }
+  #angra-btn:hover .a-ico { transform: rotate(-8deg) scale(1.12); }
+
+  @keyframes angra-float {
+    0%,100% { margin-top: 0; }
+    50%     { margin-top: -6px; }
+  }
+  @keyframes angra-sheen {
+    0%, 55% { transform: translateX(-130%); }
+    100%    { transform: translateX(130%); }
+  }
+
+  /* ---------- صفحه سیاه انتقال ---------- */
+  #angra-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483647;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 34px;
+    pointer-events: none;
+    visibility: hidden;
+    clip-path: circle(0 at var(--ox, 95%) var(--oy, 50%));
+  }
+  #angra-overlay.on {
+    visibility: visible;
+    pointer-events: all;
+    animation: angra-reveal .9s cubic-bezier(.7,0,.2,1) forwards;
+  }
+  @keyframes angra-reveal {
+    to { clip-path: circle(150vmax at var(--ox, 95%) var(--oy, 50%)); }
+  }
+
+  /* هاله‌ی پشت لوگو */
+  #angra-overlay .glow {
+    position: absolute;
+    width: min(70vw, 520px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(217,119,90,.38), rgba(217,119,90,0) 70%);
+    opacity: 0;
+    transform: scale(.4);
+  }
+  #angra-overlay.on .glow { animation: angra-glow 2.6s .7s ease-out forwards; }
+  @keyframes angra-glow {
+    60%  { opacity: 1; transform: scale(1.05); }
+    100% { opacity: .85; transform: scale(1); }
+  }
+
+  /* لوگو */
+  #angra-logo {
+    width: min(46vw, 230px);
+    height: auto;
+    overflow: visible;
+    position: relative;
+    filter: drop-shadow(0 0 28px rgba(217,119,90,.55));
+  }
+  #angra-logo .px {
+    fill: var(--angra);
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0;
+    transform: scale(0) rotate(-12deg);
+  }
+  #angra-logo .eye { fill: #000; }
+  #angra-overlay.on #angra-logo .px {
+    animation: angra-pop .7s cubic-bezier(.2,1.5,.4,1) forwards;
+  }
+  #angra-overlay.on #angra-logo .p1 { animation-delay: .85s; }  /* سر */
+  #angra-overlay.on #angra-logo .p2 { animation-delay: 1.0s; }  /* بازوها */
+  #angra-overlay.on #angra-logo .p3 { animation-delay: 1.1s; }  /* تنه */
+  #angra-overlay.on #angra-logo .l1 { animation-delay: 1.25s; }
+  #angra-overlay.on #angra-logo .l2 { animation-delay: 1.32s; }
+  #angra-overlay.on #angra-logo .l3 { animation-delay: 1.39s; }
+  #angra-overlay.on #angra-logo .l4 { animation-delay: 1.46s; }
+  #angra-overlay.on #angra-logo .eye {
+    animation: angra-pop .5s 1.6s cubic-bezier(.2,1.5,.4,1) forwards,
+               angra-blink 3s 2.4s infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  @keyframes angra-pop {
+    to { opacity: 1; transform: scale(1) rotate(0); }
+  }
+  @keyframes angra-blink {
+    0%, 92%, 100% { transform: scaleY(1); }
+    96%           { transform: scaleY(.1); }
+  }
+  #angra-overlay.on #angra-logo {
+    animation: angra-bob 1.6s 1.9s ease-in-out infinite;
+  }
+  @keyframes angra-bob {
+    0%,100% { transform: translateY(0); }
+    50%     { transform: translateY(-8px); }
+  }
+
+  /* نوشته‌ی Angra AI */
+  #angra-overlay .name {
+    font: 300 clamp(20px, 5vw, 30px)/1 -apple-system, "SF Pro Display", Inter, system-ui, sans-serif;
+    color: #f1d9cf;
+    letter-spacing: 1em;
+    opacity: 0;
+    padding-left: 1em;
+  }
+  #angra-overlay.on .name { animation: angra-name 1.2s 1.7s cubic-bezier(.2,.8,.2,1) forwards; }
+  @keyframes angra-name {
+    to { opacity: 1; letter-spacing: .38em; }
+  }
+
+  /* نوار پیشرفت */
+  #angra-overlay .bar {
+    position: absolute;
+    bottom: 12vh;
+    width: 120px; height: 2px;
+    background: rgba(255,255,255,.1);
+    border-radius: 2px;
+    overflow: hidden;
+    opacity: 0;
+  }
+  #angra-overlay .bar i {
+    display: block; height: 100%; width: 100%;
+    background: var(--angra);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  #angra-overlay.on .bar { animation: angra-fade .4s 1.8s forwards; }
+  #angra-overlay.on .bar i { animation: angra-fill 1.4s 1.9s ease-in-out forwards; }
+  @keyframes angra-fade { to { opacity: 1; } }
+  @keyframes angra-fill { to { transform: scaleX(1); } }
+
+  /* خروج نرم قبل از رفتن به سایت */
+  #angra-overlay.leave { animation: none; clip-path: none; opacity: 1; transition: opacity .35s ease; opacity: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    #angra-btn, #angra-btn::before { animation: none; }
+  }
+  @media (max-width: 600px) {
+    #angra-btn { right: 10px; padding: 9px 14px 9px 10px; font-size: 13px; }
+  }
+</style>
+
+<!-- دکمه -->
+<button id="angra-btn" type="button" aria-label="Angra AI">
+  <svg class="a-ico" viewBox="0 0 1750 1200" shape-rendering="crispEdges" aria-hidden="true">
+    <g fill="#fff">
+      <rect x="300" y="10" width="1180" height="290"/>
+      <rect x="10" y="300" width="1735" height="285"/>
+      <rect x="300" y="585" width="1180" height="290"/>
+      <rect x="300" y="870" width="140" height="320"/>
+      <rect x="598" y="870" width="140" height="320"/>
+      <rect x="1025" y="870" width="140" height="320"/>
+      <rect x="1320" y="870" width="160" height="320"/>
+    </g>
+    <g fill="#c4694b">
+      <rect x="450" y="145" width="148" height="147"/>
+      <rect x="1172" y="145" width="148" height="147"/>
+    </g>
+  </svg>
+  <span>Angra AI</span>
+</button>
+
+<!-- صفحه‌ی سیاه + لوگو -->
+<div id="angra-overlay" aria-hidden="true">
+  <div class="glow"></div>
+  <svg id="angra-logo" viewBox="0 0 1750 1200" shape-rendering="crispEdges">
+    <rect class="px p1" x="300" y="10"  width="1180" height="292"/>
+    <rect class="px p2" x="10"  y="300" width="1735" height="287"/>
+    <rect class="px p3" x="300" y="585" width="1180" height="292"/>
+    <rect class="px l1" x="300" y="870" width="140" height="320"/>
+    <rect class="px l2" x="598" y="870" width="140" height="320"/>
+    <rect class="px l3" x="1025" y="870" width="140" height="320"/>
+    <rect class="px l4" x="1320" y="870" width="160" height="320"/>
+    <rect class="eye" x="450"  y="145" width="148" height="147" opacity="0"/>
+    <rect class="eye" x="1172" y="145" width="148" height="147" opacity="0"/>
+  </svg>
+  <div class="name">ANGRA AI</div>
+  <div class="bar"><i></i></div>
+</div>
+
+<script>
+(function () {
+  var URL = "https://shokribardiya.github.io/Angra_AI/";
+  var btn = document.getElementById("angra-btn");
+  var ov  = document.getElementById("angra-overlay");
+  var busy = false;
+
+  btn.addEventListener("click", function () {
+    if (busy) return;
+    busy = true;
+
+    // انیمیشن از محل دکمه شروع می‌شود
+    var r = btn.getBoundingClientRect();
+    ov.style.setProperty("--ox", (r.left + r.width / 2) + "px");
+    ov.style.setProperty("--oy", (r.top + r.height / 2) + "px");
+
+    document.documentElement.style.overflow = "hidden";
+    ov.setAttribute("aria-hidden", "false");
+    ov.classList.add("on");
+
+    // بعد از پایان انیمیشن، انتقال به سایت
+    setTimeout(function () { ov.classList.add("leave"); }, 3500);
+    setTimeout(function () { window.location.href = URL; }, 3850);
+  });
+
+  // اگر کاربر با دکمه‌ی Back برگشت، حالت اولیه برگردد
+  window.addEventListener("pageshow", function (e) {
+    if (e.persisted) {
+      ov.classList.remove("on", "leave");
+      ov.setAttribute("aria-hidden", "true");
+      document.documentElement.style.overflow = "";
+      busy = false;
+    }
+  });
+})();
+</script>
+<meta name="theme-color" content="#CA7C5C">
+
+<!-- Favicon (SVG جاسازی‌شده در کد) -->
+<link rel="icon" type="image/svg+xml" sizes="any" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23CA7C5C'/%3E%3Cg transform='translate(256 256) scale(1.1) translate(-360 -320)'%3E%3Ccircle cx='360' cy='355' r='89' fill='none' stroke='%23000' stroke-width='32'/%3E%3Cpolygon fill='%23000' points='360,180 470,228 456,257 360,215 264,257 250,228'/%3E%3C/g%3E%3C/svg%3E">
+
+<!-- نسخه‌ی پشتیبان برای گوگل و iOS (فایل واقعی، پایین‌تر توضیح دادم) -->
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
