@@ -6026,3 +6026,84 @@ const OblivionANGRA = (() => {
 })();
 </script>
 <!-- ===== پایان ===== -->
+<!-- ===== Nythos Button ===== -->
+<style>
+  .nythos-btn{
+    position:fixed; right:24px; bottom:24px; z-index:9998;
+    display:inline-flex; align-items:center; gap:10px;
+    padding:13px 20px 13px 16px;
+    font:600 15px/1 -apple-system,"Segoe UI",system-ui,sans-serif;
+    letter-spacing:.2px; color:#faf9f5; text-decoration:none;
+    background:#141413; border-radius:999px;
+    box-shadow:0 1px 0 rgba(255,255,255,.12) inset, 0 8px 24px rgba(20,20,19,.28);
+    transition:transform .35s cubic-bezier(.2,.8,.2,1), background .35s, box-shadow .35s;
+  }
+  .nythos-btn:hover{
+    background:#D97757; transform:translateY(-3px);
+    box-shadow:0 1px 0 rgba(255,255,255,.25) inset, 0 14px 32px rgba(217,119,87,.45);
+  }
+  .nythos-btn:active{transform:translateY(0) scale(.97)}
+  .nythos-btn:focus-visible{outline:2px solid #D97757; outline-offset:3px}
+  .nythos-spark{width:18px;height:18px;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+  .nythos-btn:hover .nythos-spark{transform:rotate(135deg) scale(1.15)}
+  .nythos-arrow{transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+  .nythos-btn:hover .nythos-arrow{transform:translateX(4px)}
+
+  /* Transition overlay */
+  .nythos-overlay{
+    position:fixed; inset:0; z-index:10000; pointer-events:none;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px;
+    background:#D97757; color:#faf9f5;
+    clip-path:circle(0 at var(--x,50%) var(--y,50%));
+    transition:clip-path .85s cubic-bezier(.65,0,.2,1);
+  }
+  .nythos-overlay.active{clip-path:circle(150% at var(--x,50%) var(--y,50%)); pointer-events:all}
+  .nythos-overlay svg{width:56px;height:56px;opacity:0;transform:scale(.4) rotate(-90deg);
+    transition:opacity .5s .35s, transform .9s .35s cubic-bezier(.2,.8,.2,1)}
+  .nythos-overlay span{font:600 28px/1 -apple-system,"Segoe UI",system-ui,sans-serif;letter-spacing:1px;
+    opacity:0;transform:translateY(12px);transition:opacity .5s .5s, transform .6s .5s cubic-bezier(.2,.8,.2,1)}
+  .nythos-overlay.active svg{opacity:1;transform:scale(1) rotate(0)}
+  .nythos-overlay.active span{opacity:1;transform:none}
+
+  @media (max-width:600px){.nythos-btn{right:16px;bottom:16px}}
+  @media (prefers-reduced-motion:reduce){
+    .nythos-btn,.nythos-spark,.nythos-arrow,.nythos-overlay,.nythos-overlay *{transition-duration:.01s !important}
+  }
+</style>
+
+<a href="https://shokribardiya.github.io/Nythos/" class="nythos-btn" id="nythosBtn" aria-label="Open Nythos">
+  <svg class="nythos-spark" viewBox="0 0 24 24" fill="none" stroke="#D97757" stroke-width="2.4" stroke-linecap="round">
+    <path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/>
+  </svg>
+  Nythos
+  <svg class="nythos-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 12h14M13 6l6 6-6 6"/>
+  </svg>
+</a>
+
+<div class="nythos-overlay" id="nythosOverlay" aria-hidden="true">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+    <path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19"/>
+  </svg>
+  <span>Nythos</span>
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('nythosBtn');
+    var overlay = document.getElementById('nythosOverlay');
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      var r = btn.getBoundingClientRect();
+      overlay.style.setProperty('--x', (r.left + r.width / 2) + 'px');
+      overlay.style.setProperty('--y', (r.top + r.height / 2) + 'px');
+      overlay.classList.add('active');
+      setTimeout(function () { window.location.href = btn.href; }, 1300);
+    });
+    // Reset when coming back with the browser's back button
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) overlay.classList.remove('active');
+    });
+  })();
+</script>
+<!-- ===== /Nythos Button ===== -->
