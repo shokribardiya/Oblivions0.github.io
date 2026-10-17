@@ -1,6 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oblivion</title>
+<style>html,body{margin:0;background:#000}</style>
+</head>
+<body>
+
+<!-- ============ OBLIVION HERO · COPY FROM HERE ============ -->
+<oblivion-hero></oblivion-hero>
+<script>
+(function(){
+if(customElements.get('oblivion-hero'))return;
+var TAU=6.2832,CS=['rgb(115,153,198)','rgb(204,123,92)','rgb(255,255,255)'],CR=['115,153,198','204,123,92','255,255,255'];
+function clamp(x){return x<0?0:x>1?1:x}
+function ease(x){x=clamp(x);return x*x*(3-2*x)}
+function logo(c){
+  c.fillStyle=c.strokeStyle='#fff';
+  c.beginPath();c.moveTo(372,326);c.lineTo(575,410);c.lineTo(550,468);c.lineTo(372,392);c.lineTo(190,467);c.lineTo(165,410);c.closePath();c.fill();
+  c.lineWidth=56;c.beginPath();c.arc(370,640,167,0,TAU);c.stroke();
+  c.lineWidth=36;
+  c.beginPath();c.arc(647,660,37,0,TAU);c.stroke();
+  c.beginPath();c.arc(1126,660,37,0,TAU);c.stroke();
+  c.beginPath();c.arc(1244,661,37,Math.PI,TAU);c.stroke();
+  c.fillRect(592,565,36,150);c.fillRect(722,565,36,150);c.fillRect(778,605,36,110);
+  c.fillRect(1022,605,36,110);c.fillRect(1200,605,36,110);c.fillRect(1262,661,36,54);
+  [796,1040].forEach(function(x){c.beginPath();c.arc(x,574,19,0,TAU);c.fill()});
+  c.beginPath();c.moveTo(880,605);c.lineTo(918,605);c.lineTo(942,665);c.lineTo(966,605);c.lineTo(1004,605);c.lineTo(960,715);c.lineTo(924,715);c.closePath();c.fill();
+  c.lineWidth=30;c.beginPath();c.moveTo(824,742);c.lineTo(872,574);c.stroke();
+}
+function sprite(c){
+  var s=document.createElement('canvas');s.width=s.height=64;var q=s.getContext('2d');
+  var g=q.createRadialGradient(32,32,0,32,32,32);
+  g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.12,'rgba('+c+',.55)');g.addColorStop(1,'rgba('+c+',0)');
+  q.fillStyle=g;q.fillRect(0,0,64,64);
+  q.fillStyle='rgba(255,255,255,.7)';q.fillRect(31,4,2,56);q.fillRect(4,31,56,2);
+  return s;
+}
+function build(st){
+  var oc=document.createElement('canvas');oc.width=1200;oc.height=560;
+  var o=oc.getContext('2d');o.translate(-130,-290);logo(o);
+  var d=o.getImageData(0,0,1200,560).data,a=[],x,y,i;
+  for(y=0;y<560;y+=st)for(x=0;x<1200;x+=st){
+    if(d[(y*1200+x)*4+3]>128){
+      var X=x+130+(Math.random()-.5)*st,Y=y+290+(Math.random()-.5)*st,h=Math.hypot(X-370,Y-640),
+      k=(Y<472&&h>196)?2:(X<575&&h<200)?1:0,q=Math.random(),
+      c=k===1?(q<.5?0:q<.85?1:2):k===2?(q<.7?1:2):(q<.8?2:q<.92?0:1);
+      a.push({X:X,Y:Y,k:k,c:c});
+    }
+  }
+  a.sort(function(){return Math.random()-.5});
+  if(a.length>4300)a.length=4300;
+  var nl=a.length;
+  for(i=0;i<650;i++){var q2=Math.random();a.push({X:0,Y:0,k:3,c:q2<.45?0:q2<.8?1:2})}
+  a.sort(function(p,q){return p.c-q.c});
+  var N=a.length,F=function(){return new Float32Array(N)},
+  P={N:N,tx:F(),ty:F(),dl:F(),sz:F(),ph:F(),sp:F(),gr:F(),ga:F(),vx:F(),vy:F(),ox:F(),oy:F(),kd:new Uint8Array(N),col:new Uint8Array(N),big:new Uint8Array(N)};
+  for(i=0;i<N;i++){
+    var p=a[i];
+    P.tx[i]=p.X;P.ty[i]=p.Y;P.kd[i]=p.k;P.col[i]=p.c;
+    P.dl[i]=.55*Math.random()+.45*clamp((p.X-165)/1135);
+    P.sz[i]=.8+Math.random();P.ph[i]=Math.random()*TAU;P.sp[i]=.8+Math.random()*2.2;
+    P.gr[i]=p.k===3?160+Math.pow(Math.random(),.8)*1000:30+Math.pow(Math.random(),.75)*950;
+    P.ga[i]=(i%3)*2.094+P.gr[i]*.0055+(Math.random()-.5)*.9;
+    P.big[i]=Math.random()<(p.k===3?.02:.04)?1:0;
+  }
+  var idx=[],lk=[];
+  for(i=0;i<N;i++)if(P.kd[i]<3&&Math.random()<700/nl)idx.push(i);
+  for(i=0;i<Math.min(240,idx.length);i++){
+    var A=idx[i],best=-1,bd=26;
+    for(var j=0;j<idx.length;j++){var B=idx[j];if(B===A)continue;var dd=Math.hypot(P.tx[A]-P.tx[B],P.ty[A]-P.ty[B]);if(dd<bd&&dd>4){bd=dd;best=B}}
+    if(best>=0)lk.push(A,best);
+  }
+  P.lk=lk;return P;
+}
+var TPL='<style>:host{display:block;position:relative;height:100vh;height:100svh;min-height:480px;background:#000;overflow:hidden;isolation:isolate;contain:layout paint style}'+
+'canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}'+
+'.cue{position:absolute;left:50%;bottom:max(22px,env(safe-area-inset-bottom));width:1px;height:54px;background:linear-gradient(rgba(255,255,255,.25),rgba(255,255,255,0));transform:translateX(-50%)}'+
+'.cue i{position:absolute;left:-1px;top:0;width:3px;height:3px;border-radius:50%;background:#fff;animation:d 2.4s ease-in infinite}'+
+'@keyframes d{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(52px);opacity:0}}'+
+'@media(prefers-reduced-motion:reduce){.cue i{animation:none}}</style><canvas role="img" aria-label="Oblivion"></canvas><div class="cue"><i></i></div>';
+
+customElements.define('oblivion-hero',class extends HTMLElement{
+  connectedCallback(){
+    var r=this.attachShadow({mode:'open'});r.innerHTML=TPL;
+    var host=this,cv=r.querySelector('canvas'),cue=r.querySelector('.cue'),g=cv.getContext('2d'),
+    reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,
+    W=0,H=0,dpr=1,sc=1,f=reduce?1:0,t0=performance.now(),last=t0,raf=0,pm={x:-999,y:-999},
+    P=build(innerWidth<700?7:5),SP=[sprite(CR[0]),sprite(CR[1]),sprite(CR[2])],
+    SX=new Float32Array(P.N),SY=new Float32Array(P.N),i,
+    sky=[];for(i=0;i<350;i++)sky.push([Math.random(),Math.random(),Math.random()*1.2+.4,Math.random()*TAU,Math.random()*.8+.2]);
+    var neb=[[.25,.35,.6,0],[.78,.6,.55,1],[.5,.9,.65,0],[.92,.12,.45,1]];
+    function size(){
+      var b=host.getBoundingClientRect();W=b.width;H=b.height;dpr=Math.min(devicePixelRatio||1,2);
+      cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);sc=Math.min(W*.84/1135,H*.6/510);
+      if(reduce)draw(performance.now());
+    }
+    function draw(now){
+      var t=(now-t0)/1000,dt=Math.min(.05,(now-last)/1000||.016);last=now;
+      var rc=host.getBoundingClientRect();
+      if(rc.bottom<0||rc.top>innerHeight){if(!reduce)raf=requestAnimationFrame(draw);return}
+      var p=clamp(-rc.top/Math.max(1,rc.height)),cyc=t%20,tg=(!reduce&&cyc>14&&cyc<17.5)?0:1;
+      f+=(tg>f?1:-1)*Math.min(Math.abs(tg-f),dt/3.6);
+      g.setTransform(dpr,0,0,dpr,0,0);
+      g.globalCompositeOperation='source-over';g.fillStyle='#000';g.fillRect(0,0,W,H);
+      g.globalCompositeOperation='lighter';
+      var m=Math.max(W,H),k,n,rx=W/2+(370-731)*sc,ry=H*.46+(640-580)*sc,fa=f*f*(1-p);
+      // cosmic dust
+      for(k=0;k<neb.length;k++){
+        n=neb[k];var nx=(n[0]+Math.sin(t*.07+k*2)*.05)*W,ny=(n[1]+Math.cos(t*.05+k)*.04)*H-p*H*.08,nr=n[2]*m,
+        gg=g.createRadialGradient(nx,ny,0,nx,ny,nr);
+        gg.addColorStop(0,'rgba('+CR[n[3]]+','+(.085*(1-p))+')');gg.addColorStop(1,'rgba('+CR[n[3]]+',0)');
+        g.fillStyle=gg;g.fillRect(nx-nr,ny-nr,nr*2,nr*2);
+      }
+      // distant stars
+      g.fillStyle='#fff';
+      for(k=0;k<sky.length;k++){n=sky[k];g.globalAlpha=(.25+.35*Math.sin(t*n[4]*2+n[3]))*(1-p);g.fillRect(n[0]*W,((n[1]*H+p*H*.1*n[4])%H),n[2],n[2])}
+      // event horizon glow
+      var ri=139*sc,ro=195*sc,R=ro*1.5,pul=.8+.2*Math.sin(t*1.3);
+      var cg=g.createRadialGradient(rx,ry,0,rx,ry,R);
+      cg.addColorStop(0,'rgba(0,0,0,0)');cg.addColorStop(ri*.7/R,'rgba(0,0,0,0)');
+      cg.addColorStop(ri/R,'rgba(115,153,198,'+(.3*fa*pul)+')');cg.addColorStop(ro/R,'rgba(204,123,92,'+(.2*fa*pul)+')');cg.addColorStop(1,'rgba(204,123,92,0)');
+      g.globalAlpha=1;g.fillStyle=cg;g.fillRect(rx-R,ry-R,R*2,R*2);
+      // stars forming the logo
+      var mx=pm.x,my=pm.y,pr=Math.max(70,sc*110),pr2=pr*pr,ci=-1,sk=Math.max(.9,sc*1.7),ex=1-p;
+      for(i=0;i<P.N;i++){
+        var kd=P.kd[i],e=kd===3?0:ease((f-P.dl[i]*.45)/.55),a=P.ga[i]+t*.16/(1+P.gr[i]*.004),
+        gx=370+P.gr[i]*Math.cos(a),gy=640+P.gr[i]*Math.sin(a)*.62,x,y;
+        if(kd===3){x=gx;y=gy}
+        else{
+          var ddx=P.tx[i]-gx,ddy=P.ty[i]-gy,cur=Math.sin(e*3.1416)*.22*(P.ph[i]>3.1?1:-1);
+          x=gx+ddx*e-ddy*cur;y=gy+ddy*e+ddx*cur;
+          var jt=Math.sin(t*1.7+P.ph[i])*(kd===1?1.8:.7)*e;x+=jt;y+=Math.cos(t*1.3+P.ph[i])*(kd===1?1.8:.7)*e;
+        }
+        var X=W/2+(x-731)*sc,Y=H*.46+(y-580)*sc;
+        X+=(X-rx)*p*.9;Y+=(Y-ry)*p*.9+p*H*.05;
+        var qx=X-mx,qy=Y-my,q2=qx*qx+qy*qy;
+        if(q2<pr2){var w=1-Math.sqrt(q2)/pr;w*=w*1.6;var qd=Math.sqrt(q2)+.01;P.vx[i]+=qx/qd*w;P.vy[i]+=qy/qd*w}
+        P.vx[i]*=.9;P.vy[i]*=.9;P.ox[i]=(P.ox[i]+P.vx[i])*.94;P.oy[i]=(P.oy[i]+P.vy[i])*.94;
+        X+=P.ox[i];Y+=P.oy[i];SX[i]=X;SY[i]=Y;
+        if(X<-20||X>W+20||Y<-20||Y>H+20)continue;
+        var al=(.55+.45*Math.sin(t*P.sp[i]+P.ph[i]))*(kd===3?.3:.9)*(.4+.6*e)*ex;
+        if(al<.02)continue;
+        if(P.col[i]!==ci){ci=P.col[i];g.fillStyle=CS[ci]}
+        var s=P.sz[i]*sk;g.globalAlpha=al;
+        if(P.big[i]){var bs=s*7;g.drawImage(SP[ci],X-bs/2,Y-bs/2,bs,bs)}else g.fillRect(X-s/2,Y-s/2,s,s);
+      }
+      // neural links
+      g.globalAlpha=.17*f*f*f*ex;g.strokeStyle='rgb(140,175,225)';g.lineWidth=.6;g.beginPath();
+      for(i=0;i<P.lk.length;i+=2){var A=P.lk[i],B=P.lk[i+1];g.moveTo(SX[A],SY[A]);g.lineTo(SX[B],SY[B])}
+      g.stroke();
+      cue.style.opacity=Math.max(0,1-p*4);
+      if(!reduce)raf=requestAnimationFrame(draw);
+    }
+    host.addEventListener('pointermove',function(ev){var b=host.getBoundingClientRect();pm.x=ev.clientX-b.left;pm.y=ev.clientY-b.top});
+    host.addEventListener('pointerleave',function(){pm.x=pm.y=-999});
+    this._ro=new ResizeObserver(size);this._ro.observe(host);
+    size();if(!reduce)raf=requestAnimationFrame(draw);
+    this._stop=function(){cancelAnimationFrame(raf)};
+  }
+  disconnectedCallback(){if(this._stop)this._stop();if(this._ro)this._ro.disconnect()}
+});
+})();
+</script>
+<!-- ============ OBLIVION HERO · COPY TO HERE ============ -->
+
+<!-- DEMO ONLY: delete this block. Your real website continues here. -->
+<main style="min-height:100vh;background:#000;color:#777;display:grid;place-items:center;font:16px system-ui,sans-serif">The rest of your website starts here</main>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
 <meta charset="UTF-8">
 <!-- SECURITY-LAYER:BEGIN -->
 <!-- Client-side hardening only. Not a substitute for server/Cloudflare protections
